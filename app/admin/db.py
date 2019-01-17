@@ -62,7 +62,8 @@ def set_up_tables():
         title VARCHAR (50) NOT NULL,
         body VARCHAR (200) NOT NULL,
         votes INTEGER NOT NULL,
-        comments VARCHAR (50) NOT NULL
+        voters INTEGER,
+        created_at TIMESTAMP
     )"""
 
     comments_table_query = """
@@ -106,7 +107,7 @@ def connect_to_and_query_db(query=None, DB_URL=None):
         # connect to db
         conn = psycopg2.connect(DB_URL)
         print("\n\nConnected {}\n".format(conn.get_dsn_parameters()))
-        cursor = conn.cursor()
+        cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
         if query:
             # Execute query
