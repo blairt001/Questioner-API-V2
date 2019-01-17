@@ -1,4 +1,4 @@
-"""The users meetup routes"""
+"""The users meetup routes endpoint polished"""
 
 from flask import jsonify, request
 from app.admin.models import QuestionModel, MeetupModel, CommentModel
