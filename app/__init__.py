@@ -20,7 +20,7 @@ def create_app(config_name):
     app.register_blueprint(users)
     
     #register database url
-    init_db(app_config["db_url"])
+    init_db(app_config["DB_URL"])
 
     #Register error handlers
     @app.errorhandler(404)
