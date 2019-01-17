@@ -105,7 +105,7 @@ class MeetupsBaseTest(unittest.TestCase):
                          "topic": "Fullstack"
                         }]
         #use an empty token for performing the tests
-        #self.token = ''
+        self.token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImJsYWlydGhlYWRtaW4ifQ.dIAwwPHsRobuOzGDDPD4qAlBQJMvQ9W_5u3awULgeDY" 
 
     #tear down tests                                 
     def tearDown(self):
@@ -128,7 +128,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
                                  data=json.dumps(self.login_admin1),
                                  content_type="application/json")
         data = json.loads(login.data.decode('utf-8'))
-        self.token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImJsYWlydGhlYWRtaW4ifQ.dIAwwPHsRobuOzGDDPD4qAlBQJMvQ9W_5u3awULgeDY"
+        self.token = data["token"]
         return self.token
     """
     #tests admin create meetup
