@@ -43,20 +43,20 @@ class MeetupsBaseTest(unittest.TestCase):
         self.post_meetup1 = {"topic":"Scrum",
                             "happenningOn":"2019-02-14",
                             "location":"Thika",
-                            "images":["blair.png", "tony.png"],
-                            "tags":["Tech", "Health"]
+                            "images":"blair.png",
+                            "tags":"Tech"
                            }
         self.post_meetup2 = {"topic":"Fullstack",
                              "happenningOn":"2019-02-15",
                              "location":"Nairobi",
-                             "images":["west.png", "east.png"],
-                             "tags":["Tech", "Health"]
+                             "images": "tony.png",
+                             "tags":"Health"
                             }
         self.post_meetup3 = {"topic":"Miguel Miguel",
                              "happenningOn":"2019-02-16",
                              "location":"Nairobi",
-                             "images":["mig1.png", "mig2.png"],
-                             "tags":["Tech", "Health"]
+                             "images":"Miguel.png",
+                             "tags":"Tech"
                             }
 
         self.rsvp_response1 = [{"Attending": "yes",
@@ -66,26 +66,26 @@ class MeetupsBaseTest(unittest.TestCase):
         self.meetup_topic_record = {"topic":"",
                             "happenningOn":"14/02/2019",
                             "location":"Thika",
-                            "images":["blair.png", "tony.png"],
-                            "tags":["Tech", "Health"]}
+                            "images":"blair.png",
+                            "tags":"Tech"}
 
         self.meetup_location_record = {"topic":"Scrum",
                             "happenningOn":"14/02/2019",
                             "location":"",
-                            "images":["blair.png", "tony.png"],
-                            "tags":["Tech", "Health"]}
+                            "images":"blair.png",
+                            "tags":"Tech"}
 
         self.meetup_date_record = {"topic":"Scrum",
                             "happenningOn":"",
                             "location":"Thika",
-                            "images":["blair.png", "tony.png"],
-                            "tags":["Tech", "Health"]}
+                            "images":"blair.png",
+                            "tags":"Tech"}
 
         self.meetup_tag_record = {"topic":"Scrum",
                             "happenningOn":"14/02/2019",
                             "location":"Thika",
-                            "images":["blair.png", "tony.png"],
-                            "tags":[]}
+                            "images":"blair.png",
+                            "tags":""}
 
 
         self.meetups = [{"created_at": "Wed, 09 Jan 2019 02:30:10 GMT",
@@ -93,17 +93,15 @@ class MeetupsBaseTest(unittest.TestCase):
                          "images": ["blair.png",
                                     "tony.png"],
                          "location": "Thika",
-                         "happenningOn": "14/02/2019",
-                         "tags": ["Tech",
-                                  "Health"],
+                         "happenningOn": "2019-02-14",
+                         "tags": "Tech",
                          "topic": "Scrum"},
                         {"created_at": "Wed, 09 Jan 2019 02:30:54 GMT",
                          "id": 2,
-                         "images": ["west.png",
-                                    "east.png"],
+                         "images": "tony.png",
                          "location": "Nairobi",
-                         "happenningOn": "15/02/2019",
-                         "tags": ["Tech", "Health"],
+                         "happenningOn": "2019-02-15",
+                         "tags": "Health",
                          "topic": "Fullstack"
                         }]
         #use an empty token for performing the tests
@@ -133,6 +131,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
         self.token = data["token"]
         return self.token
     """
+    #tests admin create meetup
     def test_admin_can_create_a_meetup(self):
         self.token = self.login()
         response = self.client.post("api/v2/meetups",
@@ -142,7 +141,12 @@ class TestMeetupsRecords(MeetupsBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 201)
         self.assertEqual(result["status"], 201)
-        self.assertEqual(result["data"], [{"location": "Thika","happenningOn": "14/02/2019","images": ["blair.png","tony.png"],"tags": ["Tech","Health"],"topic": "Scrum"}])
+        self.assertEqual(result["data"], [{"topic":"Scrum",
+                            "happenningOn":"2019-02-14",
+                            "location":"Thika",
+                            "images":"blair.png",
+                            "tags":"Tech"
+                           }])
     """
     #tests for meetup not set
     def test_no_meetup_topic_provided(self):
