@@ -83,3 +83,26 @@ class UserBaseTest(unittest.TestCase):
     def tearDown(self):
         self.app.testing = False
         init_db(self.DB_URL)
+
+#testing for the users endpoints
+class TestUsersEndpoints(UserBaseTest):
+
+    def test_user_wrong_json_keys(self):
+        response = self.client.post("api/v2/auth/signup",
+                                    data=json.dumps(self.signup_user3),
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 400)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(
+            result['error'],
+            'Should be firstname, lastname, username, email, phoneNumber, password and confirmpassword')
+
+    def test_user_can_sign_up(self):
+        """
+        Tests to confirm a user signup successfully
+        """
+        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user1), content_type = "application/json")
+        self.assertEqual(response.status_code, 201)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result['data'], 'User Registered Successfully!')
+    
