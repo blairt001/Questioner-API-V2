@@ -12,6 +12,8 @@ services:
 
 before_script:
     - psql -c "CREATE DATABASE test_db;" -U postgres
+    - psql -c "CREATE DATABASE quizer_db;" -U postgres
+    - psql -c "CREATE USER andela WITH PASSWORD '1234';" -U postgres
 
 # Run tests
 script:
