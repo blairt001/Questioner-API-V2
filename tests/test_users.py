@@ -105,6 +105,7 @@ class TestUsersEndpoints(UserBaseTest):
         self.assertEqual(result['data'], 'User Registered Successfully!')
     """
 
+    """
     def test_user_can_login(self):
         self.client.post("api/v2/auth/signup",
                          data = json.dumps(self.signup_user1),
@@ -116,7 +117,7 @@ class TestUsersEndpoints(UserBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertTrue(result['token'])
         self.assertEqual(result["message"], "Logged in successfully")
-
+    """
     #tests that user sign-up passwords match
     def test_user_enter_unmatching_passwords(self):
         response = self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user2), content_type = "application/json")
