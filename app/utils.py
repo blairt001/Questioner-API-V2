@@ -1,5 +1,5 @@
 #This module contains the functions that will validate users data
-#imports
+#some imports
 import os
 import re
 from functools import wraps
