@@ -4,6 +4,7 @@
 import os
 import sys
 import psycopg2
+import psycopg2.extras
 
 
 def init_db(DB_URL=None):
