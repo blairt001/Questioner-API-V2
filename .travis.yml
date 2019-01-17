@@ -1,0 +1,24 @@
+language: python
+python:
+    - "3.6.7"
+
+# Install dependencies
+install:
+    - pip install -r requirements.txt
+
+services:
+    - postgresql
+
+before_script:
+    - psql -c 'CREATE DATABASE quizer_test_db;' -U postgres
+
+# Run tests
+script:
+     - pytest --cov=app
+
+after_success:
+    - coveralls
+#
+# branches:
+#     only:
+#         - develop
