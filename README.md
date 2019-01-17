@@ -72,6 +72,9 @@ python manage.py runserver
 ## Testing API Endpoints:
 Use [Postman](https://www.getpostman.com/downloads/)
 
+## License
+[MIT LICENSE](https://github.com/blairt001/Questioner-API-V2/blob/develop/LICENSE)
+
 ## Credits
 [Andela](https://andela.com/)
 
