@@ -1,17 +1,27 @@
-#Language specification
 language: python
 python:
-  - "3.6.7"
-# Installing dependencies
+    - "3.6"
+
+# Install dependencies
+install:
+    - pip3 install -r requirements.txt
+    - pip3 install coveralls
+
 services:
-  - postgresql
-install: 
-  - pip install -r requirements.txt
-  - pip install coveralls
+    - postgresql
+
 before_script:
-  - psql -c "CREATE DATABASE test_quizer_db;" -U postgres
-# Running tests
-script: 
-  - coverage run --source=app.api.v2 -m pytest && coverage report
+    - psql -c "CREATE DATABASE test_db;" -U postgres
+    - psql -c "CREATE DATABASE quizer_db;" -U postgres
+    - psql -c "CREATE USER andela WITH PASSWORD '1234';" -U postgres
+
+# Run tests
+script:
+     - pytest --cov=app
+
 after_success:
-  - coveralls
+    - coveralls
+#
+# branches:
+#     only:
+#         - develop

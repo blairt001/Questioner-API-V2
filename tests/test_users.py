@@ -84,7 +84,7 @@ class UserBaseTest(unittest.TestCase):
         self.app.testing = False
         init_db(self.DB_URL)
 
-#testing for the users endpoints
+#testing for the users api endpoints
 class TestUsersEndpoints(UserBaseTest):
 
     def test_user_wrong_json_keys(self):
