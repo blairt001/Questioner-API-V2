@@ -5,6 +5,7 @@ import os
 import sys
 import psycopg2
 import psycopg2.extras
+from dotenv import load_dotenv
 
 
 def init_db(DB_URL=None):
@@ -98,6 +99,7 @@ def connect_to_and_query_db(query=None, DB_URL=None):
     """
         Initiates a connection to the db and executes a query
     """
+    load_dotenv()
     conn = None
     cursor = None
     if DB_URL is None:
