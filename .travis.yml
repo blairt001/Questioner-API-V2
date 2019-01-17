@@ -8,6 +8,13 @@ services:
 install: 
   - pip install -r requirements.txt
   - pip install coveralls
+env:
+  - export APP_ENV=development
+  - export TESTING_ENV=testing
+  - export FLASK_APP=manage.py
+  - export SECRET_KEY=b'\x8e=\xee\xf8\xc0\xad\xf3\xf4\x9bF\xa6\xaa\xc3\xc0\x19\xb4,55\x02\x8a\x80g\xec'
+  - export DATABASE_URL=postgresql://andela:1234@localhost/quizer_db
+  - export DATABASE_TEST_URL=postgresql://tony:1234@localhost/quizer_test_db
 before_script:
   - psql -c "CREATE DATABASE quizer_db;" -U postgres
 # Running tests
