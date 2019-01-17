@@ -18,7 +18,7 @@ def admin_create_meetup(current_user):
         images = request.get_json()['images']
         tags = request.get_json()['tags']
 
-#return error message with the corresponding status code
+#return error message with the corresponding status code defined in the kenyetechbytes.com
     except:
         return jsonify({'status':400,
                         'error': 'Check the json keys you have used very well'}), 400
