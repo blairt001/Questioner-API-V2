@@ -1,13 +1,37 @@
 FORMAT: 1A
-HOST: http://polls.apiblueprint.org/
+HOST: https://questionerv2-blair-heroku.herokuapp.com/api/v2
 
-# questionerv2
+# Questioner-API-V2
 
-Polls is a simple API allowing consumers to view polls and vote in them.
+Questioner is a crowd-source questions for a meetup. It helps the meetup organizer prioritize questions to be answered. Other users can vote on asked questions and they bubble to the top or to the bottom of the log.
 
-## Questions Collection [/questions]
+## Sign up Collection [/auth/signup]
 
-### List All Questions [GET]
+### User can sign up[POST]
+
+A user can create an account using this action
+It takes a JSON object containing a firstname, lastname, phoneNumber, username, username, email, password, confirmpassword  authorization details.
+
++ firstname (required, string) - first name
++ lastname (required, string) - last name
++ phoneNumber (required, integer) - phone number
++ username (required, string) - username
++ email (required, string) - user email
++ password (required, string) - Strong login password
++ confirmpassword (required, string) - Strong login confirm password
+
++ Request (application/json)
+
+        {
+                "firstname":"Tony",
+                "lastname": "Andela",
+                "phoneNumber":"0715096908",
+                "username":"blairtheadmin",
+                "email":"blair1234@gmail.com",
+                "password": "Blairman1234",
+                "confirmpassword":"Blairman1234"
+        }
+
 
 + Response 200 (application/json)
 
@@ -33,7 +57,7 @@ Polls is a simple API allowing consumers to view polls and vote in them.
             }
         ]
 
-### Create a New Question [POST]
+### Create a New  [GET]
 
 You may create your own question using this action. It takes a JSON
 object containing a question and a collection of answers in the
