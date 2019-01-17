@@ -130,7 +130,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
         data = json.loads(login.data.decode('utf-8'))
         self.token = data["token"]
         return self.token
-    """
+
     #tests admin create meetup
     def test_admin_can_create_a_meetup(self):
         self.token = self.login()
@@ -141,13 +141,13 @@ class TestMeetupsRecords(MeetupsBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 201)
         self.assertEqual(result["status"], 201)
-        self.assertEqual(result["data"], [{"topic":"Scrum",
-                            "happenningOn":"2019-02-14",
-                            "location":"Thika",
-                            "images":"blair.png",
-                            "tags":"Tech"
-                           }])
-    """
+        self.assertEqual(result["data"], [{
+            "happenningOn": "2019-02-14",
+            "location": "Thika",
+            "tags": "Tech",
+            "topic": "Scrum"
+        }])
+
     #tests for meetup not set
     def test_no_meetup_topic_provided(self):
         self.token = self.login()

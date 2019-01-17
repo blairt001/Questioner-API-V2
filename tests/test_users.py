@@ -97,7 +97,7 @@ class TestUsersEndpoints(UserBaseTest):
             result['error'],
             'Should be firstname, lastname, username, email, phoneNumber, password and confirmpassword')
 
-    """
+
     def test_user_can_sign_up(self):
         response = self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user1), content_type = "application/json")
         self.assertEqual(response.status_code, 201)
@@ -117,7 +117,7 @@ class TestUsersEndpoints(UserBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertTrue(result['token'])
         self.assertEqual(result["message"], "Logged in successfully")
-    """
+    
     #tests that user sign-up passwords match
     def test_user_enter_unmatching_passwords(self):
         response = self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user2), content_type = "application/json")
