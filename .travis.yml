@@ -9,8 +9,7 @@ install:
   - pip install -r requirements.txt
   - pip install coveralls
 before_script:
-  - psql -c "CREATE DATABASE quizer_test_db;" -U postgres
-  - psql -c "CREATE USER tony WITH PASSWORD '1234';" -U postgres  
+  - psql -c "CREATE DATABASE quizer_db;" -U postgres
 # Running tests
 script: 
   - pytest --cov=app
