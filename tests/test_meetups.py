@@ -105,7 +105,7 @@ class MeetupsBaseTest(unittest.TestCase):
                          "topic": "Fullstack"
                         }]
         #use an empty token for performing the tests
-        self.token = ''
+        self.token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImJsYWlydGhlYWRtaW4ifQ.dIAwwPHsRobuOzGDDPD4qAlBQJMvQ9W_5u3awULgeDY'
 
     #tear down tests                                 
     def tearDown(self):
