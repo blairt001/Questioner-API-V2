@@ -6,7 +6,7 @@ import sys
 import psycopg2
 from datetime import datetime
 
-def init_db(db_url=None):
+def init_db(DB_URL=None):
     """
         Initialize db connection
     """
@@ -91,18 +91,18 @@ def drop_table_if_exists():
     return [drop_comments_table, drop_meetups_table, drop_questions_table, drop_users_table]
 
 
-def connect_to_and_query_db(query=None, db_url=None):
+def connect_to_and_query_db(query=None, DB_URL=None):
     """
         Initiates a connection to the db and executes a query
     """
     conn = None
     cursor = None
-    if db_url is None:
-        db_url = os.getenv('DATABASE_URL')
+    if DB_URL is None:
+        DB_URL = os.getenv('DATABASE_URL')
 
     try:
         # connect to db
-        conn = psycopg2.connect(db_url)
+        conn = psycopg2.connect(DB_URL)
         print("\n\nConnected {}\n".format(conn.get_dsn_parameters()))
         cursor = conn.cursor()
 
