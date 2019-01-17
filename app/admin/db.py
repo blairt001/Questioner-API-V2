@@ -4,7 +4,7 @@
 import os
 import sys
 import psycopg2
-from datetime import datetime
+
 
 def init_db(DB_URL=None):
     """
@@ -46,7 +46,7 @@ def set_up_tables():
     CREATE TABLE meetups (
         meetup_id SERIAL PRIMARY KEY,
         topic VARCHAR (24) NOT NULL,
-        happenningOn VARCHAR (30) NOT NULL,
+        meetup_date VARCHAR (24) NOT NULL,
         meetup_location VARCHAR (24) NOT NULL,
         meetup_images VARCHAR (24) NOT NULL,
         meetup_tags VARCHAR (24) NOT NULL,
@@ -56,6 +56,7 @@ def set_up_tables():
     questions_table_query = """
     CREATE TABLE questions (
         question_id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL,
         meetup_id INTEGER NOT NULL,
         title VARCHAR (50) NOT NULL,
         body VARCHAR (200) NOT NULL,
