@@ -76,7 +76,7 @@ Use [Postman](https://www.getpostman.com/downloads/)
 [MIT LICENSE](https://github.com/blairt001/Questioner-API-V2/blob/develop/LICENSE)
 
 ## Credits
-[Andela](https://andela.com/)
+[Andela Kenya](https://andela.com/)
 
 ## Developer
 Tony B.
