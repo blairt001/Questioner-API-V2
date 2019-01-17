@@ -13,6 +13,7 @@ from app import utils
 
 KEY = os.getenv('SECRET_KEY')
 
+#tests for user signup 
 @path_2.route("/auth/signup", methods=['POST'])
 def user_sign_up():
 
