@@ -104,3 +104,43 @@ class TestUsersEndpoints(UserBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['data'], 'User Registered Successfully!')
     """
+
+    def test_user_can_login(self):
+        self.client.post("api/v2/auth/signup",
+                         data = json.dumps(self.signup_user1),
+                         content_type="application/json")
+        response = self.client.post("api/v2/auth/login",
+                                    data=json.dumps(self.login_user1),
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 200)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertTrue(result['token'])
+        self.assertEqual(result["message"], "Logged in successfully")
+
+    #tests that user sign-up passwords match
+    def test_user_enter_unmatching_passwords(self):
+        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user2), content_type = "application/json")
+        self.assertEqual(response.status_code, 400)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result["error"], "Your passwords don't match!")
+
+    #tests user enter wrong email
+    def test_user_enter_wrong_email(self):
+        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user6), content_type = "application/json")
+        self.assertEqual(response.status_code , 400)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result["error"], "Email is Invalid")
+
+    #tests user enter short password
+    def test_user_enter_short_password(self):
+        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user4), content_type = "application/json")
+        self.assertEqual(response.status_code , 400)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result["error"], "Password should not be less than 8 characters or exceed 20")
+
+    #tests user enter long password
+    def test_user_enter_long_password(self):
+        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user5), content_type = "application/json")
+        self.assertEqual(response.status_code , 400)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result["error"], "Password should not be less than 8 characters or exceed 20")
