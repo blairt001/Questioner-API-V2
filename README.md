@@ -1,5 +1,5 @@
 # Questioner-API-V2
-[![Build Status](https://travis-ci.org/blairt001/Questioner-API-V2.svg?branch=develop)](https://travis-ci.org/blairt001/Questioner-API-V2)[![Coverage Status](https://coveralls.io/repos/github/blairt001/Questioner-API-V2/badge.png?branch=develop)](https://coveralls.io/github/blairt001/Questioner-API-V2?branch=develop)[![Maintainability](https://api.codeclimate.com/v1/badges/f8860af9cd43ffc71066/maintainability)](https://codeclimate.com/github/blairt001/Questioner-API-V2/maintainability)
+[![Build Status](https://travis-ci.org/blairt001/Questioner-API-V2.svg?branch=develop)](https://travis-ci.org/blairt001/Questioner-API-V2)[![Coverage Status](https://coveralls.io/repos/github/blairt001/Questioner-API-V2/badge.svg?branch=develop)](https://coveralls.io/github/blairt001/Questioner-API-V2?branch=develop)[![Maintainability](https://api.codeclimate.com/v1/badges/f8860af9cd43ffc71066/maintainability)](https://codeclimate.com/github/blairt001/Questioner-API-V2/maintainability)
 
 
 ## Heroku Hosting Link
