@@ -23,6 +23,10 @@ def create_app(config_name):
     init_db(app_config["DB_URL"])
 
     #Register error handlers
+     @app.errorhandler(400)
+    def bad_request(error):
+        return jsonify({'error':'Bad request. Check the syntax', 'status': 400}), 400
+        
     @app.errorhandler(404)
     def page_not_found(error):
         return jsonify({'error':'Url not found', 'status': 404}), 404
