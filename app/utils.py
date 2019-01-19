@@ -11,7 +11,7 @@ import jwt
 
 
 # local imports
-from app.admin.models import Token
+from app.admin.models import UserToken
 from app.admin.models import UserModel
 from app.admin.db import select_from_db
 
