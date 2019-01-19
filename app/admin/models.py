@@ -381,7 +381,7 @@ class UserModel:
              "registered_on": user.registered_on,}
     """
 
-    class UserRsvp:
+class UserRsvp:
     """
     The rsvp models
     """
