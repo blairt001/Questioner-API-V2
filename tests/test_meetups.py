@@ -243,3 +243,24 @@ class TestMeetupsRecords(MeetupsBaseTest):
                                           'topic':"Scrum",
                                           'happenningon': "Thu, 14 Feb 2019 00:00:00 GMT",
                                           'location':"Thika"})
+
+    #tests if a user can be able to get all meetup records
+    def test_a_user_can_be_able_to_get_all_meetup_records(self):
+        self.token = self.user_login()
+        self.client.post("api/v2/meetups",
+                         data=json.dumps(self.post_meetup1),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        self.client.post("api/v2/meetups",
+                         data=json.dumps(self.post_meetup2),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+
+        response = self.client.get("api/v2/meetups/upcoming",
+                                   content_type="application/json")
+        self.assertEqual(response.status_code, 200)
+
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result["status"], 200)
+        self.assertTrue(result["data"])
+
