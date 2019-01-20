@@ -17,23 +17,23 @@ class MeetupsBaseTest(unittest.TestCase):
         init_db(self.DB_URL) #getting our database url from the env file
 
         self.signup_admin1 = {"firstname":"Tony",
-                             "lastname": "Andela",
+                             "lastname": "Blair",
                              "phoneNumber":"0715096908",
-                             "username":"blairtheadmin",
-                             "email":"blair1234@gmail.com",
-                             "password": "Blairman1234",
-                             "confirmpassword":"Blairman1234"}
+                             "username":"admin",
+                             "email":"admin@gmail.com",
+                             "password": "andela2019",
+                             "confirmpassword":"andela2019"}
 
         self.signup_user1 = {"firstname":"Tony",
                              "lastname": "Andela",
                              "phoneNumber":"0713403687",
                              "username":"fakeadmin",
-                             "email":"blair1234.dev@gmail.com",
+                             "email":"blairtdev@gmail.com",
                              "password": "Blairman1234",
                              "confirmpassword":"Blairman1234"}
 
-        self.login_admin1 = {"username":"blairtheadmin",
-                           "password":"Blairman1234"}
+        self.login_admin1 = {"username":"admin",
+                           "password":"andela2019"}
 
         self.login_user1 = {"username":"fakeadmin",
                            "password":"Blairman1234"}
@@ -41,19 +41,19 @@ class MeetupsBaseTest(unittest.TestCase):
 
 
         self.post_meetup1 = {"topic":"Scrum",
-                            "happenningOn":"2019-02-14",
+                            "happenningon":"14/02/2019",
                             "location":"Thika",
                             "images":"blair.png",
                             "tags":"Tech"
                            }
         self.post_meetup2 = {"topic":"Fullstack",
-                             "happenningOn":"2019-02-15",
+                             "happenningon":"2019-02-15",
                              "location":"Nairobi",
                              "images": "tony.png",
                              "tags":"Health"
                             }
         self.post_meetup3 = {"topic":"Miguel Miguel",
-                             "happenningOn":"2019-02-16",
+                             "happenningon":"2019-02-16",
                              "location":"Nairobi",
                              "images":"Miguel.png",
                              "tags":"Tech"
@@ -64,28 +64,35 @@ class MeetupsBaseTest(unittest.TestCase):
                                 "topic": "Scrum"}]
 
         self.meetup_topic_record = {"topic":"",
-                            "happenningOn":"14/02/2019",
+                            "happenningon":"14/02/2019",
                             "location":"Thika",
                             "images":"blair.png",
                             "tags":"Tech"}
 
         self.meetup_location_record = {"topic":"Scrum",
-                            "happenningOn":"14/02/2019",
+                            "happenningon":"14/02/2019",
                             "location":"",
                             "images":"blair.png",
                             "tags":"Tech"}
 
         self.meetup_date_record = {"topic":"Scrum",
-                            "happenningOn":"",
+                            "happenningon":"",
                             "location":"Thika",
                             "images":"blair.png",
                             "tags":"Tech"}
 
         self.meetup_tag_record = {"topic":"Scrum",
-                            "happenningOn":"14/02/2019",
+                            "happenningon":"14/02/2019",
                             "location":"Thika",
                             "images":"blair.png",
                             "tags":""}
+
+        self.check_whitespace = {"topic":"Scrum",
+                                 "happenningon":"14/02/2019",
+                                 "location":"              ",
+                                 "images":"blair.png",
+                                 "tags": "Tech"}
+
 
 
         self.meetups = [{"created_at": "Wed, 09 Jan 2019 02:30:10 GMT",
@@ -93,14 +100,14 @@ class MeetupsBaseTest(unittest.TestCase):
                          "images": ["blair.png",
                                     "tony.png"],
                          "location": "Thika",
-                         "happenningOn": "2019-02-14",
+                         "happenningon": "2019-02-14",
                          "tags": "Tech",
                          "topic": "Scrum"},
                         {"created_at": "Wed, 09 Jan 2019 02:30:54 GMT",
                          "id": 2,
                          "images": "tony.png",
                          "location": "Nairobi",
-                         "happenningOn": "2019-02-15",
+                         "happenningon": "2019-02-15",
                          "tags": "Health",
                          "topic": "Fullstack"
                         }]
@@ -112,12 +119,10 @@ class MeetupsBaseTest(unittest.TestCase):
         """Tperform final cleanup after tests run"""
         self.app.testing = False  
         init_db(self.DB_URL)  
-"""
+
 class TestMeetupsRecords(MeetupsBaseTest):
-    def login(self):
-        self.client.post('api/v2/auth/signup',
-                         data=json.dumps(self.signup_admin1),
-                         content_type="application/json")
+    def user_login(self):
+        #since we had already registered the admin user
         login = self.client.post('api/v2/auth/login',
                                  data=json.dumps(self.login_admin1),
                                  content_type="application/json")
@@ -127,7 +132,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
 
     #tests admin create meetup
     def test_admin_can_create_a_meetup(self):
-        self.token = self.login()
+        self.token = self.user_login()
         response = self.client.post("api/v2/meetups",
                                     data = json.dumps(self.post_meetup1),
                                     headers={'x-access-token': self.token},
@@ -136,15 +141,15 @@ class TestMeetupsRecords(MeetupsBaseTest):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(result["status"], 201)
         self.assertEqual(result["data"], [{
-            "happenningOn": "2019-02-14",
             "location": "Thika",
+            "happenningon": "14/02/2019",
             "tags": "Tech",
             "topic": "Scrum"
         }])
 
     #tests for meetup not set
     def test_no_meetup_topic_provided(self):
-        self.token = self.login()
+        self.token = self.user_login()
         response = self.client.post("api/v2/meetups",
         data = json.dumps(self.meetup_topic_record),
         headers={'x-access-token': self.token},
@@ -156,7 +161,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
     
     #tests for meetup location missing
     def test_no_meetup_location_provided(self):
-        self.token = self.login()
+        self.token = self.user_login()
         response = self.client.post("api/v2/meetups",
                                     data = json.dumps(self.meetup_location_record),
                                     headers={'x-access-token': self.token},
@@ -167,7 +172,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
         self.assertEqual(result["error"], 'provide the location')
     #tests for meetup date missing
     def test_no_meetup_date_provided(self):
-        self.token = self.login()
+        self.token = self.user_login()
         response = self.client.post("api/v2/meetups",
                                     data = json.dumps(self.meetup_date_record),
                                     headers={'x-access-token': self.token},
@@ -179,7 +184,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
 
     #tests for meetup tags missing
     def test_no_meetup_tags_provided(self):
-        self.token = self.login()
+        self.token = self.user_login()
         response = self.client.post("api/v2/meetups",
                                     data = json.dumps(self.meetup_tag_record),
                                     headers={'x-access-token': self.token},
@@ -198,14 +203,27 @@ class TestMeetupsRecords(MeetupsBaseTest):
                                  data = json.dumps(self.login_user1),
                                  content_type = "application/json")
         resp = json.loads(login.data.decode('utf-8'))
-        user_token =resp['token']
+        token =resp['token']
         response = self.client.post("api/v2/meetups",
                                     data = json.dumps(self.post_meetup1),
-                                    headers={'x-access-token': user_token},
+                                    headers={'x-access-token': token},
                                     content_type = "application/json")
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 401)
         self.assertEqual(result["status"], 401)
         self.assertEqual(result["error"], "You are not allowed to perfom this function")
+
+    #tests for any available whitespaces
+    """
+    def test_if_a_user_inputs_a_whitespace(self):
+        self.token = self.user_login()
+        response = self.client.post("api/v2/meetups",
+                                    data=json.dumps(self.check_whitespace),
+                                    headers={'x-access-token': self.token},
+                                    content_type="application/json")
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(result["status"], 400)
+        self.assertEqual(result["error"], 'topic field cannot be left blank')
 
     """

@@ -16,13 +16,13 @@ USERS_LEN = []
 
 #create the meetup model class
 class MeetupModel:
-    def __init__(self, topic, happenningOn, location, images, tags):
+    def __init__(self, topic, happenningon, location, images, tags):
         """
        Initialize the meetup class, with your variables at hand
         """
        # self.id = len(MEETUPS_LEN)+1
         self.topic = topic
-        self.happenningOn = happenningOn
+        self.happenningon = happenningon
         self.location = location
         self.images = images
         self.tags = tags
@@ -31,13 +31,13 @@ class MeetupModel:
 
     def save_meetup_record(self):
         """
-        save a new meetup record to the postgres database
+        save a new meetup record to the postgres db
         """
         #MEETUPS_LEN.append(self)
         query = """
-        INSERT INTO meetups(topic, happenningOn, meetup_location, meetup_images, meetup_tags, created_at) VALUES(
+        INSERT INTO meetups(topic, happenningon, meetup_location, meetup_images, meetup_tags, created_at) VALUES(
             '{}', '{}', '{}', '{}', '{}' , '{}'
-        )""".format(self.topic, self.happenningOn, self.location, self.images, self.tags, self.created_at)
+        )""".format(self.topic, self.happenningon, self.location, self.images, self.tags, self.created_at)
 
         db.query_db_no_return(query)
 
@@ -48,10 +48,10 @@ class MeetupModel:
         """
         #return [MeetupModel.to_json(meetup) for meetup in MEETUPS_LEN if meetup.id == meeting_id]
         query = """
-        SELECT meetup_id, topic, happenningOn, meetup_location FROM meetups
+        SELECT meetup_id, topic, happenningon, meetup_location FROM meetups
         WHERE meetups.meetup_id = '{}'""".format(meeting_id)
 
-        meetup = database.select_from_db(query)
+        meetup = db.select_from_db(query)
         return meetup
 
     @staticmethod
@@ -66,12 +66,12 @@ class MeetupModel:
         meetup_tags, created_at FROM meetups
         """
 
-        meetups = database.select_from_db(query)
+        meetups = db.select_from_db(query)
         data = []
         for meetup in meetups:
             meetup = {'meetupId' : meetup["meetup_id"],
                       'topic' : meetup["topic"],
-                      'HappenningOn' : meetup["happenningOn"],
+                      'happenningon' : meetup["happenningon"],
                       'meetupLocation' : meetup["meetup_location"],
                       'meetupTags' : meetup["meetup_tags"],
                       'createdAt' : meetup["created_at"]}
@@ -100,7 +100,7 @@ class MeetupModel:
             DELETE FROM meetups
             WHERE meetups.meetup_id = '{}'""".format(meet_id)
 
-            database.query_db_no_return(query)
+            db.query_db_no_return(query)
             return True
         return False
 
@@ -112,7 +112,7 @@ class MeetupModel:
         WHERE meetups.meetup_location = '{}' AND meetups.meetup_date = '{}'
         """.format(meetup_location, date)
 
-        posted = database.select_from_db(query)
+        posted = db.select_from_db(query)
         return posted
 
 
@@ -126,7 +126,7 @@ class MeetupModel:
         return {
             "id": meetup.id,
             "topic": meetup.topic,
-            "happenningOn": meetup.happenningOn,
+            "happenningon": meetup.happenningon,
             "location": meetup.location,
             "tags": meetup.tags,
         }
@@ -158,7 +158,7 @@ class QuestionModel:
         )""".format(self.user_id, self.meetup_id, self.title,
                     self.body, self.votes, self.created_at)
 
-        database.query_db_no_return(query)
+        db.query_db_no_return(query)
     """
     @staticmethod
     def to_json(question):
@@ -182,7 +182,7 @@ class QuestionModel:
         SELECT question_id, title, body, comment, votes FROM questions
         WHERE questions.question_id = '{}'""".format(quiz_id)
 
-        question = database.select_from_db(query)
+        question = db.select_from_db(query)
         return question
 
 
@@ -198,7 +198,7 @@ class QuestionModel:
         WHERE questions.meetup_id = '{}'
         """.format(meeting_id)
 
-        questions = database.select_from_db(query)
+        questions = db.select_from_db(query)
         data = []
         for question in questions:
             question = {'questionId' : question["question_id"],
@@ -228,7 +228,7 @@ class CommentModel:
 
     def save_comment(self):
         """
-        Save the comment to postgres database
+        Save the comment to postgres db
         """
         #COMMENTS_LEN.append(self)
         query = """
@@ -237,7 +237,7 @@ class CommentModel:
         )""".format(self.user_id, self.question_id, self.title,
                     self.body, self.comment)
 
-        database.query_db_no_return(query)
+        db.query_db_no_return(query)
 
     @staticmethod
     def get_all_comments(quiz_id):
@@ -249,7 +249,7 @@ class CommentModel:
         WHERE comments.question_id = '{}'
         """.format(quiz_id)
 
-        comments = database.select_from_db(query)
+        comments = db.select_from_db(query)
         data = []
         for comment in comments:
             comment = {'userId' : comment["user_id"],
@@ -333,7 +333,7 @@ class UserModel:
         hashed_password = generate_password_hash(str(password))
         return hashed_password
     
-    #check if password exists in the database, if they match
+    #check if password exists in the db, if they match
     @staticmethod
     def check_if_password_in_db(password_hash, password):
         return check_password_hash(password_hash, str(password))
@@ -344,7 +344,7 @@ class UserModel:
         SELECT question_id FROM questions
         WHERE questions.user_id = '{}'""".format(user_id)
 
-        questions_list = database.select_from_db(query)
+        questions_list = db.select_from_db(query)
         questions = len(questions_list)
         return questions
 
@@ -355,7 +355,7 @@ class UserModel:
         WHERE rsvps.user_id = '{}' AND rsvps.rsvp = '{}'
         """.format(user_id, 'yes')
 
-        meetups = database.select_from_db(query)
+        meetups = db.select_from_db(query)
         return meetups
 
     @staticmethod
@@ -405,7 +405,7 @@ class UserRsvp:
             '{}', '{}', '{}', '{}'
         )""".format(self.meetup_id, self.user_id, self.meetup_topic, self.rsvp)
 
-        database.query_db_no_return(query)
+        db.query_db_no_return(query)
 
 
     @staticmethod
@@ -418,7 +418,7 @@ class UserRsvp:
         AND rsvps.user_id = '{}'
         """.format('no', meetup_id, user_id)
 
-        database.query_db_no_return(query)
+        db.query_db_no_return(query)
 
 
     @staticmethod
@@ -431,7 +431,7 @@ class UserRsvp:
         WHERE rsvps.meetup_id = '{}' AND rsvps.rsvp = '{}'
         """.format(meetup_id, 'yes')
 
-        attendees_list = database.select_from_db(query)
+        attendees_list = db.select_from_db(query)
         attendees = len(attendees_list)
         return attendees
 
@@ -447,14 +447,14 @@ class UserVote:
 
     def save_vote(self):
         """
-        Save the votes to database
+        Save the votes to db
         """
         query = """
         INSERT INTO votes(user_id, question_id) VALUES(
             '{}', '{}'
         )""".format(self.user_id, self.question_id)
 
-        database.query_db_no_return(query)
+        db.query_db_no_return(query)
 
      #check if a user already voted
     @staticmethod
@@ -464,7 +464,7 @@ class UserVote:
         WHERE votes.user_id = '{}' AND votes.question_id = '{}'
         """.format(user_id, question_id)
 
-        voted = database.select_from_db(query)
+        voted = db.select_from_db(query)
         return voted
 
 class AuthToken:
@@ -480,7 +480,7 @@ class AuthToken:
             '{}'
         )""".format(self.token)
 
-        database.query_db_no_return(query)
+        db.query_db_no_return(query)
 
     @staticmethod
     def check_if_token_blacklisted(token):
@@ -489,5 +489,5 @@ class AuthToken:
         WHERE blacklist_tokens.token = '{}'
         """.format(token)
 
-        token = database.select_from_db(query)
+        token = db.select_from_db(query)
         return token  

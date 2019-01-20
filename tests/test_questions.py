@@ -36,7 +36,7 @@ class QuestionBaseTest(unittest.TestCase):
 
 
         self.meetup = {"topic":"Andela Fellowship",
-                       "happenningOn":"16/02/2019",
+                       "happenningon":"16/02/2019",
                        "location":"Nairobi",
                        "images":["mig1.png", "mig2.png"],
                        "tags":["Tech", "Health"]
