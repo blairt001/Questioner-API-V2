@@ -81,24 +81,24 @@ class MeetupModel:
 
     #delete a specific meetup
     @staticmethod
-    def delete_specific_meetup(meet_id):
+    def delete_specific_meetup(meeting_id):
         """
         found = None
         for meetup in MEETUPS_LEN:
-            if meetup.id == meet_id:
+            if meetup.id == meeting_id:
                 MEETUPS_LEN.remove(meetup)
                 found = True
-            elif meetup.id != meet_id:
+            elif meetup.id != meeting_id:
                 found = False
         return found
         """
 
-        meetup = MeetupModel.get_meetup(meet_id)
+        meetup = MeetupModel.get_meetup(meeting_id)
 
         if meetup:
             query = """
             DELETE FROM meetups
-            WHERE meetups.meetup_id = '{}'""".format(meet_id)
+            WHERE meetups.meetup_id = '{}'""".format(meeting_id)
 
             db.query_db_no_return(query)
             return True
