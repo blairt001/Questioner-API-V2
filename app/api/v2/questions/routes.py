@@ -51,6 +51,18 @@ def create_question_record(current_user, meetup_id):
                              "meetup": meetup_id,
                              "body": body}]}), 201
 
+
+#get all questions record
+@path_2.route("/meetups/<int:meet_id>/questions", methods=['GET'])
+def get_user_get_all_questions_for_a_meetup(meet_id):
+    """
+    User to fetch all questions for a meetup record
+    """
+    questions = QuestionModel.get_all_questions(meet_id)
+    if questions:
+        return jsonify({"status": 200, "data": questions}), 200
+    return jsonify({"status": 404, "data": "We cant find a question for this meetup. No question posted yet"}), 404
+
 #upvote a question
 @path_2.route("/questions/<int:question_id>/upvote", methods=['PATCH'])
 @token_required
@@ -98,13 +110,3 @@ def user_comment_on_a_question(question_id):
         comments.append(username)
         return jsonify({"status": 201, "data": my_question}), 201
     return jsonify({'status': 404, 'error':'The question you are looking for is not found'}), 404
-
-@path_2.route("/meetups/<int:meet_id>/questions", methods=['GET'])
-def get_user_get_all_questions_for_a_meetup(meet_id):
-    """
-    User to fetch all questions for a meetup record
-    """
-    questions = QuestionModel.get_all_questions(meet_id)
-    if questions:
-        return jsonify({"status": 200, "data": questions}), 200
-    return jsonify({"status": 404, "data": "We cant find a question for this meetup. No question posted yet"}), 404
