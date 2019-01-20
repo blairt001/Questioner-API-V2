@@ -59,9 +59,8 @@ class QuestionBaseTest(unittest.TestCase):
                                 "title": "What is Dev?",
                                 "votes": 1}
         self.downvoted_question = {"body": "I really like how people talk about Tonys Dev",
-                                   "meetup_id": 1,
-                                   "comments": [],  #initialize comments to an empy list
-                                   "question_id": 1,
+                                   "comments": "",  #initialize comments to an empy list
+                                   "questionid": 1,
                                    "title": "What is Dev?",
                                    "votes": -1}
                                    
@@ -192,18 +191,29 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
 
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['data'], self.upvoted_question)
- 
-    """
 
-    def test_downvote_question(self):
-        self.token = self.user_login()
-        self.client.post("api/v1/meetups", data = json.dumps(self.meetup), content_type = "application/json")
-        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question1),headers={'x-access-token': self.token}, content_type = "application/json")
-        response = self.client.patch("api/v1/questions/1/downvote", headers={'x-access-token': self.token}, content_type = "application/json")
+
+    #tests user can downvote a question
+    def test_user_can_downvote_a_question_record(self):
+        self.token = self.login()
+        self.client.post("api/v2/meetups",
+                         data=json.dumps(self.post_meetup1),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        self.client.post("api/v2/meetups/1/questions",
+                         data=json.dumps(self.post_question1),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        response = self.client.patch("api/v2/questions/1/downvote",
+                                     headers={'x-access-token': self.token},
+                                     content_type="application/json")
         self.assertEqual(response.status_code, 200)
 
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['data'], self.downvoted_question)
+ 
+    """
+
     
     #tests if a user enters an invalid token
     def user_enter_invalid_token(self):
