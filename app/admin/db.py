@@ -49,7 +49,7 @@ def set_up_tables():
     CREATE TABLE meetups (
         meetup_id SERIAL PRIMARY KEY,
         topic VARCHAR (24) NOT NULL,
-        meetup_date TIMESTAMP,
+        happenningOn TIMESTAMP,
         meetup_location VARCHAR (24) NOT NULL,
         meetup_images VARCHAR (24) NOT NULL,
         meetup_tags VARCHAR (24) NOT NULL,
@@ -99,11 +99,12 @@ def set_up_tables():
         token VARCHAR
     )"""
 
+    #create a super user admin
     password = generate_password_hash('andela2019')
     create_admin_query = """
     INSERT INTO users(username, firstname, lastname, phone, email, password, admin) VALUES(
         '{}', '{}', '{}', '{}', '{}', '{}', '{}'
-    )""".format('blairaddmin', 'Tony', 'Blair', '0715096908', 'blairtheadmin@gmail.com', password, True)
+    )""".format('admin', 'Tony', 'Blair', '0715096908', 'admin@gmail.com', password, True)
 
     return [users_table_query, meetups_table_query,
             questions_table_query, comments_table_query,
