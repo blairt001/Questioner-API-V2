@@ -92,7 +92,7 @@ class MeetupModel:
                 found = False
         return found
         """
-
+        #get specific meetup
         meetup = MeetupModel.get_specific_meetup(meeting_id)
 
         if meetup:
