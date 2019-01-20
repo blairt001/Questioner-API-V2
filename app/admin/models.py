@@ -144,7 +144,7 @@ class QuestionModel:
         query = """
         INSERT INTO questions(user_id, meetup_id, title, body, votes, created_at) VALUES(
             '{}', '{}', '{}', '{}', '{}', '{}'
-        )""".format(self.user_id, self.meetup_id, self.title, self.body, self.votes, self.created_at)
+        )""".format(self.user_id, self.meetup_id, self.title, self.body, self.votes, '','', self.created_at)
 
         db.query_db_no_return(query)
 
@@ -183,7 +183,7 @@ class QuestionModel:
                         'title' : question["title"],
                         'body' : question["body"],
                         'votes' : question["votes"],
-                        #'voters' : question['voters'],
+                        'voters' : question['voters'],
                         'createdAt' : question["created_at"]
                        }
             data.append(question)

@@ -51,7 +51,6 @@ def create_question_record(current_user, meetup_id):
                              "meetup": meetup_id,
                              "body": body}]}), 201
 
-
 #get all questions record
 @path_2.route("/meetups/<int:meet_id>/questions", methods=['GET'])
 def get_user_get_all_questions_for_a_meetup(meet_id):

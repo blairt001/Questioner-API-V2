@@ -24,10 +24,11 @@ class QuestionBaseTest(unittest.TestCase):
 
         self.signup_user2 = {"firstname":"Tony",
                              "lastname": "Andela",
+                             "phoneNumber":"0715096908",
                              "username":"fakeadmin",
-                             "email":"blair1234.dev@gmail.com",
+                             "email":"blaidev@gmail.com",
                              "password": "Blairman1234",
-                             "confirm_password":"Blairman1234"}
+                             "confirmpassword":"Blairman1234"}
 
         self.login_user_1 = {"username":"admin",
                            "password":"andela2019"}
