@@ -17,12 +17,12 @@ class MeetupsBaseTest(unittest.TestCase):
         init_db(self.DB_URL) #getting our database url from the env file
 
         self.signup_admin1 = {"firstname":"Tony",
-                             "lastname": "Andela",
+                             "lastname": "Blair",
                              "phoneNumber":"0715096908",
-                             "username":"toniezah",
-                             "email":"blairman@gmail.com",
-                             "password": "Blairman1234",
-                             "confirmpassword":"Blairman1234"}
+                             "username":"admin",
+                             "email":"admin@gmail.com",
+                             "password": "andela2019",
+                             "confirmpassword":"andela2019"}
 
         self.signup_user1 = {"firstname":"Tony",
                              "lastname": "Andela",
@@ -32,8 +32,8 @@ class MeetupsBaseTest(unittest.TestCase):
                              "password": "Blairman1234",
                              "confirmpassword":"Blairman1234"}
 
-        self.login_admin1 = {"username":"toniezah",
-                           "password":"Blairman1234"}
+        self.login_admin1 = {"username":"admin",
+                           "password":"andela2019"}
 
         self.login_user1 = {"username":"fakeadmin",
                            "password":"Blairman1234"}
@@ -122,9 +122,7 @@ class MeetupsBaseTest(unittest.TestCase):
 
 class TestMeetupsRecords(MeetupsBaseTest):
     def user_login(self):
-        self.client.post('api/v2/auth/signup',
-                         data=json.dumps(self.signup_admin1),
-                         content_type="application/json")
+        #since we had already registered the admin user
         login = self.client.post('api/v2/auth/login',
                                  data=json.dumps(self.login_admin1),
                                  content_type="application/json")
@@ -144,7 +142,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
         self.assertEqual(result["status"], 201)
         self.assertEqual(result["data"], [{
             "location": "Thika",
-            "date": "14/02/2019",
+            "happenningon": "14/02/2019",
             "tags": "Tech",
             "topic": "Scrum"
         }])
