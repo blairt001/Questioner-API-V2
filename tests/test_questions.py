@@ -109,6 +109,14 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
                            "meetup": 1,
                            "title": "What is Dev?",
                            "user_id": 1}])
+
+    def test_get_all_questions_records(self):
+        self.token = self.user_login()
+        self.client.post("api/v1/meetups", data = json.dumps(self.post_meetup1), content_type = "application/json")
+        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question1), headers={'x-access-token': self.token}, content_type = "application/json")
+        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question2),headers={'x-access-token': self.token}, content_type = "application/json")
+        response = self.client.get("api/v1/meetups/1/questions", content_type = "application/json")
+        self.assertEqual(response.status_code, 200)
     """
     def test_upvote_question(self):
         self.token = self.user_login()
@@ -150,13 +158,7 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
         result = json.loads(response.data.decode("utf'8"))
         self.assertEqual(result['data'], self.question1_and_comment1)
 
-    def test_get_all_questions_records(self):
-        self.token = self.user_login()
-        self.client.post("api/v1/meetups", data = json.dumps(self.meetup), content_type = "application/json")
-        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question1), headers={'x-access-token': self.token}, content_type = "application/json")
-        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question2),headers={'x-access-token': self.token}, content_type = "application/json")
-        response = self.client.get("api/v1/meetups/1/questions", content_type = "application/json")
-        self.assertEqual(response.status_code, 200)
+    
 
     #tests that an unregistered user can not post a question
     def test_unregistered_user_not_post_question(self):
