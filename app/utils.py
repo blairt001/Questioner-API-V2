@@ -168,7 +168,7 @@ def check_for_whitespace(data):
     return True
 
 #check for other validations
-"""
+
 def check_if_string(data):
     if not re.match("^[A-Za-z]*$", data['firstname']):
         abort(make_response(jsonify({
@@ -184,19 +184,7 @@ def check_if_string(data):
         abort(make_response(jsonify({
             "status": 400,
             "Error":  "Make sure you only use letters in your username"}), 400))
-"""
-def check_for_whitespace(data):
-    """
-    Check for whitespace only in input data
-    """
-    for keys, value in data.items():
-        if not value.strip():
-            abort(make_response(jsonify({
-                'status': 400,
-                'error':'{} field cannot be left blank'.format(keys)}), 400))
-
-    return True
-
+            
 def check_if_string(data):
     for key, value in data.items():
         if key in ['firstname', 'lastname', 'username']:
