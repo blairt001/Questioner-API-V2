@@ -4,6 +4,8 @@ from flask import jsonify, request , make_response , abort
 from app.admin.models import MeetupModel
 from app.api.v2 import path_2 
 from app.utils import  check_if_user_is_admin , token_required
+from app.admin.models import UserModel, UserRsvp, UserVote
+from app import utils
 
 @path_2.route("/meetups", methods=['POST'])
 @token_required
@@ -37,6 +39,31 @@ def admin_create_meetup(current_user):
     admin = check_if_user_is_admin()
     if not admin:
         return jsonify({'status': 401, 'error':"You are not allowed to perfom this function"}), 401
+  
+
+    #lets do validations
+    try:
+        data = request.get_json()
+        topic = data['topic']
+        happenningon = data['happenningon']
+        location = data['location']
+        images = data['images']
+        tags = data['tags']
+
+    except KeyError:
+        return jsonify({
+            'status':400,
+            'error': 'Should be topic, happenningon, location, images and tags'}), 400
+
+    utils.check_for_whitespace(data)
+    utils.check_if_string(data)
+
+    if not tags:
+        abort(make_response(jsonify({
+            'status':400,
+            'error':'tags field is required'}), 400))
+
+    happenningon = utils.check_date(happenningon)
 
     meetup = MeetupModel(
         topic=topic,
@@ -60,8 +87,12 @@ def admin_create_meetup(current_user):
 def get_specific_meetup(meetup_id):
     meetup = MeetupModel.get_specific_meetup(meetup_id)
     if meetup:
-        return jsonify({"status": 200, "data": meetup}), 200
-    return jsonify({"status": 404, "data": "Meetup not found"}), 404
+        meetup = meetup[0] #assign it index 0 =1 
+        return jsonify({"status": 200, "data": {'meetupId': meetup['meetup_id'],
+                                                'topic': meetup['topic'],
+                                                'happenningon': meetup['happenningon'],
+                                                'location': meetup['meetup_location']}}), 200
+    return jsonify({"status": 404, "data": "Meetup with id {} not found".format(meetup_id)}), 404
 
 #User get all upcoming meetup records
 @path_2.route("/meetups/upcoming", methods=["GET"])

@@ -62,7 +62,7 @@ class MeetupModel:
         #return [MeetupModel.to_json(meetup) for meetup in MEETUPS_LEN]
 
         query = """
-        SELECT meetup_id, topic, meetup_date, meetup_location,
+        SELECT meetup_id, topic, happenningon, meetup_location,
         meetup_tags, created_at FROM meetups
         """
 
@@ -109,7 +109,7 @@ class MeetupModel:
     def check_if_meetup_already_posted(meetup_location, date):
         query = """
         SELECT meetup_id FROM meetups
-        WHERE meetups.meetup_location = '{}' AND meetups.meetup_date = '{}'
+        WHERE meetups.meetup_location = '{}' AND meetups.happenningon = '{}'
         """.format(meetup_location, date)
 
         posted = db.select_from_db(query)

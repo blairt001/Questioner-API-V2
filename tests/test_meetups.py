@@ -47,13 +47,13 @@ class MeetupsBaseTest(unittest.TestCase):
                             "tags":"Tech"
                            }
         self.post_meetup2 = {"topic":"Fullstack",
-                             "happenningon":"2019-02-15",
+                             "happenningon":"15/02/2019",
                              "location":"Nairobi",
                              "images": "tony.png",
                              "tags":"Health"
                             }
         self.post_meetup3 = {"topic":"Miguel Miguel",
-                             "happenningon":"2019-02-16",
+                             "happenningon":"16/02/2019",
                              "location":"Nairobi",
                              "images":"Miguel.png",
                              "tags":"Tech"
@@ -142,7 +142,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
         self.assertEqual(result["status"], 201)
         self.assertEqual(result["data"], [{
             "location": "Thika",
-            "happenningon": "14/02/2019",
+            "happenningon": "14 Feb 2019",
             "tags": "Tech",
             "topic": "Scrum"
         }])
@@ -227,3 +227,21 @@ class TestMeetupsRecords(MeetupsBaseTest):
         self.assertEqual(result["error"], 'topic field cannot be left blank')
 
     """
+     #tests that user can get a single meetup record
+    def test_user_can_get_a_single_meetup_record(self):
+         
+        self.token = self.user_login()
+        self.client.post("api/v2/meetups",
+                         data=json.dumps(self.post_meetup1),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        response = self.client.get("api/v2/meetups/1",
+                                   content_type="application/json")
+        self.assertEqual(response.status_code, 200)
+
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result['status'], 200)
+        self.assertEqual(result['data'], {'meetupId': 1,
+                                          'topic':"Scrum",
+                                          'happenningon': "Thu, 14 Feb 2019 00:00:00 GMT",
+                                          'location':"Thika"})
