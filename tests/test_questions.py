@@ -16,10 +16,11 @@ class QuestionBaseTest(unittest.TestCase):
 
         self.signup_user1 = {"firstname":"Tony",
                              "lastname": "Blair",
-                             "username":"toniezah",
-                             "email":"blairt134@gmail.com",
-                             "password": "Manchester123",
-                             "confirm_password":"Manchester123"}
+                             "phoneNumber":"0715096908",
+                             "username":"admin",
+                             "email":"admin@gmail.com",
+                             "password": "andela2019",
+                             "confirmpassword":"andela2019"}
 
         self.signup_user2 = {"firstname":"Tony",
                              "lastname": "Andela",
@@ -28,19 +29,19 @@ class QuestionBaseTest(unittest.TestCase):
                              "password": "Blairman1234",
                              "confirm_password":"Blairman1234"}
 
-        self.login_user_1 = {"username":"toniezah",
-                           "password":"Manchester123"}
+        self.login_user_1 = {"username":"admin",
+                           "password":"andela2019"}
 
         self.login_user_2 = {"username":"fakeadmin",
                            "password":"Blairman1234"}
 
 
-        self.meetup = {"topic":"Andela Fellowship",
-                       "happenningon":"16/02/2019",
-                       "location":"Nairobi",
-                       "images":["mig1.png", "mig2.png"],
-                       "tags":["Tech", "Health"]
-                      }
+        self.post_meetup1 =   {"topic":"Scrum",
+                            "happenningon":"14/02/2019",
+                            "location":"Thika",
+                            "images":"blair.png",
+                            "tags":"Tech"
+                           }
 
         self.post_question1 = {"title":"What is Dev?",
                                "body":"I really like how people talk about Tony's Dev"}
@@ -79,31 +80,36 @@ class QuestionBaseTest(unittest.TestCase):
         """Tperform final cleanup after tests run"""
         self.app.testing = False
         
-"""
 class TestQuestionApiEndpoint(QuestionBaseTest):
     #create an empty token on admin login
     def user_login(self):
-        self.client.post(
-            'api/v1/auth/signup', data=json.dumps(self.signup_user1),
-            content_type="application/json")
-        login = self.client.post(
-            'api/v1/auth/login', data=json.dumps(self.login_user_1),
-            content_type="application/json")
+        login = self.client.post('api/v2/auth/login',
+                                 data=json.dumps(self.login_user_1),
+                                 content_type="application/json")
         data = json.loads(login.data.decode('utf-8'))
         self.token = data["token"]
         return self.token
 
-    def test_user_can_post_a_question_to_meetup(self):
+    #tests user can post a question to a specific meetup
+    def test_user_can_post_a_question_to_meetup_record(self):
         self.token = self.user_login()
-        self.client.post("api/v1/meetups", data = json.dumps(self.meetup), content_type = "application/json")
-        response = self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question1), headers={'x-access-token': self.token}, content_type = "application/json")
+        self.client.post("api/v2/meetups",
+                         data=json.dumps(self.post_meetup1),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        response = self.client.post("api/v2/meetups/1/questions",
+                                    data=json.dumps(self.post_question1),
+                                    headers={'x-access-token': self.token},
+                                    content_type="application/json")
         self.assertEqual(response.status_code, 201)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['status'], 201)
-        self.assertEqual(result['data'], [{"body": "I really like how people talk about Tony's Dev",
-                                           "meetup": 1,
-                                           "title": "What is Dev?"}])
-
+        self.assertEqual(result['data'],
+                         [{"body": "I really like how people talk about Tony's Dev",
+                           "meetup": 1,
+                           "title": "What is Dev?",
+                           "user_id": 1}])
+    """
     def test_upvote_question(self):
         self.token = self.user_login()
         self.client.post("api/v1/meetups", data = json.dumps(self.meetup), content_type = "application/json")
@@ -161,4 +167,5 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
         self.assertEqual(response.status_code, 401)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['message'], "Token is missing")
-        """
+    """
+        
