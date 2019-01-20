@@ -93,7 +93,7 @@ def downvote_question(question_id):
 #user should be able to post comment
 @path_2.route("/questions/<int:question_id>/comment", methods=['POST'])
 @token_required
-def user_comment_on_a_question(question_id):
+def user_comment_on_a_question(current_user, question_id):
     username_len = utils.decode_token()
     username = username_len['username']
     user = UserModel.get_user_by_username(username)
