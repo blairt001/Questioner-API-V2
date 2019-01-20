@@ -96,7 +96,7 @@ def token_required(f):
         if not token:
             return jsonify({'message':"Token is missing"}), 401
 
-        blacklisted = Token.check_if_token_blacklisted(token)
+        blacklisted = AuthToken.check_if_token_blacklisted(token)
         if blacklisted:
             abort(make_response(jsonify({
                 'message':'Please login again to continue'}), 401))
@@ -153,7 +153,7 @@ is already in use".format(key, value)), 400))
 #check if the user is actually an admin
 def check_if_user_is_admin():
     username = decode_token()
-    if username['username'] != "blairtheadmin":
+    if username['username'] != "admin":
         return False
     return True
 
