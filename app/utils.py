@@ -184,6 +184,7 @@ def check_if_string(data):
             "status": 400,
             "Error":  "Make sure you only use letters in your username"}), 400))
 
+#check for any whitespace in the user inputs
 def check_for_whitespace(data):
     """
     Check for whitespace only in input data
@@ -195,15 +196,6 @@ def check_for_whitespace(data):
                 'error':'{} field cannot be left blank'.format(keys)}), 400))
 
     return True
-
-def check_if_string(data):
-    for key, value in data.items():
-        if key in ['firstname', 'lastname', 'username']:
-            if not value.isalpha():
-                abort(make_response(jsonify({
-                    "status": 400,
-                    "Error":  "Make sure you only use letters in your {}".format(key)}), 400))
-
 
 def check_phone_number(phone):
     if not re.match('^[0-9]*$', phone):

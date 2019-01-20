@@ -10,8 +10,8 @@ from app import utils;
 @path_2.route("/meetups/<int:meetup_id>/questions", methods=['POST'])
 @token_required
 def create_question_record(current_user, meetup_id):
-    username_len = utils.decode_token()
-    username = username_len['username']
+    username_dict = utils.decode_token()
+    username = username_dict['username']
     user = UserModel.get_user_by_username(username)
     try:
         user = user[0]
