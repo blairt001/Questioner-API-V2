@@ -24,10 +24,11 @@ class QuestionBaseTest(unittest.TestCase):
 
         self.signup_user2 = {"firstname":"Tony",
                              "lastname": "Andela",
+                             "phoneNumber":"0715096908",
                              "username":"fakeadmin",
-                             "email":"blair1234.dev@gmail.com",
+                             "email":"blaidev@gmail.com",
                              "password": "Blairman1234",
-                             "confirm_password":"Blairman1234"}
+                             "confirmpassword":"Blairman1234"}
 
         self.login_user_1 = {"username":"admin",
                            "password":"andela2019"}
@@ -110,6 +111,15 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
                            "title": "What is Dev?",
                            "user_id": 1}])
     """
+    def test_get_all_questions_records(self):
+        self.token = self.user_login()
+        self.client.post("api/v1/meetups", data = json.dumps(self.post_meetup1), content_type = "application/json")
+        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question1), headers={'x-access-token': self.token}, content_type = "application/json")
+        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question2),headers={'x-access-token': self.token}, content_type = "application/json")
+        response = self.client.get("api/v1/meetups/1/questions", content_type = "application/json")
+        self.assertEqual(response.status_code, 200)
+    """
+    """
     def test_upvote_question(self):
         self.token = self.user_login()
         self.client.post("api/v1/meetups", data = json.dumps(self.meetup), content_type = "application/json")
@@ -150,13 +160,7 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
         result = json.loads(response.data.decode("utf'8"))
         self.assertEqual(result['data'], self.question1_and_comment1)
 
-    def test_get_all_questions_records(self):
-        self.token = self.user_login()
-        self.client.post("api/v1/meetups", data = json.dumps(self.meetup), content_type = "application/json")
-        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question1), headers={'x-access-token': self.token}, content_type = "application/json")
-        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question2),headers={'x-access-token': self.token}, content_type = "application/json")
-        response = self.client.get("api/v1/meetups/1/questions", content_type = "application/json")
-        self.assertEqual(response.status_code, 200)
+    
 
     #tests that an unregistered user can not post a question
     def test_unregistered_user_not_post_question(self):
