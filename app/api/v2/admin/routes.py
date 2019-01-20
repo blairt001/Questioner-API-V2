@@ -94,7 +94,7 @@ def get_specific_meetup(meetup_id):
                                                 'location': meetup['meetup_location']}}), 200
     return jsonify({"status": 404, "data": "Meetup with id {} not found".format(meetup_id)}), 404
 
-#User get all upcoming meetup records
+#User get all upcoming meetup records endpoint
 @path_2.route("/meetups/upcoming", methods=["GET"])
 def get_all_upcoming_meetups():
     meetups = MeetupModel.get_all_upcoming_meetups()
