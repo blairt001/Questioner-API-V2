@@ -69,11 +69,10 @@ class QuestionBaseTest(unittest.TestCase):
         self.post_comment1 = {"comment":"Wow, I love every topic on Dev, the answer will help me alot"}
 
         self.question1_and_comment1 = {"body": "I really like how people talk about Tonys Dev",
-                                     "comments": ["Wow, I love every topic on Dev, the answer will help me alot", {"username" : "toniezah"}],
-                                     "meetup_id": 1,
+                                     "comment": "Wow, I love every topic on Dev, the answer will help me alot",
                                      "question_id": 1,
                                      "title": "What is Dev?",
-                                     "votes": 0}
+                                     "userId" : 1 }
 
         self.token = ''
     #tear down tests                                 
