@@ -93,7 +93,7 @@ class MeetupModel:
         return found
         """
 
-        meetup = MeetupModel.get_meetup(meeting_id)
+        meetup = MeetupModel.get_specific_meetup(meeting_id)
 
         if meetup:
             query = """
