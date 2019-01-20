@@ -108,6 +108,7 @@ def set_up_tables():
 
     #end create super user admin
     
+    #return all our table model queries
     return [users_table_query, meetups_table_query,
             questions_table_query, comments_table_query,
             rsvps_table_query, create_admin_query,
