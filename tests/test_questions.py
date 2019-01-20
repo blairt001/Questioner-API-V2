@@ -65,7 +65,8 @@ class QuestionBaseTest(unittest.TestCase):
                                    "question_id": 1,
                                    "title": "What is Dev?",
                                    "votes": -1}
-        #prepare comments setup
+                                   
+        #prepare comments setup to accelerate our tests
         self.post_comment1 = {"comment":"Wow, I love every topic on Dev, the answer will help me alot"}
 
         self.question1_and_comment1 = {"body": "I really like how people talk about Tonys Dev",
