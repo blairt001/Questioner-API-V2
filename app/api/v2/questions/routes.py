@@ -138,7 +138,7 @@ def user_comment_on_a_question(current_user, question_id):
 @path_2.route("/questions/<int:question_id>/comments", methods=['GET'])
 @token_required
 def get_all_comments_on_a_given_question(current_user, question_id):
-    question = Question.get_question(question_id)
+    question = QuestionModel.get_question(question_id)
     if not question:
         abort(make_response(jsonify({
             'status': 404,
