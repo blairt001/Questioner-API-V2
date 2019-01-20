@@ -5,6 +5,7 @@ from app.admin.models import MeetupModel
 from app.api.v2 import path_2 
 from app.utils import  check_if_user_is_admin , token_required
 from app.admin.models import UserModel, UserRsvp, UserVote
+from app import utils
 
 @path_2.route("/meetups", methods=['POST'])
 @token_required
@@ -62,7 +63,7 @@ def admin_create_meetup(current_user):
             'status':400,
             'error':'tags field is required'}), 400))
 
-    meetup_date = validators.check_date(meetup_date)
+    happenningon = utils.check_date(happenningon)
 
     meetup = MeetupModel(
         topic=topic,
