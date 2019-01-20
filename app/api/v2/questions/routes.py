@@ -133,3 +133,21 @@ def user_comment_on_a_question(current_user, question_id):
     return jsonify({
         'status': 404,
         'error':'Question with id {} not found'.format(question_id)}), 404
+
+#a user should be able to get all comments for a question
+@path_2.route("/questions/<int:question_id>/comments", methods=['GET'])
+@token_required
+def get_all_comments_on_a_given_question(current_user, question_id):
+    question = QuestionModel.get_question(question_id)
+    if not question:
+        abort(make_response(jsonify({
+            'status': 404,
+            'error': 'Question with id {} not found'.format(question_id)})))
+
+    comments = CommentModel.get_all_comments(question_id)
+    if comments:
+        return jsonify({'status': 200,
+                        'data': comments})
+    return jsonify({
+        'status': 404,
+        'error': 'No comments posted for question with id {}'.format(question_id)}), 404
