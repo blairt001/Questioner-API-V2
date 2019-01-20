@@ -62,7 +62,7 @@ class MeetupModel:
         #return [MeetupModel.to_json(meetup) for meetup in MEETUPS_LEN]
 
         query = """
-        SELECT meetup_id, topic, meetup_date, meetup_location,
+        SELECT meetup_id, topic, happenningon, meetup_location,
         meetup_tags, created_at FROM meetups
         """
 
