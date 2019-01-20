@@ -214,7 +214,6 @@ class TestMeetupsRecords(MeetupsBaseTest):
         self.assertEqual(result["error"], "You are not allowed to perfom this function")
 
     #tests for any available whitespaces
-    """
     def test_if_a_user_inputs_a_whitespace(self):
         self.token = self.user_login()
         response = self.client.post("api/v2/meetups",
@@ -224,9 +223,8 @@ class TestMeetupsRecords(MeetupsBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
-        self.assertEqual(result["error"], 'topic field cannot be left blank')
+        self.assertEqual(result["error"], 'location field cannot be left blank')
 
-    """
      #tests that user can get a single meetup record
     def test_user_can_get_a_single_meetup_record(self):
          
