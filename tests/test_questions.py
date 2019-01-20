@@ -109,7 +109,7 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
                            "meetup": 1,
                            "title": "What is Dev?",
                            "user_id": 1}])
-   """
+    """
     def test_get_all_questions_records(self):
         self.token = self.user_login()
         self.client.post("api/v1/meetups", data = json.dumps(self.post_meetup1), content_type = "application/json")
