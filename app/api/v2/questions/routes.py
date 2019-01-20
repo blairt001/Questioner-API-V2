@@ -93,19 +93,42 @@ def downvote_question(question_id):
 #user should be able to post comment
 @path_2.route("/questions/<int:question_id>/comment", methods=['POST'])
 def user_comment_on_a_question(question_id):
-    """
-    User post comment endpoint route
-    """
+    username_len = validators.decode_token()
+    username = username_len['username']
+    user = User.get_user_by_username(username)
+    try:
+        user = user[0]
+    except:
+        return jsonify({
+            'status': 401,
+            'error': "Please login first"}), 401
     try:
         comment = request.get_json()['comment']
     except KeyError:
-        abort(make_response(jsonify({'status': 400, 'error':'Check your json key. It is comment'})))
-    username = decode_token()
-    question = QuestionModel.get_question(question_id)
+        abort(make_response(jsonify({
+            'status': 400,
+            'error':'Check your json key. Should be comment'})))
+
+    question = QuestionModel.get_specific_question(question_id)
     if question:
-        my_question = question[0]
-        comments = my_question['comments']
-        comments.append(comment)
-        comments.append(username)
-        return jsonify({"status": 201, "data": my_question}), 201
-    return jsonify({'status': 404, 'error':'The question you are looking for is not found'}), 404
+        question = question[0]
+        user_id = user['user_id']
+        title = question['title']
+        body = question['body']
+
+        my_comment = Comment(title,
+                             body,
+                             comment,
+                             user_id,
+                             question_id)
+        my_comment.save_comment()
+
+        return jsonify({"status": 201,
+                        "data": {"title": my_comment.title,
+                                 "body": my_comment.body,
+                                 "comment": my_comment.comment,
+                                 "userId": my_comment.user_id,
+                                 "question_id": my_comment.question_id,}}), 201
+    return jsonify({
+        'status': 404,
+        'error':'Question with id {} not found'.format(question_id)}), 404
