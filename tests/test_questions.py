@@ -151,7 +151,7 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
 
     #tests user can get all comments
     def test_user_can_get_all_comments_on_question_record(self):
-        self.token = self.login()
+        self.token = self.user_login()
         first = self.client.post("api/v2/meetups",
                              data=json.dumps(self.post_meetup1),
                              headers={'x-access-token': self.token},
