@@ -125,7 +125,7 @@ class MeetupModel:
     """
 
 class QuestionModel:
-    def __init__(self ,user_id, title, body, meetup_id, votes = 0):
+    def __init__(self ,user_id, title, body, meetup_id,votes = 0):
         """
         The initialization of the Question class that defines its variables
         """
@@ -135,6 +135,7 @@ class QuestionModel:
         self.title = title
         self.votes = 0
         self.body = body
+        self.comment = ""
         self.created_at = datetime.now()
 
     def save_question(self):
@@ -142,9 +143,9 @@ class QuestionModel:
         saves the question to the database
         """
         query = """
-        INSERT INTO questions(user_id, meetup_id, title, body, votes, created_at) VALUES(
-            '{}', '{}', '{}', '{}', '{}', '{}'
-        )""".format(self.user_id, self.meetup_id, self.title, self.body, self.votes, '','', self.created_at)
+        INSERT INTO questions(user_id, meetup_id, title, body, votes, comment, created_at) VALUES(
+            '{}', '{}', '{}', '{}', '{}', '{}', '{}'
+        )""".format(self.user_id, self.meetup_id, self.title, self.body, self.votes, self.comment, self.created_at)
 
         db.query_db_no_return(query)
 
