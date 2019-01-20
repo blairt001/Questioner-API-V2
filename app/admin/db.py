@@ -99,7 +99,7 @@ def set_up_tables():
         token VARCHAR
     )"""
 
-    #create a super user admin
+    #create a super user admin with hashed password
     password = generate_password_hash('andela2019')
     create_admin_query = """
     INSERT INTO users(username, firstname, lastname, phone, email, password, admin) VALUES(
