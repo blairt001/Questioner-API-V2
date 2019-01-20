@@ -60,7 +60,7 @@ def validate_email(email):
     except ValueError:
         abort(make_response(jsonify(
             status=400,
-            error="Invalid Email"), 400))
+            error="Email is Invalid"), 400))
     if not user or not domain:
         abort(make_response(jsonify(error="Email is Invalid"), 400))
 

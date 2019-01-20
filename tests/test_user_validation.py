@@ -25,9 +25,12 @@ class ValidationsBaseTest(unittest.TestCase):
                              "lastname": "MIT",
                              "username":"blairtony",
                              "phoneNumber":"0715096908",
-                             "email":"blairt371.dev@gmail.com",
+                             "email":"blairtdev@gmail.com",
                              "password": "Blairman1234",
                              "confirmpassword":"Blairman1234"}
+
+        self.login_user = {"username":"blairtony",
+                           "password":"Blairman1234"}
 
 
         self.user_email1_invalid = {"firstname":"Lionel",
@@ -86,15 +89,6 @@ class ValidationsBaseTest(unittest.TestCase):
 #lets now test for user validations
 class TestValidations(ValidationsBaseTest):
 
-    #tests if email is already taken
-    """
-    def test_if_email_is_already_taken(self):
-        self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user), content_type = "application/json")
-        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user), content_type = "application/json")
-        self.assertEqual(response.status_code, 400)
-        result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['error'],"Error. 'username' 'blairtony' is already in use")
-    """
     #tests if user enters an invalid email
     def test_user_enter_an_invalid_email1(self):
         response = self.client.post("api/v2/auth/signup", data = json.dumps(self.user_email1_invalid), content_type = "application/json")
@@ -136,3 +130,38 @@ class TestValidations(ValidationsBaseTest):
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['error'],"Password should contain a number(0-9)")
+
+    #tests url not found
+    def test_error_handler_404_url_not_found(self):
+        response = self.client.post("api/v2/auth/tonyandela",
+                                    data=json.dumps(self.signup_user),
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 404)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(
+            result['error'], 'Url not found')
+
+    #tests method not allowed
+    def test_error_handler_405_method_not_allowed(self):
+        response = self.client.get("api/v2/auth/signup",
+                                   data=json.dumps(self.signup_user),
+                                   content_type="application/json")
+        self.assertEqual(response.status_code, 405)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(
+            result['error'], "Method not allowed")
+
+    #tests username already used
+    def test_user_username_already_exists_in_database(self):
+
+        self.client.post("api/v2/auth/signup",
+                         data=json.dumps(self.signup_user),
+                         content_type="application/json")
+        response = self.client.post("api/v2/auth/signup",
+                                    data=json.dumps(self.signup_user),
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 400)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(
+            result['error'],
+            "Error. 'username' 'blairtony' is already in use")
