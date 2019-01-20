@@ -109,7 +109,7 @@ class MeetupModel:
     def check_if_meetup_already_posted(meetup_location, date):
         query = """
         SELECT meetup_id FROM meetups
-        WHERE meetups.meetup_location = '{}' AND meetups.meetup_date = '{}'
+        WHERE meetups.meetup_location = '{}' AND meetups.happenningon = '{}'
         """.format(meetup_location, date)
 
         posted = db.select_from_db(query)
