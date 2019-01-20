@@ -264,3 +264,18 @@ class TestMeetupsRecords(MeetupsBaseTest):
         self.assertEqual(result["status"], 200)
         self.assertTrue(result["data"])
 
+    #tests admin can delete a meetup record
+    def test_admin_can_delete_a_meetup_record(self):
+        self.token = self.user_login()
+        self.client.post("api/v2/meetups",
+                         data=json.dumps(self.post_meetup1),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        response = self.client.delete("api/v2/meetups/1",
+                                      headers={'x-access-token': self.token},
+                                      content_type="application/json")
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(result["status"], 200)
+        self.assertEqual(result["data"], "Meetup record deleted successfully")
+
