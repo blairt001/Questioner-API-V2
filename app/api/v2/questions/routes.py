@@ -117,7 +117,7 @@ def user_comment_on_a_question(current_user, question_id):
         title = question['title']
         body = question['body']
 
-        my_comment = Comment(title,
+        my_comment = CommentModel(title,
                              body,
                              comment,
                              user_id,
