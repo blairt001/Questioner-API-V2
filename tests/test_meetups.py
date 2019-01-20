@@ -142,7 +142,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
         self.assertEqual(result["status"], 201)
         self.assertEqual(result["data"], [{
             "location": "Thika",
-            "happenningon": "14/02/2019",
+            "happenningon": "14 Feb 2019",
             "tags": "Tech",
             "topic": "Scrum"
         }])
@@ -243,5 +243,5 @@ class TestMeetupsRecords(MeetupsBaseTest):
         self.assertEqual(result['status'], 200)
         self.assertEqual(result['data'], {'meetupId': 1,
                                           'topic':"Scrum",
-                                          'happenningon': "Thu, 14 Feb 2019",
-                                          'meetupLocation':"Thika"})
+                                          'happenningon': "Thu, 14 Feb 2019 00:00:00 GMT",
+                                          'location':"Thika"})
