@@ -1,7 +1,7 @@
 """The users meetup routes endpoint polished"""
 
 from flask import jsonify, request , abort, make_response
-from app.admin.models import QuestionModel, MeetupModel, CommentModel, UserModel
+from app.admin.models import QuestionModel, MeetupModel, CommentModel, UserModel, UserVote, UserRsvp
 from app.api.v2 import path_2
 from app.admin import db
 from app.utils import token_required, decode_token
@@ -63,12 +63,10 @@ def get_user_get_all_questions_for_a_meetup(meet_id):
     return jsonify({"status": 404, "data": "We cant find a question for this meetup. No question posted yet"}), 404
 
 #upvote a question
+"""
 @path_2.route("/questions/<int:question_id>/upvote", methods=['PATCH'])
 @token_required
 def upvote_question(question_id):
-    """
-    The upvote question route endpoint
-    """
     question = QuestionModel.get_question(question_id)
     if question:
         my_question = question[0]
@@ -80,15 +78,67 @@ def upvote_question(question_id):
 @path_2.route("/questions/<int:question_id>/downvote", methods=['PATCH'])
 @token_required
 def downvote_question(question_id):
-    """
-    The downvote question route endpoint
-    """
     question = QuestionModel.get_question(question_id)
     if question:
         my_question = question[0]
         my_question['votes'] = my_question['votes'] - 1
         return jsonify({"status": 200, "data": my_question}), 200
     return jsonify({"status": 404, "error": "Question not found"}), 404
+"""
+#to go the easy way, lets merge the upvote and downvote together
+@path_2.route("/questions/<int:question_id>/<vote>", methods=['PATCH'])
+@token_required
+def merge_upvote_and_downvote_question(current_user, question_id, vote):
+    username_len = utils.decode_token()
+    username = username_len['username']
+    user = UserModel.get_user_by_username(username)
+    try:
+        user = user[0]
+    except:
+        return jsonify({
+            'status': 401,
+            'error': "Please login first"}), 401
+
+    if vote not in ['upvote', 'downvote']:
+        abort(make_response(jsonify({
+            'status': 400,
+            'error': 'url vote should be upvote or downvote'}), 400))
+
+    question = QuestionModel.get_question(question_id)
+    if question:
+        user_id = user['user_id']
+        voted = UserVote.check_if_already_voted(user_id, question_id)
+        if voted:
+            abort(make_response(jsonify({
+                'status': 409,
+                'error': "You cannot vote twice on a single question"}), 409))
+
+        my_question = question[0]
+        if vote == 'upvote':
+            my_question['votes'] = my_question['votes'] + 1
+        if vote == 'downvote':
+            my_question['votes'] = my_question['votes'] - 1
+
+        query = """
+        UPDATE questions SET votes = '{}' WHERE questions.question_id = '{}'
+        """.format(my_question['votes'], question_id)
+        db.query_db_no_return(query)
+
+        voter = UserVote(question_id=question_id,
+                     user_id=user_id)
+        voter.save_vote()
+        return jsonify({"status": 200,
+                        "data": {"questionid": my_question['question_id'],
+                                 "title": my_question['title'],
+                                 "body": my_question['body'],
+                                 "comment": my_question['comment'],
+                                 "votes": my_question['votes']}}), 200
+    return jsonify({
+        "status": 404,
+        "error": "Question with id {} not found".format(question_id)}), 404
+
+
+
 
 #user should be able to post comment
 @path_2.route("/questions/<int:question_id>/comment", methods=['POST'])
