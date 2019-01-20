@@ -93,9 +93,9 @@ def downvote_question(question_id):
 #user should be able to post comment
 @path_2.route("/questions/<int:question_id>/comment", methods=['POST'])
 def user_comment_on_a_question(question_id):
-    username_len = validators.decode_token()
+    username_len = utils.decode_token()
     username = username_len['username']
-    user = User.get_user_by_username(username)
+    user = UserModel.get_user_by_username(username)
     try:
         user = user[0]
     except:
