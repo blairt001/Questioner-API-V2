@@ -110,7 +110,7 @@ def user_comment_on_a_question(current_user, question_id):
             'status': 400,
             'error':'Check your json key. Should be comment'})))
 
-    question = QuestionModel.get_specific_question(question_id)
+    question = QuestionModel.get_question(question_id)
     if question:
         question = question[0]
         user_id = user['user_id']
