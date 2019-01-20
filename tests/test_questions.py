@@ -148,6 +148,29 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
         self.assertEqual(response.status_code, 201)
         result = json.loads(response.data.decode("utf'8"))
         self.assertEqual(result['data'], self.question1_and_comment1)
+
+    #tests user can get all comments
+    def test_user_can_get_all_comments_on_question_record(self):
+        self.token = self.login()
+        first = self.client.post("api/v2/meetups",
+                             data=json.dumps(self.post_meetup1),
+                             headers={'x-access-token': self.token},
+                             content_type="application/json")
+        self.assertEqual(first.status_code, 201)
+        second = self.client.post("api/v2/meetups/1/questions",
+                             data=json.dumps(self.post_question1),
+                             headers={'x-access-token': self.token},
+                             content_type="application/json")
+        self.assertEqual(second.status_code, 201)
+        third = self.client.post("api/v2/questions/1/comment",
+                             headers={'x-access-token': self.token},
+                             data=json.dumps(self.post_comment1),
+                             content_type="application/json")
+        self.assertEqual(third.status_code, 201)
+        response = self.client.get("api/v2/questions/1/comments",
+                                   headers={'x-access-token': self.token},
+                                   content_type="application/json")
+        self.assertEqual(response.status_code, 200)
  
     """
     def test_upvote_question(self):
@@ -181,17 +204,8 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['message'], "token is expired or invalid")
     #define test case for user posting comments
-    def test_user_comment_on_a_question(self):
-        self.token = self.user_login()
-        self.client.post("api/v1/meetups", data = json.dumps(self.meetup), content_type = "application/json")
-        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question1),headers={'x-access-token': self.token}, content_type = "application/json")
-        response = self.client.post("api/v1/questions/1/comment", data = json.dumps(self.post_comment1), headers={'x-access-token': self.token}, content_type = "application/json")
-        self.assertEqual(response.status_code, 201)
-        result = json.loads(response.data.decode("utf'8"))
-        self.assertEqual(result['data'], self.question1_and_comment1)
-
     
-
+    
     #tests that an unregistered user can not post a question
     def test_unregistered_user_not_post_question(self):
         response = self.client.post("api/v1/meetups/1/questions",
