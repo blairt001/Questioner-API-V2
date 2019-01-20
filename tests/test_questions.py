@@ -54,9 +54,8 @@ class QuestionBaseTest(unittest.TestCase):
                                "body":"It is just OK"}
 
         self.upvoted_question= {"body": "I really like how people talk about Tonys Dev",
-                                "meetup_id": 1,
-                                "comments": None, #initialize comments None value
-                                "question_id": 1,
+                                "comment": "", #initialize comments None value
+                                "questionid": 1,
                                 "title": "What is Dev?",
                                 "votes": 1}
         self.downvoted_question = {"body": "I really like how people talk about Tonys Dev",
