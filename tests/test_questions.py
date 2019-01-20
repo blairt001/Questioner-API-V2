@@ -111,6 +111,7 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
                            "title": "What is Dev?",
                            "user_id": 1}])
    
+    #test user get all question records
     def test_user_get_all_questions_records(self):
         self.token = self.user_login()
         self.client.post("api/v2/meetups",
@@ -128,6 +129,25 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
         response = self.client.get("api/v2/meetups/1/questions",
                                    content_type="application/json")
         self.assertEqual(response.status_code, 200)
+
+    #test user comment on a given question
+    def test_user_comment_on_a_given_question(self):
+        self.token = self.user_login()
+        self.client.post("api/v2/meetups",
+                         data=json.dumps(self.post_meetup1),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        self.client.post("api/v2/meetups/1/questions",
+                         data=json.dumps(self.post_question1),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        response = self.client.post("api/v2/questions/1/comment",
+                                    data=json.dumps(self.post_comment1),
+                                    headers={'x-access-token': self.token},
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 201)
+        result = json.loads(response.data.decode("utf'8"))
+        self.assertEqual(result['data'], self.question1_and_comment1)
  
     """
     def test_upvote_question(self):
