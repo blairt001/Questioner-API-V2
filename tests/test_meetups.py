@@ -41,19 +41,19 @@ class MeetupsBaseTest(unittest.TestCase):
 
 
         self.post_meetup1 = {"topic":"Scrum",
-                            "happenningOn":"2019-02-14",
+                            "happenningon":"14/02/2019",
                             "location":"Thika",
                             "images":"blair.png",
                             "tags":"Tech"
                            }
         self.post_meetup2 = {"topic":"Fullstack",
-                             "happenningOn":"2019-02-15",
+                             "happenningon":"2019-02-15",
                              "location":"Nairobi",
                              "images": "tony.png",
                              "tags":"Health"
                             }
         self.post_meetup3 = {"topic":"Miguel Miguel",
-                             "happenningOn":"2019-02-16",
+                             "happenningon":"2019-02-16",
                              "location":"Nairobi",
                              "images":"Miguel.png",
                              "tags":"Tech"
@@ -64,31 +64,31 @@ class MeetupsBaseTest(unittest.TestCase):
                                 "topic": "Scrum"}]
 
         self.meetup_topic_record = {"topic":"",
-                            "happenningOn":"14/02/2019",
+                            "happenningon":"14/02/2019",
                             "location":"Thika",
                             "images":"blair.png",
                             "tags":"Tech"}
 
         self.meetup_location_record = {"topic":"Scrum",
-                            "happenningOn":"14/02/2019",
+                            "happenningon":"14/02/2019",
                             "location":"",
                             "images":"blair.png",
                             "tags":"Tech"}
 
         self.meetup_date_record = {"topic":"Scrum",
-                            "happenningOn":"",
+                            "happenningon":"",
                             "location":"Thika",
                             "images":"blair.png",
                             "tags":"Tech"}
 
         self.meetup_tag_record = {"topic":"Scrum",
-                            "happenningOn":"14/02/2019",
+                            "happenningon":"14/02/2019",
                             "location":"Thika",
                             "images":"blair.png",
                             "tags":""}
 
         self.check_whitespace = {"topic":"Scrum",
-                                 "happenningOn":"14/02/2019",
+                                 "happenningon":"14/02/2019",
                                  "location":"              ",
                                  "images":"blair.png",
                                  "tags": "Tech"}
@@ -100,14 +100,14 @@ class MeetupsBaseTest(unittest.TestCase):
                          "images": ["blair.png",
                                     "tony.png"],
                          "location": "Thika",
-                         "happenningOn": "2019-02-14",
+                         "happenningon": "2019-02-14",
                          "tags": "Tech",
                          "topic": "Scrum"},
                         {"created_at": "Wed, 09 Jan 2019 02:30:54 GMT",
                          "id": 2,
                          "images": "tony.png",
                          "location": "Nairobi",
-                         "happenningOn": "2019-02-15",
+                         "happenningon": "2019-02-15",
                          "tags": "Health",
                          "topic": "Fullstack"
                         }]
@@ -143,8 +143,8 @@ class TestMeetupsRecords(MeetupsBaseTest):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(result["status"], 201)
         self.assertEqual(result["data"], [{
-            "happenningOn": "2019-02-14",
             "location": "Thika",
+            "date": "14/02/2019",
             "tags": "Tech",
             "topic": "Scrum"
         }])
