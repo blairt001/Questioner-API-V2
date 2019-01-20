@@ -6,14 +6,6 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.admin import db
 
-#assign meetups_len, questions_len, comments_len and users_len to an empty list
-"""
-MEETUPS_LEN = []
-QUESTIONS_LEN = []
-COMMENTS_LEN = []
-USERS_LEN = []
-"""
-
 #create the meetup model class
 class MeetupModel:
     def __init__(self, topic, happenningon, location, images, tags):
@@ -143,33 +135,18 @@ class QuestionModel:
         self.title = title
         self.votes = 0
         self.body = body
-        #self.comments = COMMENTS_LEN
         self.created_at = datetime.now()
 
     def save_question(self):
         """
-        saves the question to the question store
+        saves the question to the database
         """
         query = """
-        INSERT INTO questions(user_id, meetup_id, title,
-                              body, votes, created_at) VALUES(
+        INSERT INTO questions(user_id, meetup_id, title, body, votes, created_at) VALUES(
             '{}', '{}', '{}', '{}', '{}', '{}'
-        )""".format(self.user_id, self.meetup_id, self.title,
-                    self.body, self.votes, self.created_at)
+        )""".format(self.user_id, self.meetup_id, self.title, self.body, self.votes, self.created_at)
 
         db.query_db_no_return(query)
-    """
-    @staticmethod
-    def to_json(question):
-        return {
-            "question_id": question.question_id,
-            "title": question.title,
-            "meetup_id": question.meetup_id,
-            "votes": question.votes,
-            "body": question.body,
-            "comments": question.comments
-        }
-    """
 
     @staticmethod
     def get_question(quiz_id):
@@ -186,7 +163,7 @@ class QuestionModel:
 
 
     @staticmethod
-    def get_all_questions(meeting_id):
+    def get_all_questions(meet_id):
         """
         user get all questions asked for the meetup
         """
@@ -195,7 +172,7 @@ class QuestionModel:
         SELECT question_id, user_id, meetup_id, title,
         body, votes, created_at FROM questions
         WHERE questions.meetup_id = '{}'
-        """.format(meeting_id)
+        """.format(meet_id)
 
         questions = db.select_from_db(query)
         data = []

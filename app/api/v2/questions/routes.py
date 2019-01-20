@@ -10,8 +10,8 @@ from app import utils;
 @path_2.route("/meetups/<int:meetup_id>/questions", methods=['POST'])
 @token_required
 def create_question_record(current_user, meetup_id):
-    username_dict = utils.decode_token()
-    username = username_dict['username']
+    username_len = utils.decode_token()
+    username = username_len['username']
     user = UserModel.get_user_by_username(username)
     try:
         user = user[0]
@@ -41,8 +41,8 @@ def create_question_record(current_user, meetup_id):
     question = QuestionModel(user_id=user_id,
                         title=title,
                         body=body,
-                        meetup_id=meetup_id)
-
+                        meetup_id=meetup_id
+    )
     question.save_question()
 
     return jsonify({"status": 201,
