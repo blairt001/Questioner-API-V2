@@ -47,13 +47,13 @@ class MeetupsBaseTest(unittest.TestCase):
                             "tags":"Tech"
                            }
         self.post_meetup2 = {"topic":"Fullstack",
-                             "happenningon":"2019-02-15",
+                             "happenningon":"15/02/2019",
                              "location":"Nairobi",
                              "images": "tony.png",
                              "tags":"Health"
                             }
         self.post_meetup3 = {"topic":"Miguel Miguel",
-                             "happenningon":"2019-02-16",
+                             "happenningon":"16/02/2019",
                              "location":"Nairobi",
                              "images":"Miguel.png",
                              "tags":"Tech"
