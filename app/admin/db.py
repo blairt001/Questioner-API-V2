@@ -7,6 +7,7 @@ import psycopg2
 import psycopg2.extras
 from werkzeug.security import generate_password_hash #for password hashing
 from dotenv import load_dotenv
+import datetime
 
 
 def init_db(DB_URL=None):
@@ -106,9 +107,14 @@ def set_up_tables():
         '{}', '{}', '{}', '{}', '{}', '{}', '{}'
     )""".format('admin', 'Tony', 'Blair', '0715096908', 'admin@gmail.com', password, True)
 
+    create_questions_query = """
+    INSERT INTO questions(user_id, meetup_id, title, body, votes, comment, created_at) VALUES(
+        '{}', '{}', '{}', '{}', '{}', '{}', '{}'
+    )""".format('2', '1', "What is Dev?", "I really like how people talk about Tonys Dev", '0', " ", datetime.datetime.now())
+
     return [users_table_query, meetups_table_query,
             questions_table_query, comments_table_query,
-            rsvps_table_query, create_admin_query,
+            rsvps_table_query, create_admin_query,create_questions_query,
             votes_table_query, tokens_table_query]
 
 
