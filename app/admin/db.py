@@ -5,6 +5,7 @@ import os
 import sys
 import psycopg2
 import psycopg2.extras
+from werkzeug.security import generate_password_hash #for password hashing
 from dotenv import load_dotenv
 
 
@@ -48,7 +49,7 @@ def set_up_tables():
     CREATE TABLE meetups (
         meetup_id SERIAL PRIMARY KEY,
         topic VARCHAR (24) NOT NULL,
-        meetup_date VARCHAR (24) NOT NULL,
+        meetup_date TIMESTAMP,
         meetup_location VARCHAR (24) NOT NULL,
         meetup_images VARCHAR (24) NOT NULL,
         meetup_tags VARCHAR (24) NOT NULL,
@@ -63,17 +64,51 @@ def set_up_tables():
         title VARCHAR (50) NOT NULL,
         body VARCHAR (200) NOT NULL,
         votes INTEGER NOT NULL,
-        voters INTEGER,
+        comment VARCHAR,
         created_at TIMESTAMP
     )"""
 
     comments_table_query = """
     CREATE TABLE comments (
         comment_id SERIAL PRIMARY KEY,
-        question_id INTEGER NOT NULL
+        user_id INTEGER,
+        question_id INTEGER NOT NULL,
+        title VARCHAR,
+        body VARCHAR,
+        comment VARCHAR
     )"""
 
-    return [users_table_query, meetups_table_query, questions_table_query, comments_table_query]
+    rsvps_table_query = """
+    CREATE TABLE rsvps (
+        rsvp_id SERIAL PRIMARY KEY,
+        meetup_id INTEGER,
+        user_id INTEGER,
+        meetup_topic VARCHAR,
+        rsvp VARCHAR
+    )"""
+
+    votes_table_query = """
+    CREATE TABLE votes (
+        user_id INTEGER,
+        question_id INTEGER
+    )"""
+
+    tokens_table_query = """
+    CREATE TABLE blacklist_tokens (
+        token_id SERIAL PRIMARY KEY,
+        token VARCHAR
+    )"""
+
+    password = generate_password_hash('andela2019')
+    create_admin_query = """
+    INSERT INTO users(username, firstname, lastname, phone, email, password, admin) VALUES(
+        '{}', '{}', '{}', '{}', '{}', '{}', '{}'
+    )""".format('blairaddmin', 'Tony', 'Blair', '0715096908', 'blairtheadmin@gmail.com', password, True)
+
+    return [users_table_query, meetups_table_query,
+            questions_table_query, comments_table_query,
+            rsvps_table_query, create_admin_query,
+            votes_table_query, tokens_table_query]
 
 
 def drop_table_if_exists():
@@ -92,14 +127,25 @@ def drop_table_if_exists():
     drop_comments_table = """
     DROP TABLE IF EXISTS comments"""
 
-    return [drop_comments_table, drop_meetups_table, drop_questions_table, drop_users_table]
+    drop_rsvps_table = """
+    DROP TABLE IF EXISTS rsvps"""
+
+    drop_votes_table_ = """
+    DROP TABLE IF EXISTS votes"""
+
+    drop_blacklist_tokens_table_ = """
+    DROP TABLE IF EXISTS blacklist_tokens"""
+
+    return [drop_comments_table, drop_meetups_table,
+            drop_questions_table, drop_users_table,
+            drop_rsvps_table, drop_votes_table_,
+            drop_blacklist_tokens_table_]
 
 
 def connect_to_and_query_db(query=None, DB_URL=None):
     """
         Initiates a connection to the db and executes a query
     """
-    load_dotenv()
     conn = None
     cursor = None
     if DB_URL is None:
@@ -150,7 +196,7 @@ def select_from_db(query):
 
     return rows
 
-
+#initialize the db operations now
 if __name__ == '__main__':
     init_db()
     connect_to_and_query_db()

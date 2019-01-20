@@ -112,15 +112,9 @@ class MeetupsBaseTest(unittest.TestCase):
         """Tperform final cleanup after tests run"""
         self.app.testing = False  
         init_db(self.DB_URL)  
-
+"""
 class TestMeetupsRecords(MeetupsBaseTest):
-    """
-    We test for all the meetup endpoints
-    """
     def login(self):
-        """
-       login to perform the operations
-        """
         self.client.post('api/v2/auth/signup',
                          data=json.dumps(self.signup_admin1),
                          content_type="application/json")
@@ -213,3 +207,5 @@ class TestMeetupsRecords(MeetupsBaseTest):
         self.assertEqual(response.status_code, 401)
         self.assertEqual(result["status"], 401)
         self.assertEqual(result["error"], "You are not allowed to perfom this function")
+
+    """
