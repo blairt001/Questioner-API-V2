@@ -1,7 +1,7 @@
 """The users meetup routes endpoint polished"""
 
 from flask import jsonify, request
-from app.admin.models import QuestionModel, MeetupModel, CommentModel
+from app.admin.models import QuestionModel, MeetupModel, CommentModel, UserModel
 from app.api.v2 import path_2
 from app.admin import db
 from app.utils import token_required, decode_token
@@ -12,7 +12,7 @@ from app import utils;
 def create_question_record(current_user, meetup_id):
     username_len = utils.decode_token()
     username = username_len['username']
-    user = User.get_user_by_username(username)
+    user = UserModel.get_user_by_username(username)
     try:
         user = user[0]
     except:
