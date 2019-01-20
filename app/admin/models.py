@@ -150,7 +150,6 @@ class QuestionModel:
         """
         saves the question to the question store
         """
-        #QUESTIONS_LEN.append(self)
         query = """
         INSERT INTO questions(user_id, meetup_id, title,
                               body, votes, created_at) VALUES(
@@ -207,6 +206,7 @@ class QuestionModel:
                         'title' : question["title"],
                         'body' : question["body"],
                         'votes' : question["votes"],
+                        #'voters' : question['voters'],
                         'createdAt' : question["created_at"]
                        }
             data.append(question)
