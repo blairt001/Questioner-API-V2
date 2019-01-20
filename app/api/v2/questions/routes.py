@@ -85,7 +85,7 @@ def downvote_question(question_id):
         return jsonify({"status": 200, "data": my_question}), 200
     return jsonify({"status": 404, "error": "Question not found"}), 404
 """
-#to go the easy way, lets merge the upvote and downvote together
+#lets us go the easy way, lets merge the upvote and downvote together
 @path_2.route("/questions/<int:question_id>/<vote>", methods=['PATCH'])
 @token_required
 def merge_upvote_and_downvote_question(current_user, question_id, vote):
