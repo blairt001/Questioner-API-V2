@@ -45,7 +45,7 @@ class QuestionBaseTest(unittest.TestCase):
                            }
 
         self.post_question1 = {"title":"What is Dev?",
-                               "body":"I really like how people talk about Tony Dev"}
+                               "body":"I really like how people talk about Tony's Dev"}
 
         self.post_question2 = {"title":"What is JWT?",
                                "body":"I learnt more about JWT at Tony's bootcamp"}
