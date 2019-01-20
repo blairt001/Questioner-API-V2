@@ -125,7 +125,16 @@ def meetup_rsvp(meetup_id, resp):
 @path_2.route("/meetups/<int:meetup_id>", methods=['DELETE'])
 @token_required
 def admin_delete_a_meetup(meetup_id):
+    admin = utils.check_if_user_is_admin()
+    if not admin:
+        return jsonify({
+            'status': 401,
+            'error':"You are not allowed to perfom this function"}), 401
+
     deleted = MeetupModel.delete_specific_meetup(meetup_id)
+
     if deleted:
         return jsonify({'status': 200, 'data':"Meetup record deleted successfully"}), 200
-    return jsonify({'status': 404, 'data':"Meetup with id {} not found".format(meetup_id)}), 404
+    return jsonify({
+        'status': 404,
+        'data':"Meetup with id {} not found".format(meetup_id)}), 404
