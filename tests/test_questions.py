@@ -59,7 +59,7 @@ class QuestionBaseTest(unittest.TestCase):
                                 "title": "What is Dev?",
                                 "votes": 1}
         self.downvoted_question = {"body": "I really like how people talk about Tonys Dev",
-                                   "comments": "",  #initialize comments to an empy list
+                                   "comment": "",  #initialize comments to an empy list
                                    "questionid": 1,
                                    "title": "What is Dev?",
                                    "votes": -1}
