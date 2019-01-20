@@ -195,7 +195,7 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
 
     #tests user can downvote a question
     def test_user_can_downvote_a_question_record(self):
-        self.token = self.login()
+        self.token = self.user_login()
         self.client.post("api/v2/meetups",
                          data=json.dumps(self.post_meetup1),
                          headers={'x-access-token': self.token},
