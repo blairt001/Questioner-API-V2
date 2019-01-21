@@ -42,20 +42,20 @@ class QuestionBaseTest(unittest.TestCase):
                              "tags": "Tech"}
 
         self.post_question1 = {"title": "What is Dev?",
-                               "body": "I really like Tonys Dev"}
+                               "body": "I really like how people talk about Tonys Dev"}
 
         self.post_question2 = {"title": "What is JWT?",
-                               "body": "I learnt more about JWT"}
+                               "body": "I learnt more about JWT at Bootcamp"}
 
         self.post_question3 = {"title": "Hey Mehn?",
                                "body": "It is just OK"}
 
-        self.upvoted_question = {"body": "I really like Tonys Dev",
+        self.upvoted_question = {"body": "I really like how people talk about Tonys Dev",
                                  "comment": "",
                                  "questionid": 1,
                                  "title": "What is Dev?",
                                  "votes": 1}
-        self.downvoted_question = {"body": "I really like Tonys Dev",
+        self.downvoted_question = {"body": "I really like how people talk about Tonys Dev",
                                    "comment": "",
                                    "questionid": 1,
                                    "title": "What is Dev?",
@@ -64,8 +64,8 @@ class QuestionBaseTest(unittest.TestCase):
         # prepare comments setup to accelerate our tests
         self.post_comment1 = {"comment": "Wow, I love every topic on Dev"}
 
-        self.question1_and_comment1 = {"body": "I really like Tonys Dev",
-                                       "comment": "Wow, I love topics on Dev",
+        self.question1_and_comment1 = {"body": "I really like how people talk about Tonys Dev",
+                                       "comment": "Wow, I love every topic on Dev",
                                        "question_id": 1,
                                        "title": "What is Dev?",
                                        "userId": 1}
@@ -103,7 +103,7 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['status'], 201)
         self.assertEqual(result['data'],
-                         [{"body": "I really like Tonys Dev",
+                         [{"body": "I really like how people talk about Tonys Dev",
                            "meetup": 1,
                            "title": "What is Dev?",
                            "user_id": 1}])

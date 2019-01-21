@@ -210,7 +210,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 401)
         self.assertEqual(result["status"], 401)
-        self.assertEqual(result["error"], "You are not allowed to perfom this")
+        self.assertEqual(result["error"], "You are not allowed to perfom this function")
 
     # tests for any available whitespaces
     def test_if_a_user_inputs_a_whitespace(self):
@@ -222,7 +222,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
-        self.assertEqual(result["error"], 'please enter the location')
+        self.assertEqual(result["error"], 'location field cannot be left blank')
 
     # tests that user can get a single meetup record
     def test_user_can_get_a_single_meetup_record(self):
@@ -239,7 +239,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
         self.assertEqual(result['status'], 200)
         self.assertEqual(result['data'], {'meetupId': 1,
                                           'topic': "Scrum",
-                                          'happenningon': "Thu, 14 Feb 2019",
+                                          'happenningon': "Thu, 14 Feb 2019 00:00:00 GMT",
                                           'location': "Thika"})
 
     # tests if a user can be able to get all meetup records
