@@ -5,20 +5,21 @@ from flask import request, jsonify, make_response, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 import psycopg2
 from app.admin.models import UserModel
-from app.api.v2 import path_2 
-from app.utils import validate_email, check_password , check_if_user_is_admin
+from app.api.v2 import path_2
+from app.utils import validate_email, check_password, check_if_user_is_admin
 from app.admin import db
 from app import utils
 
 
 KEY = os.getenv('SECRET_KEY')
 
-#tests for user signup 
+
+# tests for user signup 
 @path_2.route("/auth/signup", methods=['POST'])
 def user_sign_up():
 
     try:
-        data = request.get_json() #to minimize redundancy
+        data = request.get_json()  # to minimize redundancy
         firstname = data['firstname']
         lastname = data['lastname']
         username = data['username']
@@ -27,13 +28,12 @@ def user_sign_up():
         confirmPass = data['confirmpassword']
         phone = data['phoneNumber']
       
-
     except KeyError:
         abort(make_response(jsonify({'status': 400,
                                      'error': "Should be firstname, lastname, username, email, phoneNumber, password and confirmpassword"}), 400))
 
-    #check_password(password, confirm_pass)
-    #email = validate_email(email)
+    # check_password(password, confirm_pass)
+    # email = validate_email(email)
 
     utils.check_for_whitespace(data)
     utils.check_if_string(data)
@@ -45,18 +45,18 @@ def user_sign_up():
     utils.check_duplication({"email": email}, "users")
 
     user = UserModel(firstname=firstname,
-                lastname = lastname,
-                phone=phone,
-                username=username,
-                email=email,
-                password=password)
+                     lastname=lastname,
+                     phone=phone,
+                     username=username,
+                     email=email,
+                     password=password)
 
-    #call the save_user method from the models
+    # call the save_user method from the models
     user.save_user()
-    return jsonify({"status":201, "data":"User Registered Successfully!"}), 201
+    return jsonify({"status": 201, "data": "User Registered Successfully!"}), 201
 
 
-#login route
+# login route
 @path_2.route("/auth/login", methods=['POST'])
 def user_login():
     try:
@@ -69,14 +69,13 @@ def user_login():
             'status': 400,
             'error': "Should be username & password"}), 400))
 
-
     utils.check_for_whitespace(data)
 
     try:
         user = UserModel.get_user_by_username(username)
         if not user:
             return jsonify({"status": 400,
-                            "data":"The username or passsword is incorrect"}), 400
+                            "data": "The username or passsword is incorrect"}), 400
 
         user_id = user[0][0]
         username = user[0][1]
@@ -88,9 +87,10 @@ def user_login():
             abort(make_response(jsonify({'status': 400,
                                          'error': "wrong password"}), 400))
 
-        token = jwt.encode({"username":username}, KEY, algorithm='HS256')
-        return jsonify({"status": 200, "token":token.decode('UTF-8'),
+        token = jwt.encode({"username": username}, KEY, algorithm='HS256')
+        return jsonify({"status": 200, "token": token.decode('UTF-8'),
                         "message": "Logged in successfully"}), 200
 
     except psycopg2.DatabaseError as error:
         abort(make_response(jsonify(message="Server error : {}".format(error)), 500))
+        
