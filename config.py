@@ -2,6 +2,8 @@
 This contains our application configurations
 """
 import os
+
+
 class Config:
     """
     This is the default configuration class
@@ -24,6 +26,7 @@ class TestingConfig(Config):
     Set Debug to True
     """
     DEBUG = True
+
 
 """
 Declaring our application configuration
