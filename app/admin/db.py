@@ -184,7 +184,7 @@ def query_data_from_db(query):
         sys.exit(1)
 
 
-def select_from_db(query):
+def select_data_from_db(query):
     """
         Handles SELECT queries
     """
