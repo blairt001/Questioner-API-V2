@@ -44,7 +44,7 @@ class MeetupModel:
         SELECT meetup_id, topic, happenningon, meetup_location FROM meetups
         WHERE meetups.meetup_id = '{}'""".format(meeting_id)
 
-        meetup = db.select_data_from_db(select_specific_query)
+        meetup = db.select_data_from_dbom_db(select_specific_query)
         return meetup
 
     @staticmethod
@@ -59,7 +59,7 @@ class MeetupModel:
         meetup_tags, created_at FROM meetups
         """
 
-        meetups = db.select_data_from_db(select_all_meetup_query)
+        meetups = db.select_data_from_dbom_db(select_all_meetup_query)
         data = []
         for meetup in meetups:
             meetup = {'meetupId': meetup["meetup_id"],
@@ -105,7 +105,7 @@ class MeetupModel:
         WHERE meetups.meetup_location = '{}' AND meetups.happenningon = '{}'
         """.format(meetup_location, date)
 
-        posted = db.select_data_from_db(query)
+        posted = db.select_data_from_dbom_db(query)
         return posted
 
     # staticmethod decorator
@@ -160,7 +160,7 @@ class QuestionModel:
         SELECT question_id, title, body, comment, votes FROM questions
         WHERE questions.question_id = '{}'""".format(quiz_id)
 
-        question = db.select_data_from_db(get_question_query)
+        question = db.select_data_from_dbom_db(get_question_query)
         return question
 
     @staticmethod
@@ -175,7 +175,7 @@ class QuestionModel:
         WHERE questions.meetup_id = '{}'
         """.format(meet_id)
 
-        questions = db.select_data_from_db(get_all_questions_query)
+        questions = db.select_data_from_dbom_db(get_all_questions_query)
         data = []
         for question in questions:
             question = {'questionId': question["question_id"],
@@ -227,7 +227,7 @@ class CommentModel:
         WHERE comments.question_id = '{}'
         """.format(quiz_id)
 
-        comments = db.select_data_from_db(get_all_comments_query)
+        comments = db.select_data_from_dbom_db(get_all_comments_query)
         data = []
         for comment in comments:
             comment = {'userId': comment["user_id"],
@@ -296,7 +296,7 @@ class UserModel:
         SELECT user_id, username, email, password FROM users
         WHERE users.username = '{}'""".format(username)
 
-        return db.select_data_from_db(select_user_query)
+        return db.select_data_from_dbom_db(select_user_query)
 
     # get the user using his / her username
     @staticmethod
@@ -305,7 +305,7 @@ class UserModel:
         SELECT user_id, username, email, password FROM users
         WHERE users.username = '{}'""".format(username)
 
-        return db.select_data_from_db(select_user_by_username_query)
+        return db.select_data_from_dbom_db(select_user_by_username_query)
 
     # Ensure password is hashed password on the sign-in
     def encrypt_password_on_signup(self, password):
@@ -323,7 +323,7 @@ class UserModel:
         SELECT question_id FROM questions
         WHERE questions.user_id = '{}'""".format(user_id)
 
-        questions_list = db.select_data_from_db(get_user_query)
+        questions_list = db.select_data_from_dbom_db(get_user_query)
         questions = len(questions_list)
         return questions
 
@@ -334,7 +334,7 @@ class UserModel:
         WHERE rsvps.user_id = '{}' AND rsvps.rsvp = '{}'
         """.format(user_id, 'yes')
 
-        meetups = db.select_data_from_db(get_user_meetups_query)
+        meetups = db.select_data_from_dbom_db(get_user_meetups_query)
         return meetups
 
     @staticmethod
@@ -408,7 +408,7 @@ class UserRsvp:
         WHERE rsvps.meetup_id = '{}' AND rsvps.rsvp = '{}'
         """.format(meetup_id, 'yes')
 
-        attendees_list = db.select_data_from_db(get_attendees_query)
+        attendees_list = db.select_data_from_dbom_db(get_attendees_query)
         attendees = len(attendees_list)
         return attendees
 
@@ -441,7 +441,7 @@ class UserVote:
         WHERE votes.user_id = '{}' AND votes.question_id = '{}'
         """.format(user_id, question_id)
 
-        voted = db.select_data_from_db(check_vote_query)
+        voted = db.select_data_from_dbom_db(check_vote_query)
         return voted
 
 
@@ -467,5 +467,5 @@ class AuthToken:
         WHERE blacklist_tokens.token = '{}'
         """.format(token)
 
-        token = db.select_data_from_db(check_blacklist_token_query)
+        token = db.select_data_from_dbom_db(check_blacklist_token_query)
         return token  
