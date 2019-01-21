@@ -32,7 +32,7 @@ class MeetupModel:
             '{}', '{}', '{}', '{}', '{}' , '{}'
         )""".format(self.topic, self.happenningon, self.location, self.images, self.tags, self.created_at)
 
-        db.query_db_no_return(insert_query)
+        db.query_data_from_db(insert_query)
 
     @staticmethod
     def get_specific_meetup(meeting_id):
@@ -93,7 +93,7 @@ class MeetupModel:
             DELETE FROM meetups
             WHERE meetups.meetup_id = '{}'""".format(meeting_id)
 
-            db.query_db_no_return(delete_query)
+            db.query_data_from_db(delete_query)
             return True
         return False
 
@@ -148,7 +148,7 @@ class QuestionModel:
             '{}', '{}', '{}', '{}', '{}', '{}', '{}'
         )""".format(self.user_id, self.meetup_id, self.title, self.body, self.votes, self.comment, self.created_at)
 
-        db.query_db_no_return(insert_question_query)
+        db.query_data_from_db(insert_question_query)
 
     @staticmethod
     def get_question(quiz_id):
@@ -215,7 +215,7 @@ class CommentModel:
         )""".format(self.user_id, self.question_id, self.title,
                     self.body, self.comment)
 
-        db.query_db_no_return(save_comment_query)
+        db.query_data_from_db(save_comment_query)
 
     @staticmethod
     def get_all_comments(quiz_id):
@@ -286,7 +286,7 @@ class UserModel:
             '{}', '{}', '{}', '{}', '{}', '{}'
         )""".format(self.username, self.firstname, self.lastname, self.phone, self.email, self.password)
 
-        db.query_db_no_return(save_user_query)
+        db.query_data_from_db(save_user_query)
 
     # lets check the data store for any user
     @staticmethod
@@ -384,7 +384,7 @@ class UserRsvp:
             '{}', '{}', '{}', '{}'
         )""".format(self.meetup_id, self.user_id, self.meetup_topic, self.rsvp)
 
-        db.query_db_no_return(save_rsvp_query)
+        db.query_data_from_db(save_rsvp_query)
 
     @staticmethod
     def update_rsvp(meetup_id, user_id):
@@ -396,7 +396,7 @@ class UserRsvp:
         AND rsvps.user_id = '{}'
         """.format('no', meetup_id, user_id)
 
-        db.query_db_no_return(update_rsvp_query)
+        db.query_data_from_db(update_rsvp_query)
 
     @staticmethod
     def get_attendees(meetup_id):
@@ -431,7 +431,7 @@ class UserVote:
             '{}', '{}'
         )""".format(self.user_id, self.question_id)
 
-        db.query_db_no_return(save_vote_query)
+        db.query_data_from_db(save_vote_query)
 
     # check if a user already voted
     @staticmethod
@@ -458,7 +458,7 @@ class AuthToken:
             '{}'
         )""".format(self.token)
 
-        db.query_db_no_return(insert_blacklist_query)
+        db.query_data_from_db(insert_blacklist_query)
 
     @staticmethod
     def check_if_token_blacklisted(token):

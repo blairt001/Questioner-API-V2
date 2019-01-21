@@ -172,7 +172,7 @@ def connect_to_and_query_db(query=None, DB_URL=None):
     return conn, cursor
 
 
-def query_db_no_return(query):
+def query_data_from_db(query):
     """
         Handles INSERT queries
     """
