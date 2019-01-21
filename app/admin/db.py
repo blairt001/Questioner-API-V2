@@ -5,7 +5,7 @@ import os
 import sys
 import psycopg2
 import psycopg2.extras
-from werkzeug.security import generate_password_hash # for password hashing
+from werkzeug.security import generate_password_hash  # for password hashing
 from dotenv import load_dotenv
 
 
@@ -99,7 +99,7 @@ def set_up_tables():
         token VARCHAR
     )"""
 
-    #create a super user admin with hashed password
+    # create a super user admin with hashed password
     password = generate_password_hash('andela2019')
     create_admin_query = """
     INSERT INTO users(username, firstname, lastname, phone, email, password, admin) VALUES(
@@ -197,7 +197,7 @@ def select_from_db(query):
 
     return rows
 
-#initialize the db operations now
+# initialize the db operations now
 if __name__ == '__main__':
     init_db()
     connect_to_and_query_db()
