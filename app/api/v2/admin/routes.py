@@ -136,7 +136,7 @@ def meetup_rsvp(specific_user, meetup_id, resp):
     user_id = user['user_id']
     meetup = meetup[0]
     if resp == 'yes':
-        rsvpd = utils.check_if_already_rsvpd(meetup_id, user_id)
+        rsvpd = utils.check_if_rsvp_already_exists(meetup_id, user_id)
         if rsvpd:
             abort(make_response(jsonify({'status': 409,
                                          'error': 'Already confirmed attendance'}), 409))
@@ -148,7 +148,7 @@ def meetup_rsvp(specific_user, meetup_id, resp):
         rsvp.save_rsvp()
 
     if resp == 'no':
-        rsvpd = utils.check_if_already_rsvpd(meetup_id, user_id)
+        rsvpd = utils.check_if_rsvp_already_exists(meetup_id, user_id)
         if rsvpd:
             UserRsvp.update_rsvp(meetup_id, user_id)
     
