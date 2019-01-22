@@ -99,7 +99,7 @@ def user_login():
 # invalidate user token on logout
 @path_2.route("auth/logout", methods=["POST"])
 @token_required
-def logout(specific_user):
+def logout(specific_user):  #logs out a specific user from thr system
     token = request.headers['x-access-token']
 
     blacklist_token = AuthToken(token=token)
