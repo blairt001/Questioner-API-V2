@@ -111,12 +111,12 @@ def token_required(f):
             SELECT username FROM users
             WHERE users.username = '{}'""".format(data['username'])
 
-            current_user = select_data_from_db(query)
+            specific_user = select_data_from_db(query)
 
         except:
             return jsonify({'message': 'Token is expired or invalid'}), 401
 
-        return f(current_user, *args, **kwargs)
+        return f(specific_user, *args, **kwargs)
     return decorated
 
 
