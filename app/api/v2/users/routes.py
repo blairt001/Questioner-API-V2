@@ -100,9 +100,6 @@ def user_login():
 @path_2.route("auth/logout", methods=["POST"])
 @token_required
 def logout(specific_user):
-    """
-    The logout route endpoint
-    """
     token = request.headers['x-access-token']
 
     blacklist_token = AuthToken(token=token)
