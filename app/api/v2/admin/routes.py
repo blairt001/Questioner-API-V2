@@ -17,7 +17,7 @@ def admin_create_meetup(specific_user):
     """
     try:
         topic = request.get_json()['topic']
-        happenningOn = request.get_json()['happenningOn']
+        happenningon = request.get_json()['happenningon']
         location = request.get_json()['location']
         images = request.get_json()['images']
         tags = request.get_json()['tags']
@@ -29,7 +29,7 @@ def admin_create_meetup(specific_user):
 
     if not topic:
         return jsonify({'status': 400, 'error': 'Provide the topic field'}), 400
-    if not happenningOn:
+    if not happenningon:
         return jsonify({'status': 400, 'error': 'provide the meetup date'}), 400
 
     if not location:
@@ -46,7 +46,7 @@ def admin_create_meetup(specific_user):
     try:
         data = request.get_json()
         topic = data['topic']
-        happenningOn = data['happenningOn']
+        happenningon = data['happenningon']
         location = data['location']
         images = data['images']
         tags = data['tags']
@@ -54,7 +54,7 @@ def admin_create_meetup(specific_user):
     except KeyError:
         return jsonify({
             'status': 400,
-            'error': 'Should be topic, happenningOn, location, images and tags'}), 400
+            'error': 'Should be topic, happenningon, location, images and tags'}), 400
 
     utils.check_for_whitespace(data)
     utils.check_if_string(data)
@@ -64,11 +64,11 @@ def admin_create_meetup(specific_user):
             'status': 400,
             'error': 'tags field is required'}), 400))
 
-    happenningOn = utils.check_date(happenningOn)
+    happenningon = utils.check_date(happenningon)
 
     meetup = MeetupModel(
         topic=topic,
-        happenningOn=happenningOn,
+        happenningon=happenningon,
         location=location,
         images=images,
         tags=tags
@@ -79,7 +79,7 @@ def admin_create_meetup(specific_user):
     return jsonify({"status": 201,
                     "data": [{"topic": topic,
                               "location": location,
-                              "happenningOn": happenningOn,
+                              "happenningon": happenningon,
                               # "images": images,
                               "tags": tags}]}), 201
 
@@ -92,7 +92,7 @@ def get_specific_meetup(meetup_id):
         meetup = meetup[0]  # assign it index 0 =1 
         return jsonify({"status": 200, "data": {'meetupId': meetup['meetup_id'],
                                                 'topic': meetup['topic'],
-                                                'happenningOn': meetup['happenningOn'],
+                                                'happenningon': meetup['happenningon'],
                                                 'location': meetup['meetup_location']}}), 200
     return jsonify({"status": 404, "data": "Meetup with id {} not found".format(meetup_id)}), 404
 
