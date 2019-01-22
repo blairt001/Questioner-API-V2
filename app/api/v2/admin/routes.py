@@ -10,7 +10,7 @@ from app import utils
 
 @path_2.route("/meetups", methods=['POST'])
 @token_required
-def admin_create_meetup(current_user):
+def admin_create_meetup(specific_user):
     """
     POST a meetup : POST admin/meetups
     """
@@ -128,7 +128,7 @@ def meetup_rsvp(meetup_id, resp):
 # admin delete meetup
 @path_2.route("/meetups/<int:meetup_id>", methods=['DELETE'])
 @token_required
-def admin_delete_a_meetup(current_user, meetup_id):
+def admin_delete_a_meetup(specific_user, meetup_id):
     admin = utils.check_if_user_is_admin()
     if not admin:
         return jsonify({

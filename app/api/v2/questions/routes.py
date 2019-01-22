@@ -10,7 +10,7 @@ from app import utils
 
 @path_2.route("/meetups/<int:meetup_id>/questions", methods=['POST'])
 @token_required
-def create_question_record(current_user, meetup_id):
+def create_question_record(specific_user, meetup_id):
     username_len = utils.decode_token()
     username = username_len['username']
     user = UserModel.get_user_by_username(username)
@@ -91,7 +91,7 @@ def downvote_question(question_id):
 # lets us go the easy way, lets merge the upvote and downvote together
 @path_2.route("/questions/<int:question_id>/<vote>", methods=['PATCH'])
 @token_required
-def merge_upvote_and_downvote_question(current_user, question_id, vote):
+def merge_upvote_and_downvote_question(specific_user, question_id, vote):
     username_len = utils.decode_token()
     username = username_len['username']
     user = UserModel.get_user_by_username(username)
@@ -144,7 +144,7 @@ def merge_upvote_and_downvote_question(current_user, question_id, vote):
 # user should be able to post comment
 @path_2.route("/questions/<int:question_id>/comment", methods=['POST'])
 @token_required
-def user_comment_on_a_question(current_user, question_id):
+def user_comment_on_a_question(specific_user, question_id):
     username_len = utils.decode_token()
     username = username_len['username']
     user = UserModel.get_user_by_username(username)
@@ -189,7 +189,7 @@ def user_comment_on_a_question(current_user, question_id):
 # a user should be able to get all comments for a question
 @path_2.route("/questions/<int:question_id>/comments", methods=['GET'])
 @token_required
-def get_all_comments_on_a_given_question(current_user, question_id):
+def get_all_comments_on_a_given_question(specific_user, question_id):
     question = QuestionModel.get_question(question_id)
     if not question:
         abort(make_response(jsonify({

@@ -14,7 +14,7 @@ def init_db(DB_URL=None):
         Initialize db connection
     """
     try:
-        conn, cursor = connect_to_and_query_db()
+        conn, cursor = connect_to_db()
         all_init_queries = drop_table_if_exists() + set_up_tables()
         i = 0
         while i != len(all_init_queries):
@@ -33,7 +33,7 @@ def set_up_tables():
     """
         Queries run to set up and create tables
     """
-    users_table_query = """
+    table_users = """
     CREATE TABLE users (
         user_id SERIAL PRIMARY KEY,
         username VARCHAR (24) NOT NULL UNIQUE,
@@ -45,7 +45,7 @@ def set_up_tables():
         admin BOOLEAN
     )"""
 
-    meetups_table_query = """
+    table_meetups = """
     CREATE TABLE meetups (
         meetup_id SERIAL PRIMARY KEY,
         topic VARCHAR (24) NOT NULL,
@@ -56,7 +56,7 @@ def set_up_tables():
         created_at TIMESTAMP
     )"""
 
-    questions_table_query = """
+    table_questions = """
     CREATE TABLE questions (
         question_id SERIAL PRIMARY KEY,
         user_id INTEGER NOT NULL,
@@ -68,7 +68,7 @@ def set_up_tables():
         created_at TIMESTAMP
     )"""
 
-    comments_table_query = """
+    table_comments = """
     CREATE TABLE comments (
         comment_id SERIAL PRIMARY KEY,
         user_id INTEGER,
@@ -78,7 +78,7 @@ def set_up_tables():
         comment VARCHAR
     )"""
 
-    rsvps_table_query = """
+    table_rsvps = """
     CREATE TABLE rsvps (
         rsvp_id SERIAL PRIMARY KEY,
         meetup_id INTEGER,
@@ -87,13 +87,13 @@ def set_up_tables():
         rsvp VARCHAR
     )"""
 
-    votes_table_query = """
+    table_votes = """
     CREATE TABLE votes (
         user_id INTEGER,
         question_id INTEGER
     )"""
 
-    tokens_table_query = """
+    table_tokens = """
     CREATE TABLE blacklist_tokens (
         token_id SERIAL PRIMARY KEY,
         token VARCHAR
@@ -106,10 +106,10 @@ def set_up_tables():
         '{}', '{}', '{}', '{}', '{}', '{}', '{}'
     )""".format('admin', 'Tony', 'Blair', '0715096908', 'admin@gmail.com', password, True)
 
-    return [users_table_query, meetups_table_query,
-            questions_table_query, comments_table_query,
-            rsvps_table_query, create_admin_query,
-            votes_table_query, tokens_table_query]
+    return [table_users, table_meetups,
+            table_questions, table_comments,
+            table_rsvps, create_admin_query,
+            table_votes, table_tokens]
 
 
 def drop_table_if_exists():
@@ -143,7 +143,7 @@ def drop_table_if_exists():
             drop_blacklist_tokens_table_]
 
 
-def connect_to_and_query_db(query=None, DB_URL=None):
+def connect_to_db(query=None, DB_URL=None):
     """
         Initiates a connection to the db and executes a query
     """
@@ -177,7 +177,7 @@ def query_data_from_db(query):
         Handles INSERT queries
     """
     try:
-        conn = connect_to_and_query_db(query)[0]
+        conn = connect_to_db(query)[0]
         # After successful INSERT query
         conn.close()
     except psycopg2.Error as error:
@@ -189,7 +189,7 @@ def select_data_from_db(query):
         Handles SELECT queries
     """
     rows = None
-    conn, cursor = connect_to_and_query_db(query)
+    conn, cursor = connect_to_db(query)
     if conn:
         # Retrieve SELECT query results from db
         rows = cursor.fetchall()
@@ -200,4 +200,4 @@ def select_data_from_db(query):
 # initialize the db operations now
 if __name__ == '__main__':
     init_db()
-    connect_to_and_query_db()
+    connect_to_db()
