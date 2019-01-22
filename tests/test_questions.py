@@ -230,7 +230,3 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
                                      content_type="application/json")
         self.assertEqual(response.status_code, 409)
  
-    # tests user can rsvp to a meetup
-    def test_user_can_rsvp_to_a_meetup(self):
-        self.token = self.user_login()
-          
