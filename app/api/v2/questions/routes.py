@@ -1,11 +1,12 @@
 """The users meetup routes endpoint polished"""
 
-from flask import jsonify, request , abort, make_response
+from flask import jsonify, request, abort, make_response
 from app.admin.models import QuestionModel, MeetupModel, CommentModel, UserModel, UserVote, UserRsvp
 from app.api.v2 import path_2
 from app.admin import db
 from app.utils import token_required, decode_token
-from app import utils;
+from app import utils
+
 
 @path_2.route("/meetups/<int:meetup_id>/questions", methods=['POST'])
 @token_required
@@ -39,19 +40,19 @@ def create_question_record(current_user, meetup_id):
 
     user_id = user['user_id']
     question = QuestionModel(user_id=user_id,
-                        title=title,
-                        body=body,
-                        meetup_id=meetup_id
-    )
+                             title=title,
+                             body=body,
+                             meetup_id=meetup_id)
     question.save_question()
 
     return jsonify({"status": 201,
-                    "data":[{"title": title,
-                             "user_id": user_id,
-                             "meetup": meetup_id,
-                             "body": body}]}), 201
+                    "data": [{"title": title,
+                              "user_id": user_id,
+                              "meetup": meetup_id,
+                              "body": body}]}), 201
 
-#get all questions record
+
+# get all questions record
 @path_2.route("/meetups/<int:meet_id>/questions", methods=['GET'])
 def get_user_get_all_questions_for_a_meetup(meet_id):
     """
@@ -62,7 +63,7 @@ def get_user_get_all_questions_for_a_meetup(meet_id):
         return jsonify({"status": 200, "data": questions}), 200
     return jsonify({"status": 404, "data": "We cant find a question for this meetup. No question posted yet"}), 404
 
-#upvote a question
+# upvote a question
 """
 @path_2.route("/questions/<int:question_id>/upvote", methods=['PATCH'])
 @token_required
@@ -85,7 +86,9 @@ def downvote_question(question_id):
         return jsonify({"status": 200, "data": my_question}), 200
     return jsonify({"status": 404, "error": "Question not found"}), 404
 """
-#lets us go the easy way, lets merge the upvote and downvote together
+
+
+# lets us go the easy way, lets merge the upvote and downvote together
 @path_2.route("/questions/<int:question_id>/<vote>", methods=['PATCH'])
 @token_required
 def merge_upvote_and_downvote_question(current_user, question_id, vote):
@@ -119,13 +122,13 @@ def merge_upvote_and_downvote_question(current_user, question_id, vote):
         if vote == 'downvote':
             my_question['votes'] = my_question['votes'] - 1
 
-        query = """
+        update_questions_query = """
         UPDATE questions SET votes = '{}' WHERE questions.question_id = '{}'
         """.format(my_question['votes'], question_id)
-        db.query_db_no_return(query)
+        db.query_data_from_db(update_questions_query)
 
         voter = UserVote(question_id=question_id,
-                     user_id=user_id)
+                         user_id=user_id)
         voter.save_vote()
         return jsonify({"status": 200,
                         "data": {"questionid": my_question['question_id'],
@@ -138,9 +141,7 @@ def merge_upvote_and_downvote_question(current_user, question_id, vote):
         "error": "Question with id {} not found".format(question_id)}), 404
 
 
-
-
-#user should be able to post comment
+# user should be able to post comment
 @path_2.route("/questions/<int:question_id>/comment", methods=['POST'])
 @token_required
 def user_comment_on_a_question(current_user, question_id):
@@ -158,7 +159,7 @@ def user_comment_on_a_question(current_user, question_id):
     except KeyError:
         abort(make_response(jsonify({
             'status': 400,
-            'error':'Check your json key. Should be comment'})))
+            'error': 'Check your json key. Should be comment'})))
 
     question = QuestionModel.get_question(question_id)
     if question:
@@ -168,10 +169,10 @@ def user_comment_on_a_question(current_user, question_id):
         body = question['body']
 
         my_comment = CommentModel(title,
-                             body,
-                             comment,
-                             user_id,
-                             question_id)
+                                  body,
+                                  comment,
+                                  user_id,
+                                  question_id)
         my_comment.save_comment()
 
         return jsonify({"status": 201,
@@ -179,12 +180,13 @@ def user_comment_on_a_question(current_user, question_id):
                                  "body": my_comment.body,
                                  "comment": my_comment.comment,
                                  "userId": my_comment.user_id,
-                                 "question_id": my_comment.question_id,}}), 201
+                                 "question_id": my_comment.question_id, }}), 201
     return jsonify({
         'status': 404,
-        'error':'Question with id {} not found'.format(question_id)}), 404
+        'error': 'Question with id {} not found'.format(question_id)}), 404
 
-#a user should be able to get all comments for a question
+
+# a user should be able to get all comments for a question
 @path_2.route("/questions/<int:question_id>/comments", methods=['GET'])
 @token_required
 def get_all_comments_on_a_given_question(current_user, question_id):

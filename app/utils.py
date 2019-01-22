@@ -1,5 +1,7 @@
-#This module contains the functions that will validate users data
-#some imports
+# This module contains the functions that will validate users data
+# some imports
+
+
 import os
 import re
 from functools import wraps
@@ -13,16 +15,17 @@ import jwt
 # local imports
 from app.admin.models import AuthToken
 from app.admin.models import UserModel
-from app.admin.db import select_from_db
+from app.admin.db import select_data_from_db
 
 key = os.getenv("SECRET_KEY")
+
 
 def check_password(password, confirmed_password):
   
     '''
      Lets check if our passoword meets the requirements
     '''
-        # check to confirm the password is of required length
+    # check to confirm the password is of required length
     if len(password) < 8 or len(password) > 20:
         abort(make_response(jsonify(status=400, error="Password should not be less than 8 characters or exceed 20"), 400))
 
@@ -47,7 +50,8 @@ def check_password(password, confirmed_password):
 
     return hashed_password
 
-#validate email
+
+# validate email
 def validate_email(email):
     """
     Is the email valid , is it already used?
@@ -85,7 +89,7 @@ def validate_email(email):
     return email
 
 
-#wrap our function and check for the access-token
+# wrap our function and check for the access-token
 
 def token_required(f):
     @wraps(f)
@@ -94,12 +98,12 @@ def token_required(f):
         if 'x-access-token' in request.headers:
             token = request.headers['x-access-token']
         if not token:
-            return jsonify({'message':"Token is missing"}), 401
+            return jsonify({'message': "Token is missing"}), 401
 
         blacklisted = AuthToken.check_if_token_blacklisted(token)
         if blacklisted:
             abort(make_response(jsonify({
-                'message':'Please login again to continue'}), 401))
+                'message': 'Please login again to continue'}), 401))
 
         try:
             data = jwt.decode(token, key)
@@ -107,10 +111,10 @@ def token_required(f):
             SELECT username FROM users
             WHERE users.username = '{}'""".format(data['username'])
 
-            current_user = select_from_db(query)
+            current_user = select_data_from_db(query)
 
         except:
-            return jsonify({'message':'Token is expired or invalid'}), 401
+            return jsonify({'message': 'Token is expired or invalid'}), 401
 
         return f(current_user, *args, **kwargs)
     return decorated
@@ -122,7 +126,7 @@ def decode_token():
     try:
         username = jwt.decode(token, key)
     except:
-        return jsonify({"message":"Token is expired or invalid"}), 401
+        return jsonify({"message": "Token is expired or invalid"}), 401
 
     return username
 
@@ -138,37 +142,41 @@ def verify_if_user_is_admin(username):
         return admin
         """
 
+
 def check_duplication(params, table_name):
     for key, value in params.items():
         query = """
         SELECT {} from {} WHERE {}.{} = '{}'
         """.format(key, table_name, table_name, key, value)
-        duplicated = select_from_db(query)
+        duplicated = select_data_from_db(query)
         if duplicated:
             abort(make_response(jsonify(
                 status=400,
                 error="Error. '{}' '{}' \
 is already in use".format(key, value)), 400))
 
-#check if the user is actually an admin
+
+# check if the user is actually an admin
 def check_if_user_is_admin():
     username = decode_token()
     if username['username'] != "admin":
         return False
     return True
 
-#lets check for any whitespace that may exists and return true if found
+
+# lets check for any whitespace that may exists and return true if found
 def check_for_whitespace(data):
     for keys, value in data.items():
         if not value.strip():
             abort(make_response(jsonify({
                 'status': 400,
-                'error':'{} field cannot be left blank'.format(keys)}), 400))
+                'error': '{} field cannot be left blank'.format(keys)}), 400))
 
     return True
 
-#check for other validations
 
+# check for other validations
+"""
 def check_if_string(data):
     if not re.match("^[A-Za-z]*$", data['firstname']):
         abort(make_response(jsonify({
@@ -184,7 +192,9 @@ def check_if_string(data):
         abort(make_response(jsonify({
             "status": 400,
             "Error":  "Make sure you only use letters in your username"}), 400))
-            
+"""
+
+
 def check_if_string(data):
     for key, value in data.items():
         if key in ['firstname', 'lastname', 'username']:
@@ -225,7 +235,8 @@ def check_date(date):
     format_date = date[0:2]+ " " + months[int(date[3:5]) -1] + " " + date[6:]
     return format_date
 
-#has the user already responded "yes" to the meetup
+
+# has the user already responded "yes" to the meetup
 def check_if_already_rsvpd(meetup_id, user_id):
     query = """
     SELECT rsvp_id FROM rsvps
