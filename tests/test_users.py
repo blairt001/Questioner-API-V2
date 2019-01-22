@@ -25,7 +25,7 @@ class UserBaseTest(unittest.TestCase):
                              "lastname": "Blair",
                              "phoneNumber": "0715096908",
                              "username": "blairtony",
-                             "email": "blairt37.dev@gmail.com",
+                             "email": "blairtony@gmail.com",
                              "password": "Blairman1234",
                              "confirmpassword": "Blairman1234"}
 
@@ -77,8 +77,6 @@ class UserBaseTest(unittest.TestCase):
         self.login_user3 = {"username": "kenyaa",
                             "password": "@Mitcoder1"}
 
-        token = ''
-
     # clean up the tests
     def tearDown(self):
         self.app.testing = False
@@ -87,29 +85,21 @@ class UserBaseTest(unittest.TestCase):
 
 # testing for the users api endpoints
 class TestUsersEndpoints(UserBaseTest):
-    """
-    def test_user_wrong_json_keys(self):
+   
+   # tests that a user can sign up to the system
+    def test_that_a_user_can_sign_up_successfully(self):
         response = self.client.post("api/v2/auth/signup",
-                                    data=json.dumps(self.signup_user3),
+                                    data=json.dumps(self.signup_user1),
                                     content_type="application/json")
-        self.assertEqual(response.status_code, 400)
-        result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(
-            result['error'],
-            'Should be firstname, lastname, username, email, phoneNumber, password and confirmpassword')
-
-
-    def test_user_can_sign_up(self):
-        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user1), content_type = "application/json")
         self.assertEqual(response.status_code, 201)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['data'], 'User Registered Successfully!')
-    """
 
-    """
-    def test_user_can_login(self):
+
+    # tests that a user can login successfully
+    def test_that_a_user_can_login_successfully(self):
         self.client.post("api/v2/auth/signup",
-                         data = json.dumps(self.signup_user1),
+                         data=json.dumps(self.signup_user1),
                          content_type="application/json")
         response = self.client.post("api/v2/auth/login",
                                     data=json.dumps(self.login_user1),
@@ -118,32 +108,22 @@ class TestUsersEndpoints(UserBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertTrue(result['token'])
         self.assertEqual(result["message"], "Logged in successfully")
-    
-    #tests that user sign-up passwords match
-    def test_user_enter_unmatching_passwords(self):
-        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user2), content_type = "application/json")
-        self.assertEqual(response.status_code, 400)
-        result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result["error"], "Your passwords don't match!")
 
-    #tests user enter wrong email
-    def test_user_enter_wrong_email(self):
-        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user6), content_type = "application/json")
-        self.assertEqual(response.status_code , 400)
-        result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result["error"], "Email is Invalid")
 
-    #tests user enter short password
-    def test_user_enter_short_password(self):
-        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user4), content_type = "application/json")
-        self.assertEqual(response.status_code , 400)
+    # tests user can login successfully
+    def test_that_a_user_can_logout_successfully(self):
+        self.client.post("api/v2/auth/signup",
+                         data=json.dumps(self.signup_user1),
+                         content_type="application/json")
+        login = self.client.post("api/v2/auth/login",
+                                 data=json.dumps(self.login_user1),
+                                 content_type="application/json")
+        user_data = json.loads(login.data.decode('utf-8'))
+        token = user_data['token']
+        response = self.client.post("api/v2/auth/logout",
+                                    headers={'x-access-token': token},
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 200)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result["error"], "Password should not be less than 8 characters or exceed 20")
-
-    #tests user enter long password
-    def test_user_enter_long_password(self):
-        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user5), content_type = "application/json")
-        self.assertEqual(response.status_code , 400)
-        result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result["error"], "Password should not be less than 8 characters or exceed 20")
-        """
+        self.assertTrue(result['status'], 200)
+        self.assertEqual(result["data"], "Logged out successfully")
