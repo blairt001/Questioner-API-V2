@@ -15,7 +15,7 @@ import jwt
 # local imports
 from app.admin.models import AuthToken
 from app.admin.models import UserModel
-from app.admin.db import select_from_db
+from app.admin.db import select_data_from_db
 
 key = os.getenv("SECRET_KEY")
 
@@ -111,7 +111,7 @@ def token_required(f):
             SELECT username FROM users
             WHERE users.username = '{}'""".format(data['username'])
 
-            current_user = select_from_db(query)
+            current_user = select_data_from_db(query)
 
         except:
             return jsonify({'message': 'Token is expired or invalid'}), 401
@@ -148,7 +148,7 @@ def check_duplication(params, table_name):
         query = """
         SELECT {} from {} WHERE {}.{} = '{}'
         """.format(key, table_name, table_name, key, value)
-        duplicated = select_from_db(query)
+        duplicated = select_data_from_db(query)
         if duplicated:
             abort(make_response(jsonify(
                 status=400,

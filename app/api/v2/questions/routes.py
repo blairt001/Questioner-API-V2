@@ -122,10 +122,10 @@ def merge_upvote_and_downvote_question(current_user, question_id, vote):
         if vote == 'downvote':
             my_question['votes'] = my_question['votes'] - 1
 
-        query = """
+        update_questions_query = """
         UPDATE questions SET votes = '{}' WHERE questions.question_id = '{}'
         """.format(my_question['votes'], question_id)
-        db.query_db_no_return(query)
+        db.query_data_from_db(update_questions_query)
 
         voter = UserVote(question_id=question_id,
                          user_id=user_id)
