@@ -1,6 +1,7 @@
 """Tests for meetups records"""
 import unittest
 import json
+
 from app import create_app
 from config import app_config
 from app.admin.db import init_db
@@ -38,21 +39,21 @@ class MeetupsBaseTest(unittest.TestCase):
                             "password": "Blairman1234"}
 
         self.post_meetup1 = {"topic": "Scrum",
-                             "happenningon": "14/02/2019",
+                             "happenningOn": "14/02/2019",
                              "location": "Thika",
                              "images": "blair.png",
                              "tags": "Tech"
                              }
 
         self.post_meetup2 = {"topic": "Fullstack",
-                             "happenningon": "15/02/2019",
+                             "happenningOn": "15/02/2019",
                              "location": "Nairobi",
                              "images": "tony.png",
                              "tags": "Health"
                              }
 
         self.post_meetup3 = {"topic": "Miguel Miguel",
-                             "happenningon": "16/02/2019",
+                             "happenningOn": "16/02/2019",
                              "location": "Nairobi",
                              "images": "Miguel.png",
                              "tags": "Tech"
@@ -63,31 +64,31 @@ class MeetupsBaseTest(unittest.TestCase):
                                 "topic": "Scrum"}]
 
         self.meetup_topic_record = {"topic": "",
-                                    "happenningon": "14/02/2019",
+                                    "happenningOn": "14/02/2019",
                                     "location": "Thika",
                                     "images": "blair.png",
                                     "tags": "Tech"}
 
         self.meet_location_record = {"topic": "Scrum",
-                                     "happenningon": "14/02/2019",
+                                     "happenningOn": "14/02/2019",
                                      "location": "",
                                      "images": "blair.png",
                                      "tags": "Tech"}
 
         self.meetup_date_record = {"topic": "Scrum",
-                                   "happenningon": "",
+                                   "happenningOn": "",
                                    "location": "Thika",
                                    "images": "blair.png",
                                    "tags": "Tech"}
 
         self.meetup_tag_record = {"topic": "Scrum",
-                                  "happenningon": "14/02/2019",
+                                  "happenningOn": "14/02/2019",
                                   "location": "Thika",
                                   "images": "blair.png",
                                   "tags": ""}
 
         self.check_whitespace = {"topic": "Scrum",
-                                 "happenningon": "14/02/2019",
+                                 "happenningOn": "14/02/2019",
                                  "location": "              ",
                                  "images": "blair.png",
                                  "tags": "Tech"}
@@ -97,14 +98,14 @@ class MeetupsBaseTest(unittest.TestCase):
                          "images": ["blair.png",
                                     "tony.png"],
                          "location": "Thika",
-                         "happenningon": "2019-02-14",
+                         "happenningOn": "2019-02-14",
                          "tags": "Tech",
                          "topic": "Scrum"},
                         {"created_at": "Wed, 09 Jan 2019 02:30:54 GMT",
                          "id": 2,
                          "images": "tony.png",
                          "location": "Nairobi",
-                         "happenningon": "2019-02-15",
+                         "happenningOn": "2019-02-15",
                          "tags": "Health",
                          "topic": "Fullstack"}]
 
@@ -140,7 +141,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
         self.assertEqual(result["status"], 201)
         self.assertEqual(result["data"], [{
             "location": "Thika",
-            "happenningon": "14 Feb 2019",
+            "happenningOn": "14 Feb 2019",
             "tags": "Tech",
             "topic": "Scrum"
         }])
@@ -239,7 +240,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
         self.assertEqual(result['status'], 200)
         self.assertEqual(result['data'], {'meetupId': 1,
                                           'topic': "Scrum",
-                                          'happenningon': "Thu, 14 Feb 2019 00:00:00 GMT",
+                                          'happenningOn': "Thu, 14 Feb 2019 00:00:00 GMT",
                                           'location': "Thika"})
 
     # tests if a user can be able to get all meetup records

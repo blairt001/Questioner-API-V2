@@ -1,6 +1,7 @@
 """Tests for questions records"""
 import json
 import unittest
+
 from app import create_app
 
 
@@ -36,7 +37,7 @@ class QuestionBaseTest(unittest.TestCase):
                              "password": "Blairman1234"}
 
         self.post_meetup1 = {"topic": "Scrum",
-                             "happenningon": "14/02/2019",
+                             "happenningOn": "14/02/2019",
                              "location": "Thika",
                              "images": "blair.png",
                              "tags": "Tech"}

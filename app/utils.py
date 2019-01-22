@@ -11,7 +11,6 @@ from werkzeug.security import generate_password_hash
 from datetime import datetime
 import jwt
 
-
 # local imports
 from app.admin.models import AuthToken
 from app.admin.models import UserModel

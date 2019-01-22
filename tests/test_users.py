@@ -2,6 +2,7 @@
 
 import unittest
 import json
+
 from app import create_app
 from config import app_config
 from app.admin.db import init_db
