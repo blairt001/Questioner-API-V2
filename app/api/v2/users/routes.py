@@ -4,11 +4,13 @@ import jwt
 from flask import request, jsonify, make_response, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 import psycopg2
-from app.admin.models import UserModel
+
+from app.admin.models import UserModel, AuthToken
 from app.api.v2 import path_2
 from app.utils import validate_email, check_password, check_if_user_is_admin
 from app.admin import db
 from app import utils
+from app.utils import token_required
 
 
 KEY = os.getenv('SECRET_KEY')
@@ -92,5 +94,20 @@ def user_login():
                         "message": "Logged in successfully"}), 200
 
     except psycopg2.DatabaseError as error:
-        abort(make_response(jsonify(message="Server error : {}".format(error)), 500))
+        abort(make_response(jsonify(message="Server error : {}".format(error)), 500))\
+
+# invalidate user token on logout
+@path_2.route("auth/logout", methods=["POST"])
+@token_required
+def logout(specific_user):
+    """
+    The logout route endpoint
+    """
+    token = request.headers['x-access-token']
+
+    blacklist_token = AuthToken(token=token)
+    blacklist_token.blacklist_token()
+
+    return jsonify({'status': 200,
+                    'data': 'Logged out successfully'}), 200
         
