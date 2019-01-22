@@ -21,7 +21,7 @@ def create_app(config_name):
     app.register_blueprint(users)
     
     # register database url
-    # init_db(app_config["DB_URL"])     # uncomment when you want to drop the database
+    # init_db(app_config["DB_URL"]) 
     # Register error handlers
 
     @app.errorhandler(400)
