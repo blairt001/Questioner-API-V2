@@ -184,7 +184,6 @@ class QuestionModel:
                         'title': question["title"],
                         'body': question["body"],
                         'votes': question["votes"],
-                        # 'voters' : question['voters'],
                         'createdAt': question["created_at"]}
             data.append(question)
 
