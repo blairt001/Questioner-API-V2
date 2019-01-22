@@ -15,10 +15,10 @@ def init_db(DB_URL=None):
     """
     try:
         conn, cursor = connect_to_db()
-        all_init_queries = drop_table_if_exists() + set_up_tables()
+        create_db_query = drop_table_if_exists() + set_up_tables()
         i = 0
-        while i != len(all_init_queries):
-            query = all_init_queries[i]
+        while i != len(create_db_query):
+            query = create_db_query[i]
             cursor.execute(query)
             conn.commit()
             i += 1

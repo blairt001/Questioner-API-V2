@@ -1,6 +1,7 @@
 """The meetup routes"""
 from datetime import datetime
 from flask import jsonify, request, make_response, abort
+
 from app.admin.models import MeetupModel
 from app.api.v2 import path_2
 from app.utils import check_if_user_is_admin, token_required

@@ -2,9 +2,10 @@
 The admin meetup model
 """
 
-# import date
+# imports
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+
 from app.admin import db
 
 
@@ -184,7 +185,6 @@ class QuestionModel:
                         'title': question["title"],
                         'body': question["body"],
                         'votes': question["votes"],
-                        # 'voters' : question['voters'],
                         'createdAt': question["created_at"]}
             data.append(question)
 
