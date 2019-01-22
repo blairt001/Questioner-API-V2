@@ -237,12 +237,12 @@ def check_date(date):
 
 
 # has the user already responded "yes" to the meetup
-def check_if_already_rsvpd(meetup_id, user_id):
+def check_if_rsvp_already_exists(meetup_id, user_id):
     query = """
     SELECT rsvp_id FROM rsvps
     WHERE rsvps.meetup_id = '{}' AND rsvps.user_id = '{}'
     AND rsvps.rsvp = '{}'
     """.format(meetup_id, user_id, 'yes')
 
-    rsvp = select_from_db(query)
+    rsvp = select_data_from_db(query)
     return rsvp

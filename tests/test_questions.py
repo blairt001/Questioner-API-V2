@@ -230,30 +230,3 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
                                      content_type="application/json")
         self.assertEqual(response.status_code, 409)
  
-    """
-
-    
-    #tests if a user enters an invalid token
-    def user_enter_invalid_token(self):
-        token = "tonyblai63752752846728835278rtbxcavvv"
-        response = self.client.post("api/v1/meetups/1/questions",
-                                    data=json.dumps(self.post_question1),
-                                    headers={'x-access-token': token},
-                                    content_type="application/json")
-        self.assertEqual(response.status_code, 401)
-        result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['message'], "token is expired or invalid")
-    #define test case for user posting comments
-    
-    
-    #tests that an unregistered user can not post a question
-    def test_unregistered_user_not_post_question(self):
-        response = self.client.post("api/v1/meetups/1/questions",
-                                    data=json.dumps(self.post_question1),
-                                    headers={'x-access-token': self.token},
-                                    content_type="application/json")
-        self.assertEqual(response.status_code, 401)
-        result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['message'], "Token is missing")
-    """
-        
