@@ -237,3 +237,15 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
                                      headers={'x-access-token': self.token},
                                      content_type="application/json")
         self.assertEqual(response.status_code, 409)
+
+        # tests for unavailable meetup
+    def test_no_meetup_found(self):
+        self.token = self.user_login()
+        response = self.client.post("api/v2/meetups/20/questions",
+                                    data=json.dumps(self.post_question1),
+                                    headers={'x-access-token': self.token},
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 404)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result['status'], 404)
+        self.assertEqual(result['error'], 'No meetup with id 20 found')
