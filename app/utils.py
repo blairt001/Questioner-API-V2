@@ -165,12 +165,21 @@ def check_if_user_is_admin():
 
 # lets check for any whitespace that may exists and return true if found
 def check_for_whitespace(data):
+    """
+    Check for whitespace only in input data
+    """
     for keys, value in data.items():
-        if not value.strip():
-            abort(make_response(jsonify({
-                'status': 400,
-                'error': '{} field cannot be left blank'.format(keys)}), 400))
-
+        if keys != 'tags':
+            if not value.strip():
+                abort(make_response(jsonify({
+                    'status': 400,
+                    'error':'{} field cannot be left blank'.format(keys)}), 400))
+        if keys == 'tags':
+            for tags in data['tags']:
+                if not tags.strip():
+                    abort(make_response(jsonify({
+                        'status': 400,
+                        'error':'tags field cannot be left blank'}), 400))
     return True
 
 
@@ -221,7 +230,6 @@ def check_date(date):
             "status": 400, "Error":  "Invalid date format. Should be DD/MM/YYYY"}), 400))
 
     date_format = "%d/%m/%Y"
-    # create datetime objects from the strings
     strpdate = datetime.strptime(date, date_format)
     now = datetime.now()
 

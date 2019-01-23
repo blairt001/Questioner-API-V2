@@ -329,7 +329,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
         self.assertEqual(
-            result["Error"], "Invalid date format. Should be DD/MM/YYYY")
+            result["Error"], "'Date should be in the future")
 
 
     def test_user_inputs_a_past_date(self):
