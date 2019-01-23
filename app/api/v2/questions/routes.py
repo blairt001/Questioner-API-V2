@@ -75,7 +75,6 @@ def upvote_question(question_id):
         my_question['votes'] = my_question['votes'] + 1
         return jsonify({"status": 200, "data": my_question}), 200
     return jsonify({"status": 404, "error": "Question not found"}), 404
-
 #downvote a question
 @path_2.route("/questions/<int:question_id>/downvote", methods=['PATCH'])
 @token_required
@@ -102,20 +101,20 @@ def merge_upvote_and_downvote_question(specific_user, question_id, vote):
         return jsonify({
             'status': 401,
             'error': "Please login first"}), 401
-
     if vote not in ['upvote', 'downvote']:
         abort(make_response(jsonify({
             'status': 400,
-            'error': 'url vote should be upvote or downvote'}), 400))
-
+            'error': 'wrong url'}), 400))
     question = QuestionModel.get_question(question_id)
     if question:
         user_id = user['user_id']
+        
         voted = UserVote.check_if_already_voted(user_id, question_id)
         if voted:
             abort(make_response(jsonify({
                 'status': 409,
-                'error': "You cannot vote twice on a single question"}), 409))
+                'error': "You cannot vote twice on the same question"}), 409))
+        
 
         my_question = question[0]
         if vote == 'upvote':

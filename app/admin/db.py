@@ -100,7 +100,7 @@ def set_up_tables():
     )"""
 
     # create a super user admin with hashed password
-    password = generate_password_hash('andela2019')
+    password = generate_password_hash('Andela2019')
     create_admin_query = """
     INSERT INTO users(username, firstname, lastname, phone, email, password, admin) VALUES(
         '{}', '{}', '{}', '{}', '{}', '{}', '{}'

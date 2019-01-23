@@ -3,8 +3,8 @@ import json
 import unittest
 
 from app import create_app
-
-
+from config import app_config
+from app.admin.db import init_db
 class QuestionBaseTest(unittest.TestCase):
     """
     Setting up tests
@@ -13,14 +13,16 @@ class QuestionBaseTest(unittest.TestCase):
     def setUp(self):
         self.app = create_app("testing")
         self.client = self.app.test_client()
+        self.DB_URL = app_config['TEST_DB_URL'] 
+        init_db(self.DB_URL)
 
         self.signup_user1 = {"firstname": "Tony",
                              "lastname": "Blair",
                              "phoneNumber": "0715096908",
                              "username": "admin",
                              "email": "admin@gmail.com",
-                             "password": "andela2019",
-                             "confirmpassword": "andela2019"}
+                             "password": "Andela2019",
+                             "confirmpassword": "Andela2019"}
 
         self.signup_user2 = {"firstname": "Tony",
                              "lastname": "Andela",
@@ -31,7 +33,7 @@ class QuestionBaseTest(unittest.TestCase):
                              "confirmpassword": "Blairman1234"}
 
         self.login_user_1 = {"username": "admin",
-                             "password": "andela2019"}
+                             "password": "Andela2019"}
 
         self.login_user_2 = {"username": "fakeadmin",
                              "password": "Blairman1234"}
@@ -77,6 +79,7 @@ class QuestionBaseTest(unittest.TestCase):
     def tearDown(self):
         """Tperform final cleanup after tests run"""
         self.app.testing = False
+        init_db(self.DB_URL) 
 
 
 class TestQuestionApiEndpoint(QuestionBaseTest):
@@ -171,7 +174,6 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
         self.assertEqual(response.status_code, 200)
 
     # tests user can upvote a question
-    """
     def test_user_can_upvote_question(self):
         self.token = self.user_login()
         first = self.client.post("api/v2/meetups",
@@ -180,7 +182,7 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
                                  content_type="application/json")
         self.assertEqual(first.status_code, 201)
         second = self.client.post("api/v2/meetups/1/questions",
-                                  data=json.dumps(self.post_question2),
+                                  data=json.dumps(self.post_question1),
                                   headers={'x-access-token': self.token},
                                   content_type="application/json")
         self.assertEqual(second.status_code, 201)
@@ -200,17 +202,16 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
                          headers={'x-access-token': self.token},
                          content_type="application/json")
         self.client.post("api/v2/meetups/1/questions",
-                         data=json.dumps(self.post_question3),
+                         data=json.dumps(self.post_question1),
                          headers={'x-access-token': self.token},
                          content_type="application/json")
         response = self.client.patch("api/v2/questions/1/downvote",
                                      headers={'x-access-token': self.token},
                                      content_type="application/json")
         self.assertEqual(response.status_code, 200)
-
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['data'], self.downvoted_question)
-    """
+        self.assertEqual(result['data'], self.upvoted_question)
+  
     # prevent a user from voting a question more than once
     def test_user_upvote_question_more_than_once(self):
         self.token = self.user_login()
@@ -231,4 +232,3 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
                                      headers={'x-access-token': self.token},
                                      content_type="application/json")
         self.assertEqual(response.status_code, 409)
- 
