@@ -113,7 +113,7 @@ def merge_upvote_and_downvote_question(specific_user, question_id, vote):
         if voted:
             abort(make_response(jsonify({
                 'status': 409,
-                'error': "You cannot vote twice on the same question"}), 409))
+                'error': "You cannot vote two times on the same question"}), 409))
         
 
         my_question = question[0]

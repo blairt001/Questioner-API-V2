@@ -68,6 +68,9 @@ class QuestionBaseTest(unittest.TestCase):
                                    "questionid": 1,
                                    "title": "What is JWT?",
                                    "votes": -1}
+
+        self.post_incorrect_json_keys = {"titl": "Hey Mehn?",
+                               "bod": "It is just OK"}
                                    
         # prepare comments setup to accelerate our tests
         self.post_comment1 = {"comment": "Wow, I love every topic on Dev"}
@@ -268,5 +271,4 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['status'], 400)
         self.assertEqual(result['error'], 'Please use either upvote or downvote as the url')
-
-    
+        
