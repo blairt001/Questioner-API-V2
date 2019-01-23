@@ -100,7 +100,7 @@ class MeetupModel:
 
     # check if a meetup already exists
     @staticmethod
-    def check_if_meetup_already_posted(meetup_location, date):
+    def check_if_meetup_already_exists(meetup_location, date):
         query = """
         SELECT meetup_id FROM meetups
         WHERE meetups.meetup_location = '{}' AND meetups.happenningon = '{}'

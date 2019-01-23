@@ -93,7 +93,7 @@ class MeetupsBaseTest(unittest.TestCase):
                                  "images": "blair.png",
                                  "tags": ["Tech"]}
 
-        self.past_meetup_date = {"topic": "Scrum",
+        self.invalid_meetup_date = {"topic": "Scrum",
                                  "happenningon": "98635637",
                                  "location": "Thika",
                                  "images": "blair.png",
@@ -153,12 +153,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 201)
         self.assertEqual(result["status"], 201)
-        self.assertEqual(result["data"], [{
-            "location": "Thika",
-            "happenningon": "14 Feb 2019",
-            "tags": ["Tech"],
-            "topic": "Scrum"
-        }])
+        self.assertTrue(result["data"])
 
     # tests for meetup not set
     def test_no_meetup_topic_provided(self):
@@ -206,7 +201,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
-        self.assertEqual(result["error"], 'provide the tags')
+        self.assertEqual(result["error"], 'tags field cannot be left blank')
 
     # lets test user can not create a meetup
     def test_user_cannot_create_a_meetup(self):
@@ -308,7 +303,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
 
     # tests if a user inputs a whitespace 
     def test_if_a_user_inputs_whitespace(self):
-        self.token = self.login()
+        self.token = self.user_login()
         response = self.client.post("api/v2/meetups",
                                     data=json.dumps(self.check_whitespace),
                                     headers={'x-access-token': self.token},
@@ -329,13 +324,13 @@ class TestMeetupsRecords(MeetupsBaseTest):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
         self.assertEqual(
-            result["Error"], "'Date should be in the future")
+            result["Error"], "Invalid date format. Should be DD/MM/YYYY")
 
 
     def test_user_inputs_a_past_date(self):
         self.token = self.user_login()
         response = self.client.post("api/v2/meetups",
-                                    data=json.dumps(self.past_meetup_date),
+                                    data=json.dumps(self.meetups_past_date),
                                     headers={'x-access-token': self.token},
                                     content_type="application/json")
         result = json.loads(response.data.decode('utf-8'))
@@ -345,10 +340,10 @@ class TestMeetupsRecords(MeetupsBaseTest):
 
     def test_a_normal_users_cannot_create_a_meetup_record(self):
         self.client.post("api/v2/auth/signup",
-                         data=json.dumps(self.signup_user2),
+                         data=json.dumps(self.signup_user1),
                          content_type="application/json")
         login = self.client.post("api/v2/auth/login",
-                                 data=json.dumps(self.login_user_2),
+                                 data=json.dumps(self.login_user1),
                                  content_type="application/json")
         resp = json.loads(login.data.decode('utf-8'))
         user_token = resp['token']
