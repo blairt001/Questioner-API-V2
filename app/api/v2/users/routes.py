@@ -87,7 +87,7 @@ def user_login():
         password = UserModel.check_if_password_in_db(hashed_password, password)
         if not password:
             abort(make_response(jsonify({'status': 400,
-                                         'error': "wrong password"}), 400))
+                                         'error': "The paswsord is wrong"}), 400))
 
         token = jwt.encode({"username": username}, KEY, algorithm='HS256')
         return jsonify({"status": 200, "token": token.decode('UTF-8'),

@@ -164,7 +164,6 @@ class TestValidations(ValidationsBaseTest):
             result['error'], "Method not allowed")
 
     # tests username already used
-    """
     def test_user_username_already_exists_in_database(self):
 
         self.client.post("api/v2/auth/signup",
@@ -178,4 +177,3 @@ class TestValidations(ValidationsBaseTest):
         self.assertEqual(
             result['error'],
             "Error. 'username' 'blairtony' is already in use")
-    """

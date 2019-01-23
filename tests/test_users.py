@@ -111,7 +111,7 @@ class TestUsersEndpoints(UserBaseTest):
         self.assertEqual(result["message"], "Logged in successfully")
 
 
-    # tests user can login successfully
+    # tests user can logout successfully
     def test_that_a_user_can_logout_successfully(self):
         self.client.post("api/v2/auth/signup",
                          data=json.dumps(self.signup_user1),
@@ -128,3 +128,35 @@ class TestUsersEndpoints(UserBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertTrue(result['status'], 200)
         self.assertEqual(result["data"], "Logged out successfully")
+
+    # tests user enter passwords that doesnt match
+
+    def test_user_enter_unmatching_passwords(self):
+        response = self.client.post("api/v2/auth/signup",
+                                    data=json.dumps(self.signup_user2),
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 400)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result["error"], "Your passwords don't match!")
+
+     # test that a non registered user should not login
+    def test_no_signin_for_unregistered_users(self):
+        response = self.client.post("api/v2/auth/login",
+                                    data=json.dumps(self.login_user1),
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 400)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result["data"], "The username or passsword is incorrect")
+
+    # test a user uses wrong passwords to login
+    def test_user_uses_wrong_password_to_login(self):
+        self.client.post("api/v2/auth/signup",
+                         data=json.dumps(self.signup_user2),
+                         content_type="application/json")
+        response = self.client.post("api/v2/auth/login",
+                                    data=json.dumps(self.login_user3),
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 400)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result["error"], "wrong password")
+
