@@ -104,7 +104,7 @@ def merge_upvote_and_downvote_question(specific_user, question_id, vote):
     if vote not in ['upvote', 'downvote']:
         abort(make_response(jsonify({
             'status': 400,
-            'error': 'wrong url'}), 400))
+            'error': 'Please use either upvote or downvote as the url'}), 400))
     question = QuestionModel.get_question(question_id)
     if question:
         user_id = user['user_id']

@@ -179,7 +179,7 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
         self.assertEqual(response.status_code, 200)
 
     # tests user can upvote a question
-    def test_user_can_upvote_question(self):
+    def test_user_can_upvote_a_question_record(self):
         self.token = self.user_login()
         first = self.client.post("api/v2/meetups",
                                  data=json.dumps(self.post_meetup1),
@@ -239,7 +239,7 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
         self.assertEqual(response.status_code, 409)
 
         # tests for unavailable meetup
-    def test_no_meetup_found(self):
+    def test_no_meetup_record_is_missing(self):
         self.token = self.user_login()
         response = self.client.post("api/v2/meetups/20/questions",
                                     data=json.dumps(self.post_question1),
@@ -249,3 +249,24 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['status'], 404)
         self.assertEqual(result['error'], 'No meetup with id 20 found')
+
+    # tests if a user provides wrong vote response other than 'yes' , 'no' and 'maybe'
+    def tests_user_provide_wrong_vote_response(self):
+        self.token = self.user_login()
+        self.client.post("api/v2/meetups",
+                         data=json.dumps(self.post_meetup1),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        self.client.post("api/v2/meetups/1/questions",
+                         data=json.dumps(self.post_question1),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        response = self.client.patch("api/v2/questions/1/abracadabra",
+                                     headers={'x-access-token': self.token},
+                                     content_type="application/json")
+        self.assertEqual(response.status_code, 400)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result['status'], 400)
+        self.assertEqual(result['error'], 'Please use either upvote or downvote as the url')
+
+    
