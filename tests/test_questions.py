@@ -63,6 +63,11 @@ class QuestionBaseTest(unittest.TestCase):
                                    "questionid": 1,
                                    "title": "What is Dev?",
                                    "votes": -1}
+        self.downvoted_question2 = {"body": "I learnt more about JWT at Bootcamp",
+                                   "comment": "",
+                                   "questionid": 1,
+                                   "title": "What is JWT?",
+                                   "votes": -1}
                                    
         # prepare comments setup to accelerate our tests
         self.post_comment1 = {"comment": "Wow, I love every topic on Dev"}
@@ -210,7 +215,7 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
                                      content_type="application/json")
         self.assertEqual(response.status_code, 200)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['data'], self.upvoted_question)
+        self.assertEqual(result['data'], self.downvoted_question)
   
     # prevent a user from voting a question more than once
     def test_user_upvote_question_more_than_once(self):
