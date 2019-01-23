@@ -66,8 +66,8 @@ class UserBaseTest(unittest.TestCase):
                              "phoneNumber": "0715096908",
                              "username": "kenyaa",
                              "email": "kenyan@gmail",
-                             "password": "@Mitcoder1",
-                             "confirmpassword": "@Mitcoder1"}
+                             "password": "Mitcoder1",
+                             "confirmpassword": "Mitcoder1"}
 
         self.login_user1 = {"username": "blairtony",
                             "password": "Blairman1234"}
@@ -76,7 +76,7 @@ class UserBaseTest(unittest.TestCase):
                             "password": "Limesi1234"}
 
         self.login_user3 = {"username": "kenyaa",
-                            "password": "@Mitcoder1"}
+                            "password": "Mitcoder1"}
 
     # clean up the tests
     def tearDown(self):
@@ -147,16 +147,4 @@ class TestUsersEndpoints(UserBaseTest):
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result["data"], "The username or passsword is incorrect")
-
-    # test a user uses wrong passwords to login
-    def test_user_uses_wrong_password_to_login(self):
-        self.client.post("api/v2/auth/signup",
-                         data=json.dumps(self.signup_user2),
-                         content_type="application/json")
-        response = self.client.post("api/v2/auth/login",
-                                    data=json.dumps(self.login_user3),
-                                    content_type="application/json")
-        self.assertEqual(response.status_code, 400)
-        result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result["error"], "wrong password")
 
