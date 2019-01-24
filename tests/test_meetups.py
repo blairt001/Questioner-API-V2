@@ -85,7 +85,7 @@ class MeetupsBaseTest(unittest.TestCase):
                                   "happenningon": "14/02/2019",
                                   "location": "Thika",
                                   "images": "blair.png",
-                                  "tags": [""]}
+                                  "tags": ""}
 
         self.check_whitespace = {"topic": "Scrum",
                                  "happenningon": "14/02/2019",

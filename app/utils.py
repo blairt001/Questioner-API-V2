@@ -69,18 +69,18 @@ def validate_email(email):
 
     # Check that domain is valid
     try:
-        dom_1, dom_2 = domain.split(".")
-        if not re.match("^[A-Za-z]*$", dom_1):
+        domain_1, domain_2 = domain.split(".")
+        if not re.match("^[A-Za-z]*$", domain_1):
             abort(make_response(jsonify({
                 "status": 400, "Error":  "Email is Invalid"}), 400))
-        if not re.match("^[A-Za-z]*$", dom_2):
+        if not re.match("^[A-Za-z]*$", domain_2):
             abort(make_response(jsonify({
                 "status": 400, "Error":  "Email is Invalid"}), 400))
     except ValueError:
         abort(make_response(jsonify(
             status=400,
             error="Email is Invalid"), 400))
-    if not dom_1 or not dom_2:
+    if not domain_1 or not domain_2:
         abort(make_response(jsonify(
             status=400,
             error="Email is Invalid"), 400))
