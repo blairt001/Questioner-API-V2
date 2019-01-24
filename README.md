@@ -125,7 +125,7 @@ Ensure you use ProductionConfig settings which have DEBUG set to False
 
 ## Postman API Documentation
 
-**[Documentation](https://documenter.getpostman.com/view/6005235/RzthPq78)**
+> **[Documentation](https://documenter.getpostman.com/view/6005235/RzthPq78)**
 
 ## Versioning
 
