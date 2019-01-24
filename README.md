@@ -112,15 +112,19 @@ Ensure you use ProductionConfig settings which have DEBUG set to False
 
 ## GitHub pages
 
-https://blairt001.github.io/Questioner/UI/
+(https://blairt001.github.io/Questioner/UI/)
 
 ## Heroku
 
-https://questionerv2-blair-heroku.herokuapp.com/
+(https://questionerv2-blair-heroku.herokuapp.com/)
 
 ## Sample Tasks
 
-https://www.pivotaltracker.com/n/projects/2235680
+(https://www.pivotaltracker.com/n/projects/2235680)
+
+## Postman API Documentation
+
+(https://documenter.getpostman.com/view/6005235/RzthPq78)
 
 ## Versioning
 
