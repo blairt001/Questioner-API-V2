@@ -100,7 +100,7 @@ class MeetupModel:
 
     # check if a meetup already exists
     @staticmethod
-    def check_if_meetup_already_posted(meetup_location, date):
+    def check_if_meetup_already_exists(meetup_location, date):
         query = """
         SELECT meetup_id FROM meetups
         WHERE meetups.meetup_location = '{}' AND meetups.happenningon = '{}'
@@ -335,6 +335,41 @@ class UserModel:
         """.format(user_id, 'yes')
 
         meetups = db.select_data_from_db(get_user_meetups_query)
+        return meetups
+    
+
+    @staticmethod
+    def get_user_questions_records(user_id):
+        query = """
+        SELECT question_id FROM questions
+        WHERE questions.user_id = '{}'""".format(user_id)
+
+        questions_list = db.select_data_from_db(query)
+        questions = len(questions_list)
+        return questions
+
+    @staticmethod
+    def get_user_questions_details(user_id):
+        query = """
+        SELECT question_id FROM comments
+        WHERE comments.user_id = '{}'""".format(user_id)
+
+        comments_list = db.select_data_from_db(query)
+        data = set()
+        for listed in comments_list:
+            for lists in listed:
+                data.add(lists)
+        comments = len(data)
+        return comments
+
+    @staticmethod
+    def get_user_meetups_records(user_id):
+        query = """
+        SELECT meetup_id, meetup_topic FROM rsvps
+        WHERE rsvps.user_id = '{}' AND rsvps.rsvp = '{}'
+        """.format(user_id, 'yes')
+
+        meetups = db.select_data_from_db(query)
         return meetups
 
     @staticmethod

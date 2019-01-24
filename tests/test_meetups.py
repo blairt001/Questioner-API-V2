@@ -21,8 +21,8 @@ class MeetupsBaseTest(unittest.TestCase):
                               "phoneNumber": "0715096908",
                               "username": "admin",
                               "email": "admin@gmail.com",
-                              "password": "andela2019",
-                              "confirmpassword": "andela2019"}
+                              "password": "Andela2019",
+                              "confirm_password": "Andela2019"}
 
         self.signup_user1 = {"firstname": "Tony",
                              "lastname": "Andela",
@@ -30,10 +30,10 @@ class MeetupsBaseTest(unittest.TestCase):
                              "username": "fakeadmin",
                              "email": "blairtdev@gmail.com",
                              "password": "Blairman1234",
-                             "confirmpassword": "Blairman1234"}
+                             "confirm_password": "Blairman1234"}
 
         self.login_admin1 = {"username": "admin",
-                             "password": "andela2019"}
+                             "password": "Andela2019"}
 
         self.login_user1 = {"username": "fakeadmin",
                             "password": "Blairman1234"}
@@ -42,21 +42,21 @@ class MeetupsBaseTest(unittest.TestCase):
                              "happenningon": "14/02/2019",
                              "location": "Thika",
                              "images": "blair.png",
-                             "tags": "Tech"
+                             "tags": ["Tech"]
                              }
 
         self.post_meetup2 = {"topic": "Fullstack",
                              "happenningon": "15/02/2019",
                              "location": "Nairobi",
                              "images": "tony.png",
-                             "tags": "Health"
+                             "tags": ["Health"]
                              }
 
         self.post_meetup3 = {"topic": "Miguel Miguel",
                              "happenningon": "16/02/2019",
                              "location": "Nairobi",
                              "images": "Miguel.png",
-                             "tags": "Tech"
+                             "tags": ["Tech"]
                              }
 
         self.rsvp_response1 = [{"Attending": "yes",
@@ -67,31 +67,45 @@ class MeetupsBaseTest(unittest.TestCase):
                                     "happenningon": "14/02/2019",
                                     "location": "Thika",
                                     "images": "blair.png",
-                                    "tags": "Tech"}
+                                    "tags": ["Tech"]}
 
         self.meet_location_record = {"topic": "Scrum",
                                      "happenningon": "14/02/2019",
                                      "location": "",
                                      "images": "blair.png",
-                                     "tags": "Tech"}
+                                     "tags": ["Tech"]}
 
         self.meetup_date_record = {"topic": "Scrum",
                                    "happenningon": "",
                                    "location": "Thika",
                                    "images": "blair.png",
-                                   "tags": "Tech"}
+                                   "tags": ["Tech"]}
 
         self.meetup_tag_record = {"topic": "Scrum",
                                   "happenningon": "14/02/2019",
                                   "location": "Thika",
                                   "images": "blair.png",
-                                  "tags": ""}
+                                  "tags": [""]}
 
         self.check_whitespace = {"topic": "Scrum",
                                  "happenningon": "14/02/2019",
                                  "location": "              ",
                                  "images": "blair.png",
-                                 "tags": "Tech"}
+                                 "tags": ["Tech"]}
+
+        self.invalid_meetup_date = {"topic": "Scrum",
+                                 "happenningon": "98635637",
+                                 "location": "Thika",
+                                 "images": "blair.png",
+                                 "tags": ["Tech"]}
+
+        self.meetups_past_date = {"topic": "Scrum",
+                                  "happenningon": "12/07/1972",
+                                  "location": "Thika",
+                                  "images": "blair.png",
+                                  "tags": ["Tech"]}
+
+
 
         self.meetups = [{"created_at": "Wed, 09 Jan 2019 02:30:10 GMT",
                          "id": 1,
@@ -99,14 +113,14 @@ class MeetupsBaseTest(unittest.TestCase):
                                     "tony.png"],
                          "location": "Thika",
                          "happenningon": "2019-02-14",
-                         "tags": "Tech",
+                         "tags": ["Tech"],
                          "topic": "Scrum"},
                         {"created_at": "Wed, 09 Jan 2019 02:30:54 GMT",
                          "id": 2,
                          "images": "tony.png",
                          "location": "Nairobi",
                          "happenningon": "2019-02-15",
-                         "tags": "Health",
+                         "tags": ["Health"],
                          "topic": "Fullstack"}]
 
         # use an empty token for performing the tests
@@ -139,12 +153,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 201)
         self.assertEqual(result["status"], 201)
-        self.assertEqual(result["data"], [{
-            "location": "Thika",
-            "happenningon": "14 Feb 2019",
-            "tags": "Tech",
-            "topic": "Scrum"
-        }])
+        self.assertTrue(result["data"])
 
     # tests for meetup not set
     def test_no_meetup_topic_provided(self):
@@ -192,10 +201,10 @@ class TestMeetupsRecords(MeetupsBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
-        self.assertEqual(result["error"], 'provide the tags')
+        self.assertEqual(result["error"], 'tags field cannot be left blank')
 
     # lets test user can not create a meetup
-    def test_user_cannot_reate_a_meetup(self):
+    def test_user_cannot_create_a_meetup(self):
         self.client.post("api/v2/auth/signup",
                          data=json.dumps(self.signup_user1),
                          content_type="application/json")
@@ -291,3 +300,60 @@ class TestMeetupsRecords(MeetupsBaseTest):
         self.assertEqual(response.status_code, 200)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['data'], self.rsvp_response1)
+
+    # tests if a user inputs a whitespace 
+    def test_if_a_user_inputs_whitespace(self):
+        self.token = self.user_login()
+        response = self.client.post("api/v2/meetups",
+                                    data=json.dumps(self.check_whitespace),
+                                    headers={'x-access-token': self.token},
+                                    content_type="application/json")
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(result["status"], 400)
+        self.assertEqual(result["error"], 'location field cannot be left blank')
+
+
+    def test_user_inputes_an_invalid_date(self):
+        self.token = self.user_login()
+        response = self.client.post("api/v2/meetups",
+                                    data=json.dumps(self.invalid_meetup_date),
+                                    headers={'x-access-token': self.token},
+                                    content_type="application/json")
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(result["status"], 400)
+        self.assertEqual(
+            result["Error"], "Invalid date format. Should be DD/MM/YYYY")
+
+
+    def test_user_inputs_a_past_date(self):
+        self.token = self.user_login()
+        response = self.client.post("api/v2/meetups",
+                                    data=json.dumps(self.meetups_past_date),
+                                    headers={'x-access-token': self.token},
+                                    content_type="application/json")
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(result["status"], 400)
+        self.assertEqual(result["Error"], "Date should be in the future")
+
+    def test_a_normal_users_cannot_create_a_meetup_record(self):
+        self.client.post("api/v2/auth/signup",
+                         data=json.dumps(self.signup_user1),
+                         content_type="application/json")
+        login = self.client.post("api/v2/auth/login",
+                                 data=json.dumps(self.login_user1),
+                                 content_type="application/json")
+        resp = json.loads(login.data.decode('utf-8'))
+        user_token = resp['token']
+        response = self.client.post("api/v2/meetups",
+                                    data=json.dumps(self.post_meetup1),
+                                    headers={'x-access-token': user_token},
+                                    content_type="application/json")
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(result["status"], 401)
+        self.assertEqual(
+            result["error"], "You are not allowed to perfom this function")
+

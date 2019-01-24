@@ -3,8 +3,8 @@ import json
 import unittest
 
 from app import create_app
-
-
+from config import app_config
+from app.admin.db import init_db
 class QuestionBaseTest(unittest.TestCase):
     """
     Setting up tests
@@ -13,14 +13,16 @@ class QuestionBaseTest(unittest.TestCase):
     def setUp(self):
         self.app = create_app("testing")
         self.client = self.app.test_client()
+        self.DB_URL = app_config['TEST_DB_URL'] 
+        init_db(self.DB_URL)
 
         self.signup_user1 = {"firstname": "Tony",
                              "lastname": "Blair",
                              "phoneNumber": "0715096908",
                              "username": "admin",
                              "email": "admin@gmail.com",
-                             "password": "andela2019",
-                             "confirmpassword": "andela2019"}
+                             "password": "Andela2019",
+                             "confirm_password": "Andela2019"}
 
         self.signup_user2 = {"firstname": "Tony",
                              "lastname": "Andela",
@@ -28,10 +30,10 @@ class QuestionBaseTest(unittest.TestCase):
                              "username": "fakeadmin",
                              "email": "blaidev@gmail.com",
                              "password": "Blairman1234",
-                             "confirmpassword": "Blairman1234"}
+                             "confirm_password": "Blairman1234"}
 
         self.login_user_1 = {"username": "admin",
-                             "password": "andela2019"}
+                             "password": "Andela2019"}
 
         self.login_user_2 = {"username": "fakeadmin",
                              "password": "Blairman1234"}
@@ -61,6 +63,14 @@ class QuestionBaseTest(unittest.TestCase):
                                    "questionid": 1,
                                    "title": "What is Dev?",
                                    "votes": -1}
+        self.downvoted_question2 = {"body": "I learnt more about JWT at Bootcamp",
+                                   "comment": "",
+                                   "questionid": 1,
+                                   "title": "What is JWT?",
+                                   "votes": -1}
+
+        self.post_incorrect_json_keys = {"titl": "Hey Mehn?",
+                               "bod": "It is just OK"}
                                    
         # prepare comments setup to accelerate our tests
         self.post_comment1 = {"comment": "Wow, I love every topic on Dev"}
@@ -77,6 +87,7 @@ class QuestionBaseTest(unittest.TestCase):
     def tearDown(self):
         """Tperform final cleanup after tests run"""
         self.app.testing = False
+        init_db(self.DB_URL) 
 
 
 class TestQuestionApiEndpoint(QuestionBaseTest):
@@ -171,8 +182,7 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
         self.assertEqual(response.status_code, 200)
 
     # tests user can upvote a question
-    """
-    def test_user_can_upvote_question(self):
+    def test_user_can_upvote_a_question_record(self):
         self.token = self.user_login()
         first = self.client.post("api/v2/meetups",
                                  data=json.dumps(self.post_meetup1),
@@ -180,7 +190,7 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
                                  content_type="application/json")
         self.assertEqual(first.status_code, 201)
         second = self.client.post("api/v2/meetups/1/questions",
-                                  data=json.dumps(self.post_question2),
+                                  data=json.dumps(self.post_question1),
                                   headers={'x-access-token': self.token},
                                   content_type="application/json")
         self.assertEqual(second.status_code, 201)
@@ -200,17 +210,16 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
                          headers={'x-access-token': self.token},
                          content_type="application/json")
         self.client.post("api/v2/meetups/1/questions",
-                         data=json.dumps(self.post_question3),
+                         data=json.dumps(self.post_question1),
                          headers={'x-access-token': self.token},
                          content_type="application/json")
         response = self.client.patch("api/v2/questions/1/downvote",
                                      headers={'x-access-token': self.token},
                                      content_type="application/json")
         self.assertEqual(response.status_code, 200)
-
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['data'], self.downvoted_question)
-    """
+  
     # prevent a user from voting a question more than once
     def test_user_upvote_question_more_than_once(self):
         self.token = self.user_login()
@@ -231,4 +240,35 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
                                      headers={'x-access-token': self.token},
                                      content_type="application/json")
         self.assertEqual(response.status_code, 409)
- 
+
+        # tests for unavailable meetup
+    def test_no_meetup_record_is_missing(self):
+        self.token = self.user_login()
+        response = self.client.post("api/v2/meetups/20/questions",
+                                    data=json.dumps(self.post_question1),
+                                    headers={'x-access-token': self.token},
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 404)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result['status'], 404)
+        self.assertEqual(result['error'], 'No meetup with id 20 found')
+
+    # tests if a user provides wrong vote response other than 'yes' , 'no' and 'maybe'
+    def tests_user_provide_wrong_vote_response(self):
+        self.token = self.user_login()
+        self.client.post("api/v2/meetups",
+                         data=json.dumps(self.post_meetup1),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        self.client.post("api/v2/meetups/1/questions",
+                         data=json.dumps(self.post_question1),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        response = self.client.patch("api/v2/questions/1/abracadabra",
+                                     headers={'x-access-token': self.token},
+                                     content_type="application/json")
+        self.assertEqual(response.status_code, 400)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result['status'], 400)
+        self.assertEqual(result['error'], 'Please use either upvote or downvote as the url')
+        

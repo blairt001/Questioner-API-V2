@@ -65,6 +65,19 @@ def admin_create_meetup(specific_user):
             'error': 'tags field is required'}), 400))
 
     happenningon = utils.check_date(happenningon)
+    # check if a meetup already exists
+    meetup_id = MeetupModel.check_if_meetup_already_exists(location, happenningon)
+    if meetup_id:
+        abort(make_response(jsonify({
+            'status': 409,
+            'error': 'Meetup already exists. Choose another location or date'
+        }), 409))
+
+    # let admin add tag array to the database
+    tags = '{'
+    for tag in data['tags']:
+        tags += '"' + tag + '",'
+    tags = tags[:-1] + '}'
 
     meetup = MeetupModel(
         topic=topic,
