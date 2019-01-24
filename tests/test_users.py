@@ -28,7 +28,7 @@ class UserBaseTest(unittest.TestCase):
                              "username": "blairtony",
                              "email": "blairtony@gmail.com",
                              "password": "Blairman1234",
-                             "confirmpassword": "Blairman1234"}
+                             "confirm_password": "Blairman1234"}
 
         self.signup_user2 = {"firstname": "Lionel",
                              "lastname": "Messi",
@@ -36,14 +36,14 @@ class UserBaseTest(unittest.TestCase):
                              "username": "limesi",
                              "email": "limesi@gmail.com",
                              "password": "Limesi1234",
-                             "confirmpassword": "Limesi123"}
+                             "confirm_password": "Limesi123"}
 
         self.signup_user3 = {"firstname": "Joshua",
                              "lastname": "Ariga",
                              "username": "arigajosh",
                              "email": "ariga@gmail.com",
                              "password": "Ariga123",
-                             "confirmpassword": "Ariga123"}
+                             "confirm_password": "Ariga123"}
 
         self.signup_user4 = {"firstname": "Codeman",
                              "lastname": "Pragmatic",
@@ -51,7 +51,7 @@ class UserBaseTest(unittest.TestCase):
                              "username": "codeprag",
                              "email": "codeman@gmail.com",
                              "password": "Cod1",
-                             "confirmpassword": "Cod1"}
+                             "confirm_password": "Cod1"}
 
         self.signup_user5 = {"firstname": "Codeman",
                              "lastname": "Pragmatic",
@@ -59,7 +59,7 @@ class UserBaseTest(unittest.TestCase):
                              "username": "codeprag",
                              "email": "codeman@gmail.com",
                              "password": "Codedsdscfsdfsfsfhchdfgvdyvhgsdvghsd",
-                             "confirmpassword": "Codedsdscfsdfsfsfhchdfgvdyvhgsdvghsd"}
+                             "confirm_password": "Codedsdscfsdfsfsfhchdfgvdyvhgsdvghsd"}
 
         self.signup_user6 = {"firstname": "Kenyan",
                              "lastname":  "Man",
@@ -67,7 +67,7 @@ class UserBaseTest(unittest.TestCase):
                              "username": "kenyaa",
                              "email": "kenyan@gmail",
                              "password": "Mitcoder1",
-                             "confirmpassword": "Mitcoder1"}
+                             "confirm_password": "Mitcoder1"}
 
         self.login_user1 = {"username": "blairtony",
                             "password": "Blairman1234"}

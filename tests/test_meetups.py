@@ -22,7 +22,7 @@ class MeetupsBaseTest(unittest.TestCase):
                               "username": "admin",
                               "email": "admin@gmail.com",
                               "password": "Andela2019",
-                              "confirmpassword": "Andela2019"}
+                              "confirm_password": "Andela2019"}
 
         self.signup_user1 = {"firstname": "Tony",
                              "lastname": "Andela",
@@ -30,7 +30,7 @@ class MeetupsBaseTest(unittest.TestCase):
                              "username": "fakeadmin",
                              "email": "blairtdev@gmail.com",
                              "password": "Blairman1234",
-                             "confirmpassword": "Blairman1234"}
+                             "confirm_password": "Blairman1234"}
 
         self.login_admin1 = {"username": "admin",
                              "password": "Andela2019"}

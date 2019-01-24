@@ -27,7 +27,7 @@ class ValidationsBaseTest(unittest.TestCase):
                             "phoneNumber": "0715096908",
                             "email": "blairtdev@gmail.com",
                             "password": "Blairman1234",
-                            "confirmpassword": "Blairman1234"}
+                            "confirm_password": "Blairman1234"}
 
         self.login_user = {"username": "blairtony",
                            "password": "Blairman1234"}
@@ -38,7 +38,7 @@ class ValidationsBaseTest(unittest.TestCase):
                             "phoneNumber": "0715096908",
                             "email": "limesigmail.com",
                             "password": "Limesi1234",
-                            "confirmpassword": "Limesi1234"}
+                            "confirm_password": "Limesi1234"}
 
         self.user_email2 = {"firstname": "Joshua",
                             "lastname": "Ariga",
@@ -46,7 +46,7 @@ class ValidationsBaseTest(unittest.TestCase):
                             "phoneNumber": "0715096908",
                             "email": "ariga@gmailcom",
                             "password": "Ariga123",
-                            "confirmpassword": "Ariga123"}
+                            "confirm_password": "Ariga123"}
 
         self.user_password_length = {"firstname": "Codeman",
                                      "lastname": "Pragmatic",
@@ -54,7 +54,7 @@ class ValidationsBaseTest(unittest.TestCase):
                                      "phoneNumber": "0715096908",
                                      "email": "codeman@gmail.com",
                                      "password": "Code",
-                                     "confirmpassword": "Code"}
+                                     "confirm_password": "Code"}
 
         self.user_pass_alphabetic = {"firstname": "Codeman",
                                      "lastname": "Pragmatic",
@@ -62,7 +62,7 @@ class ValidationsBaseTest(unittest.TestCase):
                                      "phoneNumber": "0715096908",
                                      "email": "codeman@gmail.com",
                                      "password": "20192019",
-                                     "confirmpassword": "20192019"}
+                                     "confirm_password": "20192019"}
 
         self.user_pass_capital = {"firstname": "Kenyan",
                                   "lastname": "Man",
@@ -70,7 +70,7 @@ class ValidationsBaseTest(unittest.TestCase):
                                   "phoneNumber": "0715096908",
                                   "email": "kenyan@gmail.com",
                                   "password": "blairt1234",
-                                  "confirmpassword": "blair1234"}
+                                  "confirm_password": "blair1234"}
 
         self.user_pass_number = {"firstname": "Kenyan",
                                  "lastname": "Man",
@@ -78,7 +78,7 @@ class ValidationsBaseTest(unittest.TestCase):
                                  "phoneNumber": "0715096908",
                                  "email": "kenyan@gmail.com",
                                  "password": "Blairtony",
-                                 "confirmpassword": "Blairtony"}
+                                 "confirm_password": "Blairtony"}
 
     # clean up the tests
     def tearDown(self):
