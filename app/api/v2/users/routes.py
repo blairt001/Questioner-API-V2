@@ -108,3 +108,32 @@ def logout(specific_user):  #logs out a specific user from thr system
     return jsonify({'status': 200,
                     'data': 'Logged out successfully'}), 200
         
+# user should be able to view his / her profile when logged in
+@path_2.route("/profile", methods=['GET'])
+@token_required
+def user_view_profile(specific_user):
+    username_len = utils.decode_token()
+    username = username_len['username']
+    user = User.get_user_by_username(username)
+    try:
+        user = user[0]
+    except:
+        return jsonify({
+            'status': 401,
+            'error': "Please login first"}), 401
+
+    user_id = user['user_id']
+    questions = UserModel.get_user_questions_records(user_id)
+    meetups = UserModel.get_user_meetups_records(user_id)
+    data = []
+    for meetup in meetups:
+        meetup = {'meetupId': meetup['meetup_id'],
+                  'meetupTopic': meetup['meetup_topic']}
+        data.append(meetup)
+
+    user_question = UserModel.get_user_questions_details(user_id)
+
+    return jsonify({"status": 200,
+                    "data":{'AskedQuestions' : questions,
+                            'commentedQuestions': commented_qs,
+                            'meetups': data}}), 200
