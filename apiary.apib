@@ -1,104 +1,521 @@
 FORMAT: 1A
-HOST: https://questionerv2-blair-heroku.herokuapp.com/api/v2
+HOST: http://127.0.0.1:5000/api/v2
 
-# Questioner-API-V2
-
+# Questioner-API-V2 Docs
 Questioner is a crowd-source questions for a meetup. It helps the meetup organizer prioritize questions to be answered. Other users can vote on asked questions and they bubble to the top or to the bottom of the log.
 
-## Sign up Collection [/auth/signup]
+# Group meetups
 
-### User can sign up[POST]
+## Meetups [/meetups/]
 
-A user can create an account using this action
-It takes a JSON object containing a firstname, lastname, phoneNumber, username, username, email, password, confirmpassword  authorization details.
-
-+ firstname (required, string) - first name
-+ lastname (required, string) - last name
-+ phoneNumber (required, integer) - phone number
-+ username (required, string) - username
-+ email (required, string) - user email
-+ password (required, string) - Strong login password
-+ confirmpassword (required, string) - Strong login confirm password
+### http127.0.0.15000apiv2meetups [POST]
+Create Meetups
 
 + Request (application/json)
-
-        {
-                "firstname":"Tony",
-                "lastname": "Andela",
-                "phoneNumber":"0715096908",
-                "username":"blairtheadmin",
-                "email":"blair1234@gmail.com",
-                "password": "Blairman1234",
-                "confirmpassword":"Blairman1234"
-        }
-
-
-+ Response 200 (application/json)
-
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
-            }
-        ]
-
-### Create a New  [GET]
-
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
-
-+ Request (application/json)
-
-        {
-            "question": "Favourite programming language?",
-            "choices": [
-                "Swift",
-                "Python",
-                "Objective-C",
-                "Ruby"
-            ]
-        }
-
-+ Response 201 (application/json)
-
     + Headers
 
-            Location: /questions/2
+            x-access-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIn0._BIpJHx-a2aa1MbuoUvpJS893V6eABuMt9XOgQN6IB8
+
+
+    + Attributes (http127.0.0.15000apiv2meetupsRequest)
+
 
     + Body
 
             {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 0
-                    }, {
-                        "choice": "Python",
-                        "votes": 0
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 0
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 0
-                    }
+                "topic": "Scrum",
+                "happenningon": "14/02/2019",
+                "location": "Thika",
+                "images": "blair.png",
+                "tags": "Tech"
+            }
+
+
++ Response 200 
+
+
+
+### http127.0.0.15000apiv2meetups [POST]
+Admin Create Meetup 2
+
++ Request (application/json)
+    + Headers
+
+            x-access-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIn0._BIpJHx-a2aa1MbuoUvpJS893V6eABuMt9XOgQN6IB8
+
+
+    + Attributes (http127.0.0.15000apiv2meetupsRequest1)
+
+
+    + Body
+
+            {
+                "topic": "Miguel Miguel",
+                "happenningon": "16/02/2019",
+                "location": "Nairobi",
+                "images": "Miguel.png",
+                "tags": [
+                    "Tech"
                 ]
             }
+
+
++ Response 200 
+
+
+
+
+## Meetups Upcoming [/meetups/upcoming]
+
+### http127.0.0.15000apiv2meetupsupcoming [GET]
+Get all meetups
+
++ Request 
+    + Headers
+
+            x-access-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImZha2VhZG1pbiJ9.3JCgD2AMcZTKUsKWrwAq--gomRcsh2is-HbtVHa6HTs
+
+
+
+
+
++ Response 200 
+
+
+
+
+## Meetups 3 [/meetups/3]
+
+### http127.0.0.15000apiv2meetups3 [GET]
+Get specific meetup
+
++ Request 
+    + Headers
+
+            x-access-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImZha2VhZG1pbiJ9.3JCgD2AMcZTKUsKWrwAq--gomRcsh2is-HbtVHa6HTs
+
+
+
+
+
++ Response 200 
+
+
+
+
+## Meetups 4 [/meetups/4]
+
+### http127.0.0.15000apiv2meetups4 [DELETE]
+Admin Delete Meetup
+
++ Request 
+    + Headers
+
+            x-access-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIn0._BIpJHx-a2aa1MbuoUvpJS893V6eABuMt9XOgQN6IB8
+
+
+
+
+
++ Response 200 
+
+
+
+
+## Meetups 3 Rsvps Yes [/meetups/3/rsvps/yes]
+
+### http127.0.0.15000apiv2meetups3rsvpsyes [POST]
+User rsvp to a meetup
+
++ Request (application/json)
+    + Headers
+
+            x-access-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImZha2VhZG1pbiJ9.3JCgD2AMcZTKUsKWrwAq--gomRcsh2is-HbtVHa6HTs
+
+
+    + Attributes (array[http127.0.0.15000apiv2meetups3rsvpsyesRequest])
+
+
+    + Body
+
+            [
+                {
+                    "Attending": "yes",
+                    "meetup": 1,
+                    "topic": "Scrum"
+                }
+            ]
+
+
++ Response 200 
+
+
+
+
+
+# Group questions
+
+## Meetups 3 Questions [/meetups/3/questions]
+
+### http127.0.0.15000apiv2meetups3questions [POST]
+Post a question to a meetup record
+
++ Request (application/json)
+    + Headers
+
+            x-access-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImZha2VhZG1pbiJ9.3JCgD2AMcZTKUsKWrwAq--gomRcsh2is-HbtVHa6HTs
+
+
+    + Attributes (http127.0.0.15000apiv2meetups3questionsRequest)
+
+
+    + Body
+
+            {
+                "title": "What is Dev?",
+                "body": "I really like how people talk about Tonys Dev"
+            }
+
+
++ Response 200 
+
+
+
+### http127.0.0.15000apiv2meetups3questions [POST]
+User Create a Question
+
++ Request (application/json)
+    + Headers
+
+            x-access-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImZha2VhZG1pbiJ9.3JCgD2AMcZTKUsKWrwAq--gomRcsh2is-HbtVHa6HTs
+
+
+    + Attributes (http127.0.0.15000apiv2meetups3questionsRequest)
+
+
+    + Body
+
+            {
+                "title": "What is JWT?",
+                "body": "I learnt more about JWT at Bootcamp"
+            }
+
+
++ Response 200 
+
+
+
+### http127.0.0.15000apiv2meetups3questions [GET]
+Get all questions
+
++ Request 
+    + Headers
+
+            x-access-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImZha2VhZG1pbiJ9.3JCgD2AMcZTKUsKWrwAq--gomRcsh2is-HbtVHa6HTs
+
+
+
+
+
++ Response 200 
+
+
+
+
+## Questions 1 Comment [/questions/1/comment]
+
+### http127.0.0.15000apiv2questions1comment [POST]
+User Comment on a Question
+
++ Request (application/json)
+    + Headers
+
+            x-access-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImZha2VhZG1pbiJ9.3JCgD2AMcZTKUsKWrwAq--gomRcsh2is-HbtVHa6HTs
+
+
+    + Attributes (http127.0.0.15000apiv2questions1commentRequest)
+
+
+    + Body
+
+            {
+                "comment": "Wow, I love every topic on Dev"
+            }
+
+
++ Response 200 
+
+
+
+
+## Questions 1 Comments [/questions/1/comments]
+
+### http127.0.0.15000apiv2questions1comments [GET]
+User Get all comments
+
++ Request 
+    + Headers
+
+            x-access-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImZha2VhZG1pbiJ9.3JCgD2AMcZTKUsKWrwAq--gomRcsh2is-HbtVHa6HTs
+
+
+
+
+
++ Response 200 
+
+
+
+
+## Questions 1 Upvote [/questions/1/upvote]
+
+### http127.0.0.15000apiv2questions1upvote [PATCH]
+User Upvote A Question
+
++ Request 
+    + Headers
+
+            x-access-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImZha2VhZG1pbiJ9.3JCgD2AMcZTKUsKWrwAq--gomRcsh2is-HbtVHa6HTs
+
+
+
+
+
++ Response 200 
+
+
+
+
+## Questions 2 Downvote [/questions/2/downvote/]
+
+### http127.0.0.15000apiv2questions2downvote [PATCH]
+User Downvote a question
+
++ Request 
+    + Headers
+
+            x-access-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImZha2VhZG1pbiJ9.3JCgD2AMcZTKUsKWrwAq--gomRcsh2is-HbtVHa6HTs
+
+
+
+
+
++ Response 200 
+
+
+
+
+
+# Group comments
+
+## Questions 1 Comment [/questions/1/comment]
+
+### http127.0.0.15000apiv2questions1comment [POST]
+TODO: Add Description
+
++ Request (application/json)
+    + Headers
+
+            x-access-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImZha2VhZG1pbiJ9.3JCgD2AMcZTKUsKWrwAq--gomRcsh2is-HbtVHa6HTs
+
+
+    + Attributes (http127.0.0.15000apiv2questions1commentRequest)
+
+
+    + Body
+
+            {
+                "comment": "Wow, I love itt"
+            }
+
+
++ Response 200 
+
+
+
+
+## Questions 1 Comments [/questions/1/comments]
+
+### http127.0.0.15000apiv2questions1comments [GET]
+Get all comments
+
++ Request 
+    + Headers
+
+            x-access-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImZha2VhZG1pbiJ9.3JCgD2AMcZTKUsKWrwAq--gomRcsh2is-HbtVHa6HTs
+
+
+
+
+
++ Response 200 
+
+
+
+
+
+# Group users
+
+## Auth Signup [/auth/signup]
+
+### http127.0.0.15000apiv2authsignup [POST]
+Sign up user
+
++ Request (application/json)
+
+    + Attributes (http127.0.0.15000apiv2authsignupRequest)
+
+
+    + Body
+
+            {
+                "firstname": "Tony",
+                "lastname": "Andela",
+                "phoneNumber": "0713403687",
+                "username": "fakeadmin",
+                "email": "blairtdev@gmail.com",
+                "password": "Blairman1234",
+                "confirm_password": "Blairman1234"
+            }
+
+
++ Response 200 
+
+
+
+
+## Auth Login [/auth/login]
+
+### http127.0.0.15000apiv2authlogin [POST]
+Log in user
+
++ Request (application/json)
+
+    + Attributes (http127.0.0.15000apiv2authloginRequest)
+
+
+    + Body
+
+            {
+                "username": "fakeadmin",
+                "password": "Blairman1234"
+            }
+
+
++ Response 200 
+
+
+
+### http127.0.0.15000apiv2authlogin1 [POST]
+admin login
+
++ Request (application/json)
+
+    + Attributes (http127.0.0.15000apiv2authloginRequest)
+
+
+    + Body
+
+            {
+                "username": "admin",
+                "password": "Andela2019"
+            }
+
+
++ Response 200 
+
+
+
+
+## Auth Logout [/auth/logout{?x-access-token}]
+
+### http127.0.0.15000apiv2authlogoutxaccesstokeneyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImZha2VhZG1pbiJ9.3JCgD2AMcZTKUsKWrwAqgomRcsh2isHbtVHa6HTs [POST]
+User Logout
++ Parameters
+    + x-access-token (string, required)
+
+        + Sample: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImZha2VhZG1pbiJ9.3JCgD2AMcZTKUsKWrwAq--gomRcsh2is-HbtVHa6HTs
+
++ Request 
+    + Headers
+
+            x-access-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImZha2VhZG1pbiJ9.3JCgD2AMcZTKUsKWrwAq--gomRcsh2is-HbtVHa6HTs
+
+
+
+
+
++ Response 200 
+
+
+
+
+
+# Data Structures
+
+## http127.0.0.15000apiv2meetupsRequest (object)
+
+
+### Properties
++ `topic` (string, required) 
++ `happenningon` (string, required) 
++ `location` (string, required) 
++ `images` (string, required) 
++ `tags` (string, required) 
+
+
+## http127.0.0.15000apiv2meetupsRequest1 (object)
+
+
+### Properties
++ `topic` (string, required) 
++ `happenningon` (string, required) 
++ `location` (string, required) 
++ `images` (string, required) 
++ `tags` (array[string], required) 
+
+
+## http127.0.0.15000apiv2meetups3rsvpsyesRequest (object)
+
+
+### Properties
++ `Attending`: `yes` (string, required) 
++ `meetup`: `1` (number, required) 
++ `topic`: `Scrum` (string, required) 
+
+
+## http127.0.0.15000apiv2meetups3questionsRequest (object)
+
+
+### Properties
++ `title` (string, required) 
++ `body` (string, required) 
+
+
+## http127.0.0.15000apiv2questions1commentRequest (object)
+
+
+### Properties
++ `comment` (string, required) 
+
+
+## http127.0.0.15000apiv2authsignupRequest (object)
+
+
+### Properties
++ `firstname` (string, required) 
++ `lastname` (string, required) 
++ `phoneNumber` (string, required) 
++ `username` (string, required) 
++ `email` (string, required) 
++ `password` (string, required) 
++ `confirm_password` (string, required) 
+
+
+## http127.0.0.15000apiv2authloginRequest (object)
+
+
+### Properties
++ `username` (string, required) 
++ `password` (string, required) 
+
