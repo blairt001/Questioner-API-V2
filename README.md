@@ -46,8 +46,8 @@ $ pip install -r requirements.txt
 
 ```
 $ export SECRET_KEY=<SECRET KEY>
-$ export TESTING_DATABASE_URI=<URI>
-$ export DEVELOPMENT_DATABASE_URI=<URI>
+$ export DATABASE_URL=<URI>
+$ export DATABASE_TEST_URL=<URI>
 ```
 
 5. Run the development server
@@ -112,15 +112,15 @@ Ensure you use ProductionConfig settings which have DEBUG set to False
 
 ## GitHub pages
 
-https://blairt001.github.io/Questioner/UI/
+> **[Click Here](https://blairt001.github.io/Questioner/UI/)**
 
 ## Heroku
 
-https://questionerv2-blair-heroku.herokuapp.com/
+> **[Click Here](https://questionerv2-blair-heroku.herokuapp.com/api/v2/meetups/upcoming)**
 
 ## Sample Tasks
 
-https://www.pivotaltracker.com/n/projects/2235680
+> **[Pivota Tracker Board](https://www.pivotaltracker.com/n/projects/2235680)**
 
 ## Versioning
 
@@ -132,10 +132,10 @@ Tony Blair
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/blairt001/Questioner-API-V2/blob/develop/LICENSE) file for details
+This project is licensed under the MIT License - see the **[LICENSE](https://github.com/blairt001/Questioner-API-V2/blob/develop/LICENSE)** file for details
 
 ## Credits
-[Andela Kenya](https://andela.com/)
+**[Andela Kenya](https://andela.com/)**
 
 ## Acknowledgments
 
