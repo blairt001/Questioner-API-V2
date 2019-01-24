@@ -2,7 +2,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/blairt001/Questioner-API-V2/badge.svg?branch=develop)](https://coveralls.io/github/blairt001/Questioner-API-V2?branch=develop)
 [![Maintainability](https://api.codeclimate.com/v1/badges/f8860af9cd43ffc71066/maintainability)](https://codeclimate.com/github/blairt001/Questioner-API-V2/maintainability)
 [![PEP8](https://img.shields.io/badge/code%20style-pep8-green.svg)](https://www.python.org/dev/peps/pep-0008/)
-[![License: MIT](https://github.com/blairt001/Questioner-API-V2/blob/develop/LICENSE-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
 # Questioner-API-V2
