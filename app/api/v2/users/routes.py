@@ -4,11 +4,13 @@ import jwt
 from flask import request, jsonify, make_response, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 import psycopg2
-from app.admin.models import UserModel
+
+from app.admin.models import UserModel, AuthToken
 from app.api.v2 import path_2
 from app.utils import validate_email, check_password, check_if_user_is_admin
 from app.admin import db
 from app import utils
+from app.utils import token_required
 
 
 KEY = os.getenv('SECRET_KEY')
@@ -25,12 +27,12 @@ def user_sign_up():
         username = data['username']
         email = data['email']
         password = data['password']
-        confirmPass = data['confirmpassword']
+        confirmPass = data['confirm_password']
         phone = data['phoneNumber']
       
     except KeyError:
         abort(make_response(jsonify({'status': 400,
-                                     'error': "Should be firstname, lastname, username, email, phoneNumber, password and confirmpassword"}), 400))
+                                     'error': "Should be firstname, lastname, username, email, phoneNumber, password and confirm_password"}), 400))
 
     # check_password(password, confirm_pass)
     # email = validate_email(email)
@@ -85,12 +87,53 @@ def user_login():
         password = UserModel.check_if_password_in_db(hashed_password, password)
         if not password:
             abort(make_response(jsonify({'status': 400,
-                                         'error': "wrong password"}), 400))
+                                         'error': "The paswsord is wrong"}), 400))
 
         token = jwt.encode({"username": username}, KEY, algorithm='HS256')
         return jsonify({"status": 200, "token": token.decode('UTF-8'),
                         "message": "Logged in successfully"}), 200
 
     except psycopg2.DatabaseError as error:
-        abort(make_response(jsonify(message="Server error : {}".format(error)), 500))
+        abort(make_response(jsonify(message="Server error : {}".format(error)), 500))\
+
+# invalidate user token on logout
+@path_2.route("auth/logout", methods=["POST"])
+@token_required
+def logout(specific_user):  #logs out a specific user from thr system
+    token = request.headers['x-access-token']
+
+    blacklist_token = AuthToken(token=token)
+    blacklist_token.blacklist_token()
+
+    return jsonify({'status': 200,
+                    'data': 'Logged out successfully'}), 200
         
+# user should be able to view his / her profile when logged in
+@path_2.route("/profile", methods=['GET'])
+@token_required
+def user_view_profile(specific_user):
+    username_len = utils.decode_token()
+    username = username_len['username']
+    user = User.get_user_by_username(username)
+    try:
+        user = user[0]
+    except:
+        return jsonify({
+            'status': 401,
+            'error': "Please login first"}), 401
+
+    user_id = user['user_id']
+    questions = UserModel.get_user_questions_records(user_id)
+    meetups = UserModel.get_user_meetups_records(user_id)
+    data = []
+    for meetup in meetups:
+        meetup = {'meetupId': meetup['meetup_id'],
+                  'meetupTopic': meetup['meetup_topic']}
+        data.append(meetup)
+
+    user_question = UserModel.get_user_questions_details(user_id)
+
+    return jsonify({"status": 200,
+                    "data":{'AskedQuestions' : questions,
+                            'commentedQuestions': commented_qs,
+                            'meetups': data}}), 200

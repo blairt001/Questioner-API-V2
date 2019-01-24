@@ -1,6 +1,7 @@
 """The meetup routes"""
 from datetime import datetime
 from flask import jsonify, request, make_response, abort
+
 from app.admin.models import MeetupModel
 from app.api.v2 import path_2
 from app.utils import check_if_user_is_admin, token_required
@@ -64,6 +65,19 @@ def admin_create_meetup(specific_user):
             'error': 'tags field is required'}), 400))
 
     happenningon = utils.check_date(happenningon)
+    # check if a meetup already exists
+    meetup_id = MeetupModel.check_if_meetup_already_exists(location, happenningon)
+    if meetup_id:
+        abort(make_response(jsonify({
+            'status': 409,
+            'error': 'Meetup already exists. Choose another location or date'
+        }), 409))
+
+    # let admin add tag array to the database
+    tags = '{'
+    for tag in data['tags']:
+        tags += '"' + tag + '",'
+    tags = tags[:-1] + '}'
 
     meetup = MeetupModel(
         topic=topic,
@@ -111,19 +125,51 @@ def get_all_upcoming_meetups():
 
 # user respond to a meetup request
 @path_2.route("/meetups/<int:meetup_id>/rsvps/<resp>", methods=['POST'])
-def meetup_rsvp(meetup_id, resp):
-    """
-    A user should be able to respond to a meetup request with yes, no or maybe
-    """
-    if resp not in ["yes", "no", "maybe"]:
-        return jsonify({'status': 400, 'error': 'Response must be either yes , no or maybe'}), 400
-    meetup = MeetupModel.get_specific_meetup(meetup_id)
-    if meetup:
-        meetup = meetup[0]
-        return jsonify({'status': 200, 'data': [{'meetup': meetup_id,
-                                                 'topic': meetup['topic'],
-                                                 'Attending':resp}]}), 200
+@token_required
+def meetup_rsvp(specific_user, meetup_id, resp):
+    username_len = utils.decode_token()
+    username = username_len['username']
+    user = UserModel.get_user_by_username(username)
+    try:
+        user = user[0]
+    except:
+        return jsonify({
+            'status': 401,
+            'error': "Please login first"}), 401
 
+    if resp not in ["yes", "no", "maybe"]:
+        return jsonify({
+            'status':400,
+            'error':'Response should be either yes, no or maybe'}), 400
+    meetup = MeetupModel.get_specific_meetup(meetup_id)
+    if not meetup:
+        return jsonify({
+            'status': 404,
+            'error':'Meetup with id {} not found'.format(meetup_id)}), 404
+
+    user_id = user['user_id']
+    meetup = meetup[0]
+    if resp == 'yes':
+        rsvpd = utils.check_if_rsvp_already_exists(meetup_id, user_id)
+        if rsvpd:
+            abort(make_response(jsonify({'status': 409,
+                                         'error': 'Already confirmed attendance'}), 409))
+
+        rsvp = UserRsvp(meetup_id=meetup_id,
+                    user_id=user_id,
+                    meetup_topic=meetup['topic'],
+                    rsvp=resp)
+        rsvp.save_rsvp()
+
+    if resp == 'no':
+        rsvpd = utils.check_if_rsvp_already_exists(meetup_id, user_id)
+        if rsvpd:
+            UserRsvp.update_rsvp(meetup_id, user_id)
+    
+    # return a json formatted data
+    return jsonify({'status':200, 'data':[{'meetup':meetup_id,
+                                           'topic':meetup['topic'],
+                                           'Attending':resp}]}), 200
 
 # admin delete meetup
 @path_2.route("/meetups/<int:meetup_id>", methods=['DELETE'])
