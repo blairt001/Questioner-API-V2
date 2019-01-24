@@ -74,10 +74,7 @@ def admin_create_meetup(specific_user):
         }), 409))
 
     # let admin add tag array to the database
-    tags = '{'
-    for tag in data['tags']:
-        tags += '"' + tag + '",'
-    tags = tags[:-1] + '}'
+    tags = json.dumps(data['tags'])
 
     meetup = MeetupModel(
         topic=topic,
@@ -124,7 +121,7 @@ def get_all_upcoming_meetups():
 
 
 # user respond to a meetup request
-@path_2.route("/meetups/<int:meetup_id>/rsvps/<resp>", methods=['POST'])
+@path_2.route("/meetups/<int:meetup_id>/rsvps/<resp>/", methods=['POST'])
 @token_required
 def meetup_rsvp(specific_user, meetup_id, resp):
     username_len = utils.decode_token()
