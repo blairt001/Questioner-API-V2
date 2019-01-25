@@ -12,7 +12,7 @@ from app.admin import db
 from app import utils
 from app.utils import token_required
 
-
+# get secret key
 KEY = os.getenv('SECRET_KEY')
 
 
