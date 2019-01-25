@@ -33,6 +33,7 @@ def create_question_record(specific_user, meetup_id):
             ' error': "Check your json keys. Should be topic and body"}), 400))
 
     utils.check_for_whitespace(data)
+    utils.check_if_string(data)
     meetup = MeetupModel.get_specific_meetup(meetup_id)
     if not meetup:
         abort(make_response(jsonify({
@@ -155,12 +156,14 @@ def user_comment_on_a_question(specific_user, question_id):
             'status': 401,
             'error': "Please login first"}), 401
     try:
-        comment = request.get_json()['comment']
+        data = request.get_json()
+        comment = data['comment']
     except KeyError:
         abort(make_response(jsonify({
             'status': 400,
             'error': 'Check your json key. Should be comment'})))
-
+    utils.check_for_whitespace(data)
+    utils.check_if_string(data)
     question = QuestionModel.get_question(question_id)
     if question:
         question = question[0]

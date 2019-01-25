@@ -73,7 +73,7 @@ class MeetupsBaseTest(unittest.TestCase):
                                      "happenningon": "14/02/2019",
                                      "location": "",
                                      "images": "blair.png",
-                                     "tags": ["Tech"]}
+                                     "tags": ["Tech" , "Health"]}
 
         self.meetup_date_record = {"topic": "Scrum",
                                    "happenningon": "",
@@ -201,7 +201,7 @@ class TestMeetupsRecords(MeetupsBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
-        self.assertEqual(result["error"], 'tags field cannot be left blank')
+        self.assertEqual(result["error"], 'provide the tags')
 
     # lets test user can not create a meetup
     def test_user_cannot_create_a_meetup(self):
