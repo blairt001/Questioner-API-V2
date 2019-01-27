@@ -42,7 +42,7 @@ class QuestionBaseTest(unittest.TestCase):
                              "happenningon": "14/02/2019",
                              "location": "Thika",
                              "images": "blair.png",
-                             "tags": "Tech"}
+                             "tags": ["Tech"]}
 
         self.post_question1 = {"title": "What is Dev?",
                                "body": "I really like how people talk about Tonys Dev"}
@@ -70,7 +70,7 @@ class QuestionBaseTest(unittest.TestCase):
                                    "votes": -1}
 
         self.post_incorrect_json_keys = {"titl": "Hey Mehn?",
-                               "bod": "It is just OK"}
+                                         "bod": "It is just OK"}
                                    
         # prepare comments setup to accelerate our tests
         self.post_comment1 = {"comment": "Wow, I love every topic on Dev"}
@@ -271,20 +271,5 @@ class TestQuestionApiEndpoint(QuestionBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['status'], 400)
         self.assertEqual(result['error'], 'Please use either upvote or downvote as the url')
-    
-    # test user input a wrong json keys on asking a question
-    def test_wrong_json_keys_on_input_question(self):
-        self.token = self.user_login()
-        self.client.post("api/v2/meetups",
-                         data=json.dumps(self.post_meetup1),
-                         headers={'x-access-token': self.token},
-                         content_type="application/json")
-        response = self.client.post("api/v2/meetups/1/questions",
-                                    data=json.dumps(self.post_incorrect_json_keys),
-                                    headers={'x-access-token': self.token},
-                                    content_type="application/json")
-        self.assertEqual(response.status_code, 400)
-        result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['status'], 400)
-        self.assertEqual(result['error'], "Check your json keys. Should be topic and body")
+
         
