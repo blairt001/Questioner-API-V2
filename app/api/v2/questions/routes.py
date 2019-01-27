@@ -30,7 +30,7 @@ def create_question_record(specific_user, meetup_id):
     except KeyError:
         abort(make_response(jsonify({
             'status': 400,
-            ' error': "Check your json keys. Should be topic and body"}), 400))
+            ' error': "Check your json keys. Should be title and body"}), 400))
 
     utils.check_for_whitespace(data)
     utils.check_if_string(data)
@@ -63,7 +63,7 @@ def get_user_get_all_questions_for_a_meetup(meet_id):
     questions = QuestionModel.get_all_questions(meet_id)
     if questions:
         return jsonify({"status": 200, "data": questions}), 200
-    return jsonify({"status": 404, "data": "We cant find a question for this meetup. No question posted yet"}), 404
+    return jsonify({"status": 404, "error": "We cant find a question for this meetup. No question posted yet"}), 404
 
 # upvote a question
 """
