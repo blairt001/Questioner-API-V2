@@ -11,13 +11,13 @@ from app.admin import db
 
 # create the meetup model class
 class MeetupModel:
-    def __init__(self, topic, happenningOn, location, images, tags):
+    def __init__(self, topic, happenningon, location, images, tags):
         """
        Initialize the meetup class, with your variables at hand
         """
         # self.id = len(MEETUPS_LEN)+1
         self.topic = topic
-        self.happenningOn = happenningOn
+        self.happenningon = happenningon
         self.location = location
         self.images = images
         self.tags = tags
@@ -29,9 +29,9 @@ class MeetupModel:
         """
         # MEETUPS_LEN.append(self)
         insert_query = """
-        INSERT INTO meetups(topic, happenningOn, meetup_location, meetup_images, meetup_tags, created_at) VALUES(
+        INSERT INTO meetups(topic, happenningon, meetup_location, meetup_images, meetup_tags, created_at) VALUES(
             '{}', '{}', '{}', '{}', '{}' , '{}'
-        )""".format(self.topic, self.happenningOn, self.location, self.images, self.tags, self.created_at)
+        )""".format(self.topic, self.happenningon, self.location, self.images, self.tags, self.created_at)
 
         db.query_data_from_db(insert_query)
 
@@ -42,7 +42,7 @@ class MeetupModel:
         """
         # return [MeetupModel.to_json(meetup) for meetup in MEETUPS_LEN if meetup.id == meeting_id]
         select_specific_query = """
-        SELECT meetup_id, topic, happenningOn, meetup_location FROM meetups
+        SELECT meetup_id, topic, happenningon, meetup_location FROM meetups
         WHERE meetups.meetup_id = '{}'""".format(meeting_id)
 
         meetup = db.select_data_from_db(select_specific_query)
@@ -56,7 +56,7 @@ class MeetupModel:
         # return [MeetupModel.to_json(meetup) for meetup in MEETUPS_LEN]
 
         select_all_meetup_query = """
-        SELECT meetup_id, topic, happenningOn, meetup_location,
+        SELECT meetup_id, topic, happenningon, meetup_location,
         meetup_tags, created_at FROM meetups
         """
 
@@ -65,7 +65,7 @@ class MeetupModel:
         for meetup in meetups:
             meetup = {'meetupId': meetup["meetup_id"],
                       'topic': meetup["topic"],
-                      'happenningOn': meetup["happenningOn"],
+                      'happenningon': meetup["happenningon"],
                       'meetupLocation': meetup["meetup_location"],
                       'meetupTags': meetup["meetup_tags"],
                       'createdAt': meetup["created_at"]}
@@ -103,7 +103,7 @@ class MeetupModel:
     def check_if_meetup_already_exists(meetup_location, date):
         query = """
         SELECT meetup_id FROM meetups
-        WHERE meetups.meetup_location = '{}' AND meetups.happenningOn = '{}'
+        WHERE meetups.meetup_location = '{}' AND meetups.happenningon = '{}'
         """.format(meetup_location, date)
 
         posted = db.select_data_from_db(query)
@@ -119,7 +119,7 @@ class MeetupModel:
         return {
             "id": meetup.id,
             "topic": meetup.topic,
-            "happenningOn": meetup.happenningOn,
+            "happenningon": meetup.happenningon,
             "location": meetup.location,
             "tags": meetup.tags,
         }

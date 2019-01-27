@@ -39,7 +39,7 @@ class QuestionBaseTest(unittest.TestCase):
                              "password": "Blairman1234"}
 
         self.post_meetup1 = {"topic": "Scrum",
-                             "happenningOn": "14/02/2019",
+                             "happenningon": "14/02/2019",
                              "location": "Thika",
                              "images": "blair.png",
                              "tags": "Tech"}
