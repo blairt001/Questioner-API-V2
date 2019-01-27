@@ -105,7 +105,7 @@ def get_specific_meetup(meetup_id):
                                                 'topic': meetup['topic'],
                                                 'happenningon': meetup['happenningon'],
                                                 'location': meetup['meetup_location']}}), 200
-    return jsonify({"status": 404, "data": "Meetup with id {} not found".format(meetup_id)}), 404
+    return jsonify({"status": 404, "error": "Meetup with id {} not found".format(meetup_id)}), 404
 
 
 # User get all upcoming meetup records endpoint

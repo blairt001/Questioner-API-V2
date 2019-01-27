@@ -59,6 +59,13 @@ class MeetupsBaseTest(unittest.TestCase):
                              "tags": ["Tech"]
                              }
 
+        self.post_meetup4 = {"topica": "Miguel Miguel",
+                             "happenningoon": "16/02/2019",
+                             "location": "Nairobi",
+                             "images": "Miguel.png",
+                             "tags": ["Tech"]
+                             }
+
         self.rsvp_response1 = [{"Attending": "yes",
                                 "meetup": 1,
                                 "topic": "Scrum"}]
@@ -356,4 +363,42 @@ class TestMeetupsRecords(MeetupsBaseTest):
         self.assertEqual(result["status"], 401)
         self.assertEqual(
             result["error"], "You are not allowed to perfom this function")
+    
+    # test a user post wrong json data
+    def test_a_user_post_wrong_json_keys(self):
+        self.token = self.user_login()
+        response = self.client.post("api/v2/meetups",
+                                    data=json.dumps(self.post_meetup4),
+                                    headers={'x-access-token': self.token},
+                                    content_type="application/json")
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(result["status"], 400)
+        self.assertEqual(
+            result["error"], 'Check the json keys you have used very well')
+
+    # tests for no meetips scheduled when there are no meetups
+    def test_user_dont_get_meetup_if_not_posted(self):
+        response = self.client.get("api/v2/meetups/upcoming",
+                                   content_type="application/json")
+        self.assertEqual(response.status_code, 404)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result["status"], 404)
+        self.assertEqual(
+            result["error"], "No upcoming meetups available.")
+
+    # tests admin not deleting a meetup that is not there
+    def test_admin_cannot_delete_not_found_meetup(self):
+        self.token = self.user_login()
+        self.client.post("api/v2/meetups",
+                         data=json.dumps(self.post_meetup1),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        response = self.client.delete("api/v2/meetups/50",
+                                      headers={'x-access-token': self.token},
+                                      content_type="application/json")
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(result["status"], 404)
+        self.assertEqual(result["error"], "Meetup with id 50 not found")
 
