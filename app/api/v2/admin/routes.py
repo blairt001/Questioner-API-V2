@@ -1,4 +1,5 @@
 """The meetup routes"""
+import json
 from datetime import datetime
 from flask import jsonify, request, make_response, abort
 
@@ -74,10 +75,7 @@ def admin_create_meetup(specific_user):
         }), 409))
 
     # let admin add tag array to the database
-    tags = '{'
-    for tag in data['tags']:
-        tags += '"' + tag + '",'
-    tags = tags[:-1] + '}'
+    tags = json.dumps(data['tags'])
 
     meetup = MeetupModel(
         topic=topic,
@@ -107,7 +105,7 @@ def get_specific_meetup(meetup_id):
                                                 'topic': meetup['topic'],
                                                 'happenningon': meetup['happenningon'],
                                                 'location': meetup['meetup_location']}}), 200
-    return jsonify({"status": 404, "data": "Meetup with id {} not found".format(meetup_id)}), 404
+    return jsonify({"status": 404, "error": "Meetup with id {} not found".format(meetup_id)}), 404
 
 
 # User get all upcoming meetup records endpoint
@@ -124,7 +122,7 @@ def get_all_upcoming_meetups():
 
 
 # user respond to a meetup request
-@path_2.route("/meetups/<int:meetup_id>/rsvps/<resp>", methods=['POST'])
+@path_2.route("/meetups/<int:meetup_id>/rsvps/<resp>/", methods=['POST'])
 @token_required
 def meetup_rsvp(specific_user, meetup_id, resp):
     username_len = utils.decode_token()
@@ -187,4 +185,4 @@ def admin_delete_a_meetup(specific_user, meetup_id):
         return jsonify({'status': 200, 'data': "Meetup record deleted successfully"}), 200
     return jsonify({
         'status': 404,
-        'data': "Meetup with id {} not found".format(meetup_id)}), 404
+        'error': "Meetup with id {} not found".format(meetup_id)}), 404

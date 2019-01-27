@@ -30,9 +30,10 @@ def create_question_record(specific_user, meetup_id):
     except KeyError:
         abort(make_response(jsonify({
             'status': 400,
-            ' error': "Check your json keys. Should be topic and body"}), 400))
+            ' error': "Check your json keys. Should be title and body"}), 400))
 
     utils.check_for_whitespace(data)
+    utils.check_if_string(data)
     meetup = MeetupModel.get_specific_meetup(meetup_id)
     if not meetup:
         abort(make_response(jsonify({
@@ -62,7 +63,7 @@ def get_user_get_all_questions_for_a_meetup(meet_id):
     questions = QuestionModel.get_all_questions(meet_id)
     if questions:
         return jsonify({"status": 200, "data": questions}), 200
-    return jsonify({"status": 404, "data": "We cant find a question for this meetup. No question posted yet"}), 404
+    return jsonify({"status": 404, "error": "We cant find a question for this meetup. No question posted yet"}), 404
 
 # upvote a question
 """
@@ -120,8 +121,8 @@ def merge_upvote_and_downvote_question(specific_user, question_id, vote):
         if vote == 'upvote':
             my_question['votes'] = my_question['votes'] + 1
         if vote == 'downvote':
-            my_question['votes'] = my_question['votes'] - 1
-
+            if my_question['votes'] > 0:
+                my_question['votes'] = my_question['votes'] - 1
         update_questions_query = """
         UPDATE questions SET votes = '{}' WHERE questions.question_id = '{}'
         """.format(my_question['votes'], question_id)
@@ -155,12 +156,14 @@ def user_comment_on_a_question(specific_user, question_id):
             'status': 401,
             'error': "Please login first"}), 401
     try:
-        comment = request.get_json()['comment']
+        data = request.get_json()
+        comment = data['comment']
     except KeyError:
         abort(make_response(jsonify({
             'status': 400,
             'error': 'Check your json key. Should be comment'})))
-
+    utils.check_for_whitespace(data)
+    utils.check_if_string(data)
     question = QuestionModel.get_question(question_id)
     if question:
         question = question[0]
