@@ -185,4 +185,4 @@ def admin_delete_a_meetup(specific_user, meetup_id):
         return jsonify({'status': 200, 'data': "Meetup record deleted successfully"}), 200
     return jsonify({
         'status': 404,
-        'data': "Meetup with id {} not found".format(meetup_id)}), 404
+        'error': "Meetup with id {} not found".format(meetup_id)}), 404
