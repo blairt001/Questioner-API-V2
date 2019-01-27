@@ -62,7 +62,7 @@ class QuestionBaseTest(unittest.TestCase):
                                    "comment": "",
                                    "questionid": 1,
                                    "title": "What is Dev?",
-                                   "votes": -1}
+                                   "votes": 0}
         self.downvoted_question2 = {"body": "I learnt more about JWT at Bootcamp",
                                    "comment": "",
                                    "questionid": 1,
