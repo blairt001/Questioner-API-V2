@@ -144,7 +144,7 @@ Tony Blair
 This project is licensed under the MIT License - see the **[LICENSE](https://github.com/blairt001/Questioner-API-V2/blob/develop/LICENSE)** file for details
 
 ## Credits
-**[Andela Kenya](https://andela.com/)**
+**[Andela](https://andela.com/)**
 
 ## Acknowledgments
 
